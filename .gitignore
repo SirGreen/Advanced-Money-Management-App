@@ -1,0 +1,64 @@
+# Core
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.build/
+.buildlog/
+.history
+.svn/
+.swiftpm/
+migrate_working_dir/
+
+# IDE
+*.iml
+*.ipr
+*.iws
+.idea/
+.vscode/
+
+# Dart / Flutter
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub/
+.pub-cache/
+**/doc/api/
+**/ios/Flutter/.last_build_id
+/build/
+/coverage/
+
+# iOS / macOS
+**/Pods/
+**/Podfile.lock
+**/Flutter/Flutter.framework
+**/Flutter/Flutter.podspec
+**/Generated.xcconfig
+**/ephemeral/
+**/flutter_export_environment.sh
+**/Runner/GeneratedPluginRegistrant.*
+
+# Android
+**/local.properties
+**/.gradle/
+**/.cxx/
+/android/app/debug/
+/android/app/profile/
+/android/app/release/
+
+# Windows
+**/windows/runner/Runner.exe
+**/windows/flutter/ephemeral/
+
+# Linux
+**/linux/flutter/ephemeral/
+
+# Web
+**/web/.dart_tool/
+
+# Symbolication / obfuscation
+app.*.symbols
+app.*.map.json
