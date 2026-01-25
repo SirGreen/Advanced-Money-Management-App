@@ -1,8 +1,9 @@
 trigger:
-- main
+- master
+- publish
 
 pool:
-  vmImage: ubuntu-latest   # Best for Android builds
+  vmImage: ubuntu-latest
 
 steps:
 - script: |
@@ -19,8 +20,10 @@ steps:
 
 - script: flutter build apk --debug
   displayName: Build Debug APK
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/publish'))
 
 - task: PublishBuildArtifacts@1
   inputs:
     PathtoPublish: build/app/outputs/flutter-apk/app-debug.apk
     ArtifactName: android-apk
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/publish'))
