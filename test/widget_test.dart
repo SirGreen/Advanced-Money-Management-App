@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 // Replace 'your_app_package' with your actual package name defined in pubspec.yaml
-import 'package:adv_money_mana/main.dart'; 
+import 'package:adv_money_mana/main.dart';
 
 void main() {
   testWidgets('Money View updates smoke test', (WidgetTester tester) async {

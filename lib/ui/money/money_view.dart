@@ -55,7 +55,7 @@ class _MoneyViewState extends State<MoneyView> {
                 TextButton(
                   onPressed: () => viewModel.resetSpending(),
                   child: const Text("Reset"),
-                )
+                ),
               ],
             );
           },
