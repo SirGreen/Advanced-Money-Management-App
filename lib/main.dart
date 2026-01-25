@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'viewmodels/money_view_model.dart';
-import 'views/money_view.dart';
+import 'data/data_sources/in_memory_service.dart';
+import 'data/repositories/money_repository_impl.dart';
+import 'ui/money/money_view.dart';
+import 'ui/money/money_view_model.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,6 +16,9 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    final inMemoryService = InMemoryService();
+    final moneyRepository = MoneyRepositoryImpl(inMemoryService);
+
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
@@ -35,7 +40,7 @@ class MyApp extends StatelessWidget {
         colorScheme: .fromSeed(seedColor: Colors.deepPurple),
       ),
       home: ChangeNotifierProvider(
-        create: (context) => MoneyViewModel(),
+        create: (context) => MoneyViewModel(repository: moneyRepository),
         child: const MoneyView(),
       ),
     );
