@@ -38,10 +38,24 @@ class _MoneyViewState extends State<MoneyView> {
                   style: const TextStyle(fontSize: 40),
                 ),
                 const SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: () => vm.addExpense(10),
-                  child: const Text("Spend \$10"),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () => viewModel.addExpense(10),
+                      child: const Text("Spend \$10"),
+                    ),
+                    const SizedBox(width: 10),
+                    ElevatedButton(
+                      onPressed: () => viewModel.addExpense(50),
+                      child: const Text("Spend \$50"),
+                    ),
+                  ],
                 ),
+                TextButton(
+                  onPressed: () => viewModel.resetSpending(),
+                  child: const Text("Reset"),
+                )
               ],
             );
           },

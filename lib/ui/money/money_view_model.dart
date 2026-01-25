@@ -31,4 +31,13 @@ class MoneyViewModel extends ChangeNotifier {
 
     await _repository.saveMoneySpent(newTotal);
   }
+
+  Future<void> resetSpending() async {
+    final newTotal = 0;
+
+    _data = MoneyEntity(totalSpent: newTotal);
+    notifyListeners();
+
+    await _repository.saveMoneySpent(newTotal);
+  }
 }
