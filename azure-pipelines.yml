@@ -9,7 +9,7 @@ steps:
 - script: |
     git clone https://github.com/flutter/flutter.git -b stable
     echo "##vso[task.prependpath]$(System.DefaultWorkingDirectory)/flutter/bin"
-    flutter doctor
+    ./flutter/bin/flutter doctor
   displayName: Install Flutter
 
 - script: flutter pub get
