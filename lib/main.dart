@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
-import 'data/data_sources/in_memory_service.dart';
+import 'data/data_sources/hive_service.dart';
 import 'data/repositories/money_repository_impl.dart';
 import 'ui/money/money_view.dart';
 import 'ui/money/money_view_model.dart';
 
-void main() {
+void main() async {
+  await Hive.initFlutter();
+
   runApp(const MyApp());
 }
 
@@ -16,8 +19,8 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    final inMemoryService = InMemoryService();
-    final moneyRepository = MoneyRepositoryImpl(inMemoryService);
+    final hiveService = HiveService();
+    final moneyRepository = MoneyRepositoryImpl(hiveService);
 
     return MaterialApp(
       title: 'Flutter Demo',
