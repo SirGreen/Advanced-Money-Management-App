@@ -24,7 +24,7 @@ class _MoneyViewState extends State<MoneyView> {
     final viewModel = Provider.of<MoneyViewModel>(context, listen: false);
 
     return Scaffold(
-      appBar: AppBar(title: const Text("3-Layer Architecture")),
+      appBar: AppBar(title: const Text("Money Manager")),
       body: Center(
         child: Consumer<MoneyViewModel>(
           builder: (context, vm, child) {
