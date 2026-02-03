@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import '../../domain/entities/money_entity.dart';
 import '../../domain/repositories/money_repository.dart';
 
+// ở đây thì chứa business logic gần UI interactions
+// đồng thời notify (vì nó extend ChangeNotifier) các listener
+// để flutter cập nhật ui
 class MoneyViewModel extends ChangeNotifier {
   final MoneyRepository _repository;
 

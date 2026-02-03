@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'money_view_model.dart';
 
+// còn cái này là định nghĩa UI nên tui cũng khỏi giải thích
+// nên coi documentation
+
 class MoneyView extends StatefulWidget {
   const MoneyView({super.key});
 

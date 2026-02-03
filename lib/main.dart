@@ -7,7 +7,11 @@ import 'data/repositories/money_repository_impl.dart';
 import 'ui/money/money_view.dart';
 import 'ui/money/money_view_model.dart';
 
+// này cũng định nghĩa cách app đc init & chạy thôi
+
 void main() async {
+  // nhớ để nguyên dòng này vì hive cần đc init cho flutter trước khi
+  // khởi tạo các class có đụng tới hive
   await Hive.initFlutter();
 
   runApp(const MyApp());
