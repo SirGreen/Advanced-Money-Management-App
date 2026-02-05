@@ -1,0 +1,150 @@
+@startuml
+skinparam packageStyle rectangle
+skinparam linetype ortho
+skinparam ranksep 60
+skinparam nodesep 40
+
+top to bottom direction
+
+title "Money Management App: Architecture Diagram"
+
+package "UI Layer" <<Folder>> {
+    package "views" {
+        class ExpenditureListView
+        class TagListView
+        class SettingsView
+        class AssetsView
+    }
+    
+    package "viewmodels" {
+        class ExpenditureViewModel
+        class AssetsViewModel
+        class SettingsViewModel
+    }
+}
+
+package "Domain Layer" <<Folder>> {
+    package "entities" {
+        class Expenditure
+        class Tag
+        class ScheduledExpenditure
+        class Investment
+        class Portfolio
+        class SavingAccount
+        class SavingGoal
+        class Settings
+        class CustomExchangeRate
+        class CachedRate
+
+        class ScheduleType <<enumeration>>
+        class DividerType <<enumeration>>
+    }
+    
+    package "repositories" {
+        interface ExpenditureRepository
+        interface TagRepository
+        interface SettingsRepository
+        interface AssetsRepository
+    }
+}
+
+package "Data Layer" <<Folder>> {
+
+    package "repositories" {
+        class ExpenditureRepositoryImpl
+        class TagRepositoryImpl
+        class SettingsRepositoryImpl
+        class AssetsRepositoryImpl
+    }
+    
+    package "data_sources" {
+        ' Box-specific database services
+        class ExpenditureService
+        class TagService
+        class SettingsService
+        class AssetsService
+
+        class SecureStorageService
+    }
+}
+
+package "External" <<Cloud>> {
+    class Hive <<Database>>
+    class SecureStorage <<Security>>
+    class ExchangeRateAPI <<External>>
+}
+
+' -----------------------
+' UI -> ViewModel
+' -----------------------
+ExpenditureListView ..> ExpenditureViewModel : uses
+SettingsView ..> SettingsViewModel : uses
+AssetsView ..> AssetsViewModel : uses
+TagListView ..> TagRepository : uses
+
+' -----------------------
+' ViewModel -> Repository
+' -----------------------
+ExpenditureViewModel ..> ExpenditureRepository : uses
+SettingsViewModel ..> SettingsRepository : uses
+AssetsViewModel ..> AssetsRepository : uses
+
+' -----------------------
+' Domain relationships
+' -----------------------
+Settings --> DividerType
+ScheduledExpenditure --> ScheduleType
+
+Expenditure --> Tag : mainTagId
+Expenditure --> Tag : subTagIds
+Portfolio --> Investment : contains
+
+' -----------------------
+' HiveObject inheritance
+' -----------------------
+Expenditure --|> HiveObject : extends
+Tag --|> HiveObject : extends
+Settings --|> HiveObject : extends
+ScheduledExpenditure --|> HiveObject : extends
+CustomExchangeRate --|> HiveObject : extends
+CachedRate --|> HiveObject : extends
+SavingGoal --|> HiveObject : extends
+Investment --|> HiveObject : extends
+Portfolio --|> HiveObject : extends
+SavingAccount --|> HiveObject : extends
+
+' -----------------------
+' Repository implementations
+' -----------------------
+ExpenditureRepositoryImpl ..|> ExpenditureRepository : implements
+TagRepositoryImpl ..|> TagRepository : implements
+SettingsRepositoryImpl ..|> SettingsRepository : implements
+AssetsRepositoryImpl ..|> AssetsRepository : implements
+
+' -----------------------
+' Repository -> Box services
+' -----------------------
+ExpenditureRepositoryImpl ..> ExpenditureService
+TagRepositoryImpl ..> TagService
+SettingsRepositoryImpl ..> SettingsService
+AssetsRepositoryImpl ..> AssetsService
+
+' -----------------------
+' Box services → Hive
+' -----------------------
+ExpenditureService ..> Hive
+TagService ..> Hive
+SettingsService ..> Hive
+AssetsService ..> Hive
+
+SecureStorageService ..> SecureStorage
+
+legend right
+  |= Color |= Meaning |
+  | <#LightGreen> | UI Layer |
+  | <#LightBlue> | Domain Layer |
+  | <#LightYellow> | Data Layer |
+  | <#LightGray> | External Services |
+endlegend
+
+@enduml
