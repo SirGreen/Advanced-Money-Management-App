@@ -62,3 +62,6 @@ migrate_working_dir/
 # Symbolication / obfuscation
 app.*.symbols
 app.*.map.json
+
+# Hive autogen
+*.g.dart
