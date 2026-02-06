@@ -24,7 +24,7 @@ class SavingGoal extends HiveObject {
     required this.name,
     this.notes,
     required this.targetAmount,
-    this.currentAmount = 0.0, 
+    this.currentAmount = 0.0,
     required this.startDate,
     this.endDate,
   });
@@ -51,6 +51,6 @@ class SavingGoal extends HiveObject {
     targetAmount: json['targetAmount'],
     currentAmount: json['currentAmount'],
     startDate: DateTime.parse(json['startDate']),
-    endDate: json['endDate']!=null?DateTime.parse(json['endDate']):null
+    endDate: json['endDate'] != null ? DateTime.parse(json['endDate']) : null,
   );
 }

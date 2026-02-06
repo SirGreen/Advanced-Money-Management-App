@@ -4,9 +4,8 @@ part 'cached_rate.g.dart';
 
 @HiveType(typeId: 8)
 class CachedRate extends HiveObject {
-  
   @HiveField(0)
-  final String baseCode; 
+  final String baseCode;
 
   @HiveField(1)
   Map<String, double> conversionRates;
@@ -21,12 +20,12 @@ class CachedRate extends HiveObject {
   });
 
   Map<String, dynamic> toJson() => {
-    'baseCode':baseCode,
-    'conversionRates':conversionRates,
-    'lastFetched':lastFetched.toIso8601String(),
+    'baseCode': baseCode,
+    'conversionRates': conversionRates,
+    'lastFetched': lastFetched.toIso8601String(),
   };
 
-    factory CachedRate.fromJson(Map<String, dynamic> json) {
+  factory CachedRate.fromJson(Map<String, dynamic> json) {
     final rawRates = json['conversionRates'] as Map<String, dynamic>;
     final convertedRates = Map<String, double>.from(
       rawRates.map((key, value) => MapEntry(key, (value as num).toDouble())),
