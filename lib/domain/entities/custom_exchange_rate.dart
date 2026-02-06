@@ -2,7 +2,7 @@ import 'package:hive/hive.dart';
 
 part 'custom_exchange_rate.g.dart';
 
-@HiveType(typeId: 7) 
+@HiveType(typeId: 7)
 class CustomExchangeRate extends HiveObject {
   @HiveField(0)
   final String conversionPair;
@@ -21,5 +21,5 @@ class CustomExchangeRate extends HiveObject {
       CustomExchangeRate(
         conversionPair: json['conversionPair'],
         rate: json['rate'],
-      ); 
+      );
 }

@@ -62,7 +62,7 @@ class Settings extends HiveObject {
     'converterToCurrency': converterToCurrency,
     'remindersEnabled': remindersEnabled,
     'lastBackupDate': lastBackupDate?.toIso8601String(),
-    'userContext': userContext, 
+    'userContext': userContext,
   };
 
   factory Settings.fromJson(Map<String, dynamic> json) => Settings(
@@ -78,6 +78,6 @@ class Settings extends HiveObject {
     lastBackupDate: json['lastBackupDate'] != null
         ? DateTime.parse(json['lastBackupDate'])
         : null,
-    userContext: json['userContext'], 
+    userContext: json['userContext'],
   );
 }

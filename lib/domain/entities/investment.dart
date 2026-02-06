@@ -7,13 +7,13 @@ class Investment extends HiveObject {
   @HiveField(0)
   final String id;
   @HiveField(1)
-  String symbol; 
+  String symbol;
   @HiveField(2)
   String name;
   @HiveField(3)
   double quantity;
   @HiveField(4)
-  double averageBuyPrice;                                                
+  double averageBuyPrice;
   @HiveField(5)
   double? currentPrice;
   @HiveField(6)

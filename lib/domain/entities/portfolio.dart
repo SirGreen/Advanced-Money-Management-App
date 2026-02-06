@@ -8,18 +8,14 @@ part 'portfolio.g.dart';
 class Portfolio extends HiveObject {
   @HiveField(0)
   final String id;
-  
+
   @HiveField(1)
   String name;
-  
+
   @HiveField(2)
   HiveList<Investment> investments;
 
-  Portfolio({
-    required this.id,
-    required this.name,
-    required this.investments,
-  });
+  Portfolio({required this.id, required this.name, required this.investments});
 
   Map<String, dynamic> toJson() => {
     'id': id,
@@ -32,20 +28,26 @@ class Portfolio extends HiveObject {
     return Portfolio(
       id: json['id'],
       name: json['name'],
-      investments: HiveList(investmentBox), 
+      investments: HiveList(investmentBox),
     );
   }
 
   double get totalValue {
-    return investments.fold(0.0, (sum, investment) => sum + investment.totalValue);
+    return investments.fold(
+      0.0,
+      (sum, investment) => sum + investment.totalValue,
+    );
   }
 
   double get totalCost {
-    return investments.fold(0.0, (sum, investment) => sum + investment.totalCost);
+    return investments.fold(
+      0.0,
+      (sum, investment) => sum + investment.totalCost,
+    );
   }
-  
+
   double get totalGainLoss => totalValue - totalCost;
-  
+
   double get totalGainLossPercent {
     final cost = totalCost;
     return cost == 0 ? 0.0 : (totalGainLoss / cost) * 100;
