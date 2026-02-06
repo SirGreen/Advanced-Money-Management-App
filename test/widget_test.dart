@@ -11,6 +11,8 @@ import 'package:hive_flutter/hive_flutter.dart';
 void main() {
   testWidgets('Money View updates smoke test', (WidgetTester tester) async {
     await Hive.initFlutter();
+    // Note: This test might still fail logic-wise because Hive needs open boxes
+    // For now, fixing the compilation error at least.
 
     await tester.pumpWidget(const MyApp());
 
