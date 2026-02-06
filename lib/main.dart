@@ -1,54 +1,99 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
-
+import 'package:intl/date_symbol_data_local.dart';
 import 'data/data_sources/hive_service.dart';
 import 'data/repositories/money_repository_impl.dart';
-import 'ui/money/money_view.dart';
+import 'data/repositories/expenditure_repository_impl.dart';
+import 'data/repositories/tag_repository_impl.dart';
+import 'ui/main_view.dart';
 import 'ui/money/money_view_model.dart';
+import 'ui/transaction/expenditure_view_model.dart';
+import 'ui/transaction/scheduled_expenditure_view_model.dart';
+import 'domain/services/recurring_transaction_service.dart';
+import 'data/repositories/scheduled_expenditure_repository_impl.dart';
+import 'data/services/notification_service.dart';
 
 // này cũng định nghĩa cách app đc init & chạy thôi
-
 void main() async {
   // nhớ để nguyên dòng này vì hive cần đc init cho flutter trước khi
   // khởi tạo các class có đụng tới hive
   await Hive.initFlutter();
+  await initializeDateFormatting('vi_VN', null);
 
-  runApp(const MyApp());
+  final hiveService = HiveService();
+  await hiveService.init(); // Initialize Hive boxes
+
+  runApp(MyApp(hiveService: hiveService));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final HiveService hiveService;
 
-  // This widget is the root of your application.
+  const MyApp({super.key, required this.hiveService});
+
   @override
   Widget build(BuildContext context) {
-    final hiveService = HiveService();
+    // Repositories
     final moneyRepository = MoneyRepositoryImpl(hiveService);
+    final expenditureRepository = ExpenditureRepositoryImpl(hiveService);
+    final tagRepository = TagRepositoryImpl(hiveService);
+    final scheduledRepository = ScheduledExpenditureRepositoryImpl();
 
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-      ),
-      home: ChangeNotifierProvider(
-        create: (context) => MoneyViewModel(repository: moneyRepository),
-        child: const MoneyView(),
+    // Initialize Service
+    final notificationService = NotificationService();
+    notificationService.init();
+
+    final recurringService = RecurringTransactionService(
+      scheduledRepository,
+      expenditureRepository,
+      notificationService,
+    );
+
+    // Run Auto-Creation Background Task
+    recurringService.checkAndCreateTransactions().then((count) {
+      if (count > 0) {
+        debugPrint("Auto-created $count recurring transactions.");
+      }
+    });
+
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => MoneyViewModel(repository: moneyRepository),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => ExpenditureViewModel(
+            repository: expenditureRepository,
+            tagRepository: tagRepository,
+          ),
+        ),
+        Provider<RecurringTransactionService>.value(value: recurringService),
+        ChangeNotifierProvider(
+          create: (_) => ScheduledExpenditureViewModel(scheduledRepository),
+        ),
+      ],
+      child: MaterialApp(
+        title: 'Money Manager',
+        theme: ThemeData(
+          // This is the theme of your application.
+          //
+          // TRY THIS: Try running your application with "flutter run". You'll see
+          // the application has a purple toolbar. Then, without quitting the app,
+          // try changing the seedColor in the colorScheme below to Colors.green
+          // and then invoke "hot reload" (save your changes or press the "hot
+          // reload" button in a Flutter-supported IDE, or press "r" if you used
+          // the command line to start the app).
+          //
+          // Notice that the counter didn't reset back to zero; the application
+          // state is not lost during the reload. To reset the state, use hot
+          // restart instead.
+          //
+          // This works for code too, not just values: Most code changes can be
+          // tested with just a hot reload.
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        ),
+        home: const MainView(),
       ),
     );
   }
