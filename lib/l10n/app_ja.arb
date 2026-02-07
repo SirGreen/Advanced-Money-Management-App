@@ -1,0 +1,596 @@
+{
+    "@@locale": "ja",
+    "recentTransactions": "最近の支出",
+    "noTransactions": "支出がありません。追加してみましょう！",
+    "reports": "レポート",
+    "manageTags": "タグの管理",
+    "settings": "設定",
+    "manageScheduled": "自動支出の管理",
+    "addTransaction": "追加",
+    "editTransaction": "編集",
+    "transactionType": "タイプ",
+    "expense": "支出",
+    "expenseName": "支出名",
+    "income": "収入",
+    "source": "収入源",
+    "articleName": "品名",
+    "amount": "金額",
+    "amountOptional": "金額（オプション）",
+    "date": "日付",
+    "mainTag": "メインタグ",
+    "subTags": "サブタグ",
+    "save": "保存",
+    "update": "更新",
+    "delete": "削除",
+    "cancel": "キャンセル",
+    "confirmDelete": "削除の確認",
+    "confirmDeleteMessage": "この記録を本当に削除しますか？",
+    "selectDate": "日付を選択",
+    "selectTags": "タグを選択",
+    "addNewTag": "新しいタグを追加",
+    "noAmountSet": "金額未設定",
+    "netBalance": "収支",
+    "spendingReport": "支出レポート",
+    "totalSpending": "合計支出",
+    "byCategory": "カテゴリ別",
+    "nameInput": "名前を入力してください",
+    "validNumber": "有効な数値を入力してください",
+    "selectMainTag": "メインタグを選択してください",
+    "selectSubTag": "サブタグを選択",
+    "selectTag": "タグを選択してください",
+    "end": "完了",
+    "amountChanged": "金額が変更されました",
+    "confirmUpdateAllExpenses": "過去に作成されたすべての支出もこの新しい金額に更新しますか？",
+    "noChange": "過去分はそのまま",
+    "updateAll": "すべて更新",
+    "applyForRelatedTransaction": "関連する支出の扱い",
+    "confirmDeleteRuleInstance": "この自動支出ルールを削除する際、過去に作成された支出も一緒に削除しますか？",
+    "leaveUnchanged": "いいえ、過去分は残す",
+    "changeAll": "はい、すべて削除",
+    "finalConfirm": "最終確認",
+    "confirmShouldDeleteInstance": "本当にこのルールと関連するすべての支出を削除しますか？この操作は元に戻せません。",
+    "confirmDeleteOnlyRule": "本当にこのルールを削除しますか？過去の支出は手動の支出として残ります。",
+    "performDeleteion": "削除を実行",
+    "editAutoTrans": "自動支出の編集",
+    "addAutoTrans": "自動支出の追加",
+    "repeatSetting": "繰り返し設定",
+    "repeatType": "繰り返しタイプ",
+    "dayOfMonth": "毎月特定の日",
+    "endOfMonth": "毎月末日",
+    "daysBeforeEoM": "毎月末日からN日前",
+    "fixedInterval": "固定日",
+    "msgFixedInterval": "指定した日数ごとに区切ります。",
+    "startDate": "開始日",
+    "endDateOptional": "終了日 (オプション)",
+    "noEndDate": "設定しない (無期限)",
+    "clearEndDate": "終了日をクリア",
+    "howManyDaysBefore": "何日前",
+    "enterOneOrMoreDay": "1以上の日数を入力してください",
+    "intervalDays": "間隔日数",
+    "chooseColor": "色を選択",
+    "editTag": "タグの編集",
+    "addTag": "新しいタグを追加",
+    "tagName": "タグ名",
+    "inputTagName": "タグ名を入力してください",
+    "color": "色",
+    "icon": "アイコン",
+    "selectImgFromGallery": "ギャラリーから画像を選択",
+    "msgAddTrans": "トランザクションの追加",
+    "addNewRule": "新しいルールを追加",
+    "noAutoRule": "自動支出ルールがありません。",
+    "noTag": "タグなし",
+    "deleteRule": "このルールを削除",
+    "noDataForReport": "レポートを作成するデータがありません。",
+    "interval": "間隔",
+    "days": "日間",
+    "custom": "カスタム...",
+    "customDays": "カスタム日数 (1-180)",
+    "enterNumOfDays": "日数を入力",
+    "confirmReset": "本当にリセットしますか？",
+    "confirmDeleteEverything": "すべての支出、タグ、自動支出ルールが削除されます。この操作は元に戻せません。",
+    "reset": "リセット",
+    "transListGroup": "支出リストのグループ化",
+    "calendarMonth": "カレンダー月別",
+    "msgCalendarMonth": "毎月1日から末日までで区切ります。",
+    "paydayCycle": "給料日サイクル",
+    "msgPaydayCycle": "指定した開始日から翌月の前日までで区切ります。",
+    "cycleStartDate": "サイクル開始日",
+    "dangerousOperation": "危険な操作",
+    "resetAllData": "すべてのデータをリセット",
+    "resetApp": "アプリを初期状態に戻します。",
+    "tagInUse": "タグを使用中です",
+    "deleteAndContinue": "削除して続行",
+    "noTag": "タグがありません。",
+    "food": "食費",
+    "transport": "交通費",
+    "shopping": "買い物",
+    "entertainment": "娯楽",
+    "other": "その他",
+    "searchTransactions": "支出を検索",
+    "keyword": "キーワード",
+    "search": "検索",
+    "all": "全部",
+    "searchResults": "検索結果",
+    "noResultsFound": "研究は見つかりませんでした",
+    "paginationLimit": "表示件数の設定",
+    "done": "終わり",
+    "selectDateRange": "日付の範囲を指定",
+    "filterByDate": "日付で絞り込む",
+    "recommendations": "おすすめタグ",
+    "enterMoreCharsForSuggestion": "おすすめのためにさらに文字を入力してください",
+    "clearSelection": "選択をクリア",
+    "expenseBreakdown": "支出の内訳",
+    "incomeBreakdown": "収入の内訳",
+    "allTimeMoneyLeft": "総資産",
+    "dateRange": "期間",
+    "changeCurrency": "通貨の変更",
+    "sortBy": "並び替え",
+    "dateNewestFirst": "日付（新しい順）",
+    "dateOldestFirst": "日付（古い順）",
+    "amountHighestFirst": "金額（高い順）",
+    "amountLowestFirst": "金額（低い順）",
+    "nameAZ": "名前（A-Z）",
+    "nameZA": "名前（Z-A）",
+    "advancedSearch": "詳細検索",
+    "minAmount": "最小金額",
+    "maxAmount": "最大金額",
+    "anyDate": "すべての日付",
+    "tags": "タグ",
+    "currencyConverter": "通貨換算機",
+    "amountToConvert": "換算する金額",
+    "swapCurrencies": "通貨を入れ替える",
+    "scanReceipt": "レシートをスキャン",
+    "processingImage": "画像を処理中",
+    "takePicture": "写真を撮る",
+    "selectFromGallery": "ギャラリーから選択",
+    "moreOptions": "その他のオプション",
+    "addManually": "手動で追加",
+    "appName": "家計簿アプリ",
+    "notesOptional": "メモ（任意）",
+    "notesHint": "メモを追加（例：詳細、場所など）",
+    "receipt": "レシート",
+    "suggestTags": "タグの提案",
+    "notes": "メモ",
+    "optionalDetails": "詳細（任意）",
+    "analyzingYourReceipt": "レシートを解析中",
+    "uploadAnExistingImage": "既存の画像をアップロード",
+    "useYourCameraToScan": "カメラでスキャンする",
+    "letAiDoTheHeavyLifting": "AIにお任せください",
+    "scanYourReceipt": "レシートをスキャン",
+    "proceed": "実行",
+    "exchangeRateError": "為替レートの取得に失敗しました。後でもう一度お試しください。",
+    "addCustomRate": "カスタム為替レートを追加",
+    "exchangeRate": "為替レート",
+    "add": "追加",
+    "language": "言語",
+    "systemDefault": "システムデフォルト",
+    "primaryCurrency": "基本通貨",
+    "customExchangeRates": "カスタム為替レート",
+    "noTransactionsFound": "トランザクションが見つかりませんでした",
+    "exportingData": "データをエクスポート中",
+    "exportCancelled": "エクスポートがキャンセルされました",
+    "warning": "警告",
+    "importWarningMessage": "この操作は既存のデータに影響を与える可能性があります。続行しますか？",
+    "importSuccess": "インポートが成功しました",
+    "importFailed": "インポートに失敗しました",
+    "dataManagement": "データ管理",
+    "exportData": "データをエクスポート",
+    "exportDataSubtitle": "保存用に現在のデータをエクスポートします",
+    "importData": "データをインポート",
+    "importDataSubtitle": "バックアップからデータを復元します",
+    "allTimeBalance": "総資産",
+    "searchByName": "名前で検索",
+    "amountRange": "金額の範囲",
+    "change": "変更",
+    "select": "選択",
+    "noTagsYet": "タグがまだありません",
+    "noScheduledRules": "自動ルールがありません",
+    "tapToAddFirstRule": "タップして最初のルールを追加",
+    "edit": "編集",
+    "active": "有効",
+    "inactive": "無効",
+    "ruleName": "ルール名",
+    "endDate": "終了日",
+    "optional": "（任意）",
+    "defaultTag": "デフォルトタグ",
+    "tapToAddFirstTag": "タップして最初のタグを追加",
+    "searchCurrency": "通貨を検索",
+    "error": "エラー",
+    "convertFrom": "変換元",
+    "convertTo": "変換先",
+    "general": "一般",
+    "display": "表示",
+    "editSavingGoal": "貯金目標を編集",
+    "addSavingGoal": "貯金目標を追加",
+    "goalName": "目標名",
+    "targetAmount": "目標金額",
+    "currentAmount": "現在の金額",
+    "annualInterestRate": "年間利率",
+    "assets": "資産",
+    "savings": "貯金",
+    "investments": "投資",
+    "featureComingSoon": "近日公開予定の機能",
+    "noSavingGoals": "貯金目標がありません",
+    "home": "ホーム",
+    "addPortfolio": "ポートフォリオを追加",
+    "addNewPortfolio": "新しいポートフォリオを追加",
+    "portfolioName": "ポートフォリオ名",
+    "noPortfolios": "ポートフォリオがありません",
+    "noInvestments": "投資がありません",
+    "addInvestment": "投資を追加",
+    "addNewPortfolio": "新しいポートフォリオ",
+    "portfolioName": "ポートフォリオ名",
+    "portfolioNameHint": "例: 株式、暗号資産",
+    "nameInput": "名前を入力してください",
+    "editInvestment": "投資の編集",
+    "addInvestment": "投資の追加",
+    "investmentSymbol": "シンボル",
+    "investmentSymbolHint": "例: AAPL, BTC",
+    "investmentName": "名前",
+    "investmentNameHint": "例: Apple Inc.",
+    "quantity": "数量",
+    "averageBuyPrice": "平均購入価格",
+    "inputQuantity": "数量を入力してください",
+    "inputAverageBuyPrice": "平均購入価格を入力してください",
+    "editSavingAccount": "貯蓄口座を編集",
+    "addSavingAccount": "貯蓄口座を追加",
+    "accountName": "口座名",
+    "currentBalance": "現在の残高",
+    "openingDate": "開設日",
+    "closingDate": "解約日",
+    "stillActive": "まだ有効",
+    "clearClosingDate": "解約日をクリア",
+    "savingAccounts": "貯蓄口座",
+    "noSavingAccounts": "貯蓄口座がありません",
+    "savingGoals": "貯蓄目標",
+    "contribution": "拠出",
+    "contributionAdded": "拠出が追加されました",
+    "addContribution": "拠出を追加",
+    "contributionAmount": "拠出額",
+    "saveAsTransaction": "支出として保存",
+    "selectCurrency": "通貨を選択",
+    "pinsDoNotMatch": "PINが一致しません",
+    "setupPin": "PINを設定",
+    "enterNewPin": "新しいPINを入力",
+    "confirmNewPin": "PINを確認",
+    "pinLock": "PINロック",
+    "pinIsEnabled": "PINが有効です",
+    "pinIsDisabled": "PINが無効です",
+    "disablePin": "PINを無効にする",
+    "disablePinMessage": "PINロックを無効にするとすべてのデータが消去されます。必ずバックアップを用意してください。PINロックを無効にしてもよろしいですか？",
+    "disable": "無効にする",
+    "security": "セキュリティ",
+    "authenticateToUnlock": "ロック解除のために認証してください",
+    "incorrectPin": "PINが正しくありません",
+    "enterPin": "PINを入力",
+    "refresh": "更新",
+    "addNew": "新規追加",
+    "totalSavings": "貯蓄合計",
+    "accounts": "口座",
+    "goals": "目標",
+    "completed": "完了",
+    "transaction": "取引",
+    "transactionsSingle": "取引一覧",
+    "timeline": "タイムライン",
+    "currency": "通貨",
+    "resetDate": "日付をリセット",
+    "cashFlowTimeline": "キャッシュフローのタイムライン",
+    "createdOn": "作成日",
+    "lastUpdated": "最終更新日",
+    "budgets": "予算",
+    "noBudgetsSet": "予算が設定されていません",
+    "editBudget": "予算を編集",
+    "addBudget": "予算を追加",
+    "editingBudgetForThisTag": "このタグの予算を編集中",
+    "selectTagForBudget": "予算対象のタグを選択",
+    "budgetAmount": "予算金額",
+    "budgetPeriod": "予算期間",
+    "deleteBudget": "予算を削除",
+    "saveBudget": "予算を保存",
+    "restartToApply": "インポートが成功しました。変更を適用するにはアプリを再起動してください。",
+    "restartNow": "今すぐ再起動",
+    "trans": "取引",
+    "noTransactionsInPeriod": "この期間には取引がありません",
+    "total": "合計",
+    "clearTags": "タグをクリア",
+    "settings": "設定",
+    "exportData": "データをエクスポート",
+    "exportDataSubtitle": "データをファイルに保存します。",
+    "exportingData": "データをエクスポート中...",
+    "exportCancelled": "エクスポートがキャンセルされました。",
+    "exportFailed": "エクスポートに失敗しました。もう一度お試しください。",
+    "exportNoPassword": "エクスポートがキャンセルされました: パスワードが入力されていません。",
+    "importData": "データをインポート",
+    "importDataSubtitle": "ファイルからデータを復元します。",
+    "importSuccess": "データのインポートに成功しました！",
+    "importFailed": "インポートに失敗しました。もう一度お試しください。",
+    "importCancelled": "インポートがキャンセルされました。",
+    "importNoPassword": "インポートがキャンセルされました: パスワードが入力されていません。",
+    "importWrongPassword": "インポートに失敗しました: パスワードが間違っているかファイルが破損しています。",
+    "importWarningMessage": "この操作はアプリ内の現在のデータをすべて上書きします。この操作は元に戻せません。続行してもよろしいですか？",
+    "backupPassword": "バックアップパスワード",
+    "enterPasswordForBackup": "バックアップ用のパスワードを入力してください",
+    "password": "パスワード",
+    "passwordCannotBeEmpty": "パスワードは空にできません",
+    "ok": "OK",
+    "selectOutputFile": "出力ファイルを選択してください:",
+    "authenticateToUnlock": "ロック解除のため認証してください",
+    "incorrectPin": "PINが間違っています。もう一度お試しください。",
+    "enterPin": "PINを入力してください",
+    "forgotPin": "PINをお忘れですか？",
+    "resetConfirmation": "アプリをリセットしますか？",
+    "resetWarningMessage": "この操作はすべてのアプリデータ（取引、設定、バックアップを含む）を完全に削除します。この操作は元に戻せません。続行してもよろしいですか？",
+    "resetAndStartOver": "削除してリセット",
+    "cancel": "キャンセル",
+    "addToTotal": "合計に追加",
+    "additionalAmount": "追加金額",
+    "add": "追加",
+    "forgotToAddItem": "項目を追加し忘れましたか？ここで金額を追加できます。",
+    "addTransaction": "取引を追加",
+    "editTransaction": "取引を編集",
+    "notificationReminderTitle": "リマインダー通知",
+    "notificationReminderBody": "取引の記録を忘れずに行いましょう。",
+    "reminders": "リマインダー",
+    "enableRemindersSubtitle": "リマインダーを有効にすると、取引の追加を忘れないように通知が届きます。",
+    "enableReminders": "リマインダーを有効にする",
+    "openSettings": "設定を開く",
+    "notificationPermissionGuide": "リマインダーを使用するには通知の許可が必要です。設定で許可を有効にしてください。",
+    "permissionDenied": "通知の許可が拒否されました",
+    "notificationIncompleteTitle": "未完了の通知",
+    "clearFilter": "フィルターをクリア",
+    "sortByOverbudget": "予算超過順に並び替え",
+    "sortByPercent": "割合順に並び替え",
+    "sortByAmount": "金額順に並び替え",
+    "sortByName": "名前順に並び替え",
+    "dashboard": "ホーム",
+    "unspecifiedTransactions": "未分類の取引",
+    "overBudget": "予算オーバー",
+    "noRecentTransactions": "最近の取引はありません",
+    "viewAll": "すべて表示",
+    "highSpendingAlert": "高額支出の警告",
+    "spendingHigherThanAverage": "平均より支出が多いです",
+    "goalsEndingSoon": "まもなく終了する目標",
+    "endsOn": "終了日",
+    "upcoming": "今後の予定",
+    "cannotBeNegative": "負の値にはできません",
+    "adjustTotal": "合計を調整",
+    "adjustmentAmount": "調整額",
+    "removeFromTotal": "合計から削除",
+    "backupReminderTitle": "バックアップのリマインダー",
+    "backupReminderSubtitle": "データを安全に保つため、定期的にバックアップを作成してください",
+    "analyzing": "分析中...",
+    "analysisFailed": "分析に失敗しました。もう一度お試しください。",
+    "budgetAnalysis": "予算分析",
+    "noAnalysisSummary": "分析の要約はありません。",
+    "onTrackToMeetBudget": "予算達成の見込みあり",
+    "atRiskOfExceedingBudget": "予算超過のリスクあり",
+    "suggestions": "提案",
+    "contextSaved": "コンテキストが保存されました。",
+    "errorSavingContext": "コンテキストの保存中にエラーが発生しました。",
+    "financialContextTitle": "財務コンテキスト",
+    "financialContextDescription": "あなたの収入、支出、目標などに基づいて、より良い提案を受け取るための情報です。",
+    "financialContextHint": "例: 学生で月収は5万円、節約中です。",
+    "yourContext": "あなたのコンテキスト",
+    "financialContextSubTitle": "支出の傾向や目標に基づいて、パーソナライズされた提案を受け取りましょう。",
+    "getInsights": "インサイトを取得",
+    "@getInsights": {
+        "description": "ユーザーに洞察を提供するボタンまたはアクションのラベル"
+    },
+    "analyzeWithAI": "AIで分析",
+    "@analyzeWithAI": {
+        "description": "AIを使って分析を行うためのラベルまたはボタン"
+    },
+    "reportAnalysis": "分析レポート",
+    "@reportAnalysis": {
+        "description": "AIや統計などのレポート分析セクションのタイトル"
+    },
+    "goodPoints": "良い点",
+    "@goodPoints": {
+        "description": "ユーザーの財務行動で良かった点を表すラベル"
+    },
+    "expenses": "支出",
+    "@expenses": {
+        "description": "費用や支出を表す一般的なラベル"
+    },
+    "confidence": "信頼度: {confidence}%",
+    "@confidence": {
+        "placeholders": {
+            "confidence": {
+                "type": "String"
+            }
+        }
+    },
+    "itemsNeedAttention": "{count} 件の項目に注意が必要です",
+    "@itemsNeedAttention": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "notificationIncompleteBody": "{incompleteCount} 件の未完了の取引があります。確認してください。",
+    "@notificationIncompleteBody": {
+        "placeholders": {
+            "incompleteCount": {
+                "type": "int"
+            }
+        }
+    },
+    "exportSuccess": "エクスポート成功: {path}",
+    "@exportSuccess": {
+        "placeholders": {
+            "path": {
+                "type": "String"
+            }
+        }
+    },
+    "resetsOn": "{date} にリセット",
+    "@resetsOn": {
+        "description": "予算のリセット日を示すメッセージ",
+        "placeholders": {
+            "date": {
+                "type": "String"
+            }
+        }
+    },
+    "confirmDeleteBudget": "「{tag}」タグの予算を本当に削除しますか？",
+    "@confirmDeleteBudget": {
+        "description": "予算削除の確認メッセージ",
+        "placeholders": {
+            "tag": {
+                "type": "String"
+            }
+        }
+    },
+    "overBudgetBy": "予算超過：{amount}",
+    "@overBudgetBy": {
+        "description": "予算超過の金額",
+        "placeholders": {
+            "amount": {
+                "type": "String"
+            }
+        }
+    },
+    "remaining": "残り：{amount}",
+    "@remaining": {
+        "description": "予算の残額",
+        "placeholders": {
+            "amount": {
+                "type": "String"
+            }
+        }
+    },
+    "budgetPeriodName": "{period} の期間",
+    "@budgetPeriodName": {
+        "description": "予算期間の名前",
+        "placeholders": {
+            "period": {
+                "type": "String"
+            }
+        }
+    },
+    "transactions": "{count, plural, =0{取引なし} =1{1 件の取引} other{{count} 件の取引}}",
+    "@transactions": {
+        "description": "取引の件数",
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "estimatedValueAt": "{date} 時点の予測値",
+    "@estimatedValueAt": {
+        "placeholders": {
+            "date": {
+                "type": "String"
+            }
+        }
+    },
+    "daysBeforeEndOfMonthWithValue": "月末の{value}日前",
+    "@daysBeforeEndOfMonthWithValue": {
+        "placeholders": {
+            "value": {
+                "type": "int"
+            }
+        }
+    },
+    "fixedIntervalWithValue": "{value}日ごと",
+    "@fixedIntervalWithValue": {
+        "placeholders": {
+            "value": {
+                "type": "int"
+            }
+        }
+    },
+    "confirmCurrencyConversion": "すべての記録を {oldCode} から {newCode} に換算しますか？この操作には為替レートの取得が必要です。",
+    "@confirmCurrencyConversion": {
+        "placeholders": {
+            "oldCode": {
+                "type": "String"
+            },
+            "newCode": {
+                "type": "String"
+            }
+        }
+    },
+    "exportSuccess": "データを正常にエクスポートしました: {path}",
+    "@exportSuccess": {
+        "description": "The path of successful export",
+        "placeholders": {
+            "path": {
+                "type": "String"
+            }
+        }
+    },
+    "languageName": "{languageCode, select, ja{日本語} en{English} vi{Tiếng Việt} other{Unknown}}",
+    "@languageName": {
+        "description": "The name of a language.",
+        "placeholders": {
+            "languageCode": {
+                "type": "String"
+            }
+        }
+    },
+    "currencyName": "{currencyCode, select, JPY{日本円 (JPY)} USD{米ドル (USD)} EUR{ユーロ (EUR)} CNY{中国人民元 (CNY)} RUB{ロシア・ルーブル (RUB)} VND{ベトナム・ドン (VND)} AUD{オーストラリア・ドル (AUD)} KRW{韓国ウォン (KRW)} THB{タイ・バーツ (THB)} PHP{フィリピン・ペソ (PHP)} MYR{マレーシア・リンギット (MYR)} GBP{英ポンド (GBP)} CAD{カナダ・ドル (CAD)} CHF{スイス・フラン (CHF)} HKD{香港ドル (HKD)} SGD{シンガポール・ドル (SGD)} INR{インド・ルピー (INR)} BRL{ブラジル・レアル (BRL)} ZAR{南アフリカ・ランド (ZAR)} other{Unknown}}",
+    "@currencyName": {
+        "description": "The name of a currency.",
+        "placeholders": {
+            "currencyCode": {
+                "type": "String"
+            }
+        }
+    },
+    "daysUnit": "{day} 日間",
+    "@daysUnit": {
+        "placeholders": {
+            "day": {
+                "type": "int"
+            }
+        }
+    },
+    "warningTagInUse": "「{tagName}」タグは支出に使用されています。削除した場合、関連する支出は「その他」カテゴリに移動します。続行しますか？",
+    "@warningTagInUse": {
+        "description": "Warning message that a tag is being used for expense",
+        "placeholders": {
+            "tagName": {
+                "type": "String"
+            }
+        }
+    },
+    "removeTag": "「{tagName}」タグを本当に削除しますか？",
+    "@removeTag": {
+        "description": "Confirm delete tag",
+        "placeholders": {
+            "tagName": {
+                "type": "String"
+            }
+        }
+    },
+    "currencyValue": "¥{value}",
+    "@currencyValue": {
+        "description": "Formats a number as Japanese Yen currency.",
+        "placeholders": {
+            "value": {
+                "type": "String"
+            }
+        }
+    },
+    "imageSaveFailed": "画像の保存に失敗しました: {error}",
+    "@imageSaveFailed": {
+        "description": "Error message shown when saving an image fails.",
+        "placeholders": {
+            "error": {
+                "type": "Object"
+            }
+        }
+    },
+    "dayOfMonthLabel": "{day} 日",
+    "@dayOfMonthLabel": {
+        "description": "Label for a specific day of the month.",
+        "placeholders": {
+            "day": {
+                "type": "int"
+            }
+        }
+    }
+}
