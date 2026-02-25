@@ -13,9 +13,9 @@ class TagIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     return CircleAvatar(
       radius: radius,
-      backgroundColor: HSLColor.fromColor(tag.color)
+      backgroundColor: HSLColor.fromColor(Color(tag.colorValue))
           .withLightness(
-            (HSLColor.fromColor(tag.color).lightness * 0.8).clamp(0.0, 1.0),
+            (HSLColor.fromColor(Color(tag.colorValue)).lightness * 0.8).clamp(0.0, 1.0),
           )
           .toColor()
           .withValues(alpha: 0.2),
@@ -33,7 +33,7 @@ class TagIcon extends StatelessWidget {
           if (tag.iconName != null) {
             return Icon(
               getIconForTag(tag.iconName!),
-              color: tag.color,
+              color: Color(tag.colorValue),
               size: radius,
             );
           }
@@ -41,7 +41,7 @@ class TagIcon extends StatelessWidget {
           return Text(
             tag.name.isNotEmpty ? tag.name[0].toUpperCase() : '?',
             style: TextStyle(
-              color: tag.color,
+              color: Color(tag.colorValue),
               fontWeight: FontWeight.bold,
               fontSize: radius,
             ),

@@ -26,29 +26,22 @@ import 'ui/tags/manage_tags_page.dart';
 import 'ui/tags/tag_view_model.dart';
 
 void main() async {
-  // 1. Ensure Flutter Binding is initialized
   WidgetsFlutterBinding.ensureInitialized();
 
-  // 2. Initialize Hive
   await Hive.initFlutter();
 
-  // 3. Register Hive Adapters (Keep all of them)
   Hive.registerAdapter(ExpenditureAdapter());
   Hive.registerAdapter(TagAdapter());
+  Hive.registerAdapter(DividerTypeAdapter());
   Hive.registerAdapter(SettingsAdapter());
 
-  // 4. Khởi tạo Database Service & Mở các Box cần thiết
   final databaseService = DatabaseService();
   await databaseService.openBoxes();
 
-  // 5. Khởi tạo SettingsController và load dữ liệu ban đầu
   final settingsController = SettingsController();
   await settingsController.initialize();
 
-  // 6. Setup Dependency Injection cho tính năng Scan
-  // LLMService -> Repository -> UseCase -> Controller
   final llmService = LLMService();
-
 
   final receiptRepository = ReceiptRepositoryImpl(llmService);
   final scanReceiptUseCase = ScanReceiptUseCase(receiptRepository);
@@ -56,10 +49,7 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
-        // Cung cấp SettingsController đã được initialize
         ChangeNotifierProvider.value(value: settingsController),
-
-        // Cung cấp ExpenditureController với UseCase được inject vào
         ChangeNotifierProvider(
           create: (_) => ExpenditureController(
             scanReceiptUseCase: scanReceiptUseCase,
@@ -76,8 +66,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // 1. INITIALIZE TAG DEPENDENCIES (from tags-Huy)
-    // In a larger app, you might move this to a dependency injection container (like GetIt)
     final tagLocalDataSource = TagLocalDataSource();
     final tagRepository = TagRepositoryImpl(tagLocalDataSource);
 
@@ -97,8 +85,6 @@ class MyApp extends StatelessWidget {
       ],
       child: Builder(
         builder: (context) {
-          // 4. LISTEN TO SETTINGS (from master)
-          // This ensures the MaterialApp rebuilds when theme/language changes
           final settings = context.watch<SettingsController>();
 
           return MaterialApp(
@@ -108,24 +94,17 @@ class MyApp extends StatelessWidget {
               colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
               useMaterial3: true,
             ),
-            home: const ManageTagsPage(), 
+            localizationsDelegates: const [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: CameraScannerPage(),
+          );
+        }
       ),
-      
-      // Cấu hình Localization (Đa ngôn ngữ)
-      localizationsDelegates: const [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: AppLocalizations.supportedLocales,
-      
-      // Nếu bạn lưu locale trong settings, có thể dùng: 
-      // locale: settingsController.settings.locale,
-
-      // Màn hình chính
-      // Bạn có thể đổi thành HomePage() hoặc màn hình Dashboard của bạn
-      home: const CameraScannerPage(), 
     );
   }
 }
