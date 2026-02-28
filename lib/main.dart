@@ -2,7 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'data/data_sources/hive_service.dart';
+import 'domain/entities/expenditure.dart';
+import 'domain/entities/tag.dart';
+import 'domain/entities/scheduled_expenditure.dart';
+import 'data/data_sources/money_service.dart';
+import 'data/data_sources/expenditure_service.dart';
+import 'data/data_sources/tag_service.dart';
+import 'data/data_sources/scheduled_expenditure_service.dart';
 import 'data/repositories/money_repository_impl.dart';
 import 'data/repositories/expenditure_repository_impl.dart';
 import 'data/repositories/tag_repository_impl.dart';
@@ -21,24 +27,32 @@ void main() async {
   await Hive.initFlutter();
   await initializeDateFormatting('vi_VN', null);
 
-  final hiveService = HiveService();
-  await hiveService.init(); // Initialize Hive boxes
+  Hive.registerAdapter(ExpenditureAdapter());
+  Hive.registerAdapter(TagAdapter());
+  Hive.registerAdapter(ScheduledExpenditureAdapter());
+  Hive.registerAdapter(ScheduleTypeAdapter());
 
-  runApp(MyApp(hiveService: hiveService));
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  final HiveService hiveService;
-
-  const MyApp({super.key, required this.hiveService});
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
+    // Data Sources
+    final expenditureService = ExpenditureService();
+    final tagService = TagService();
+    final scheduledService = ScheduledExpenditureService();
+
     // Repositories
-    final moneyRepository = MoneyRepositoryImpl(hiveService);
-    final expenditureRepository = ExpenditureRepositoryImpl(hiveService);
-    final tagRepository = TagRepositoryImpl(hiveService);
-    final scheduledRepository = ScheduledExpenditureRepositoryImpl();
+    final moneyService = MoneyService();
+    final moneyRepository = MoneyRepositoryImpl(moneyService);
+    final expenditureRepository = ExpenditureRepositoryImpl(expenditureService);
+    final tagRepository = TagRepositoryImpl(tagService);
+    final scheduledRepository = ScheduledExpenditureRepositoryImpl(
+      scheduledService,
+    );
 
     // Initialize Service
     final notificationService = NotificationService();

@@ -1,39 +1,22 @@
-import 'package:hive/hive.dart';
 import '../../domain/repositories/scheduled_expenditure_repository.dart';
 import '../../domain/entities/scheduled_expenditure.dart';
+import '../data_sources/scheduled_expenditure_service.dart';
 
 class ScheduledExpenditureRepositoryImpl
     implements ScheduledExpenditureRepository {
-  ScheduledExpenditureRepositoryImpl();
+  final ScheduledExpenditureService _service;
 
-  Future<Box<ScheduledExpenditure>> get _box async {
-    if (!Hive.isBoxOpen('scheduled_expenditures')) {
-      await Hive.openBox<ScheduledExpenditure>('scheduled_expenditures');
-    }
-    return Hive.box<ScheduledExpenditure>('scheduled_expenditures');
-  }
+  ScheduledExpenditureRepositoryImpl(this._service);
 
   @override
-  Future<List<ScheduledExpenditure>> getAll() async {
-    final box = await _box;
-    return box.values.toList();
-  }
+  Future<List<ScheduledExpenditure>> getAll() => _service.getAll();
 
   @override
-  Future<void> add(ScheduledExpenditure item) async {
-    final box = await _box;
-    await box.put(item.id, item);
-  }
+  Future<void> add(ScheduledExpenditure item) => _service.add(item);
 
   @override
-  Future<void> update(ScheduledExpenditure item) async {
-    final box = await _box;
-    await box.put(item.id, item);
-  }
+  Future<void> update(ScheduledExpenditure item) => _service.update(item);
 
   @override
-  Future<void> delete(String id) async {
-    final box = await _box;
-    await box.delete(id);
-  }
+  Future<void> delete(String id) => _service.delete(id);
 }

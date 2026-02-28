@@ -1,39 +1,21 @@
-import 'package:hive/hive.dart';
 import '../../domain/repositories/tag_repository.dart';
 import '../../domain/entities/tag.dart';
-import '../data_sources/hive_service.dart';
+import '../data_sources/tag_service.dart';
 
 class TagRepositoryImpl implements TagRepository {
-  TagRepositoryImpl(HiveService hiveService);
+  final TagService _service;
 
-  Future<Box<Tag>> get _box async {
-    if (!Hive.isBoxOpen('tags')) {
-      await Hive.openBox<Tag>('tags');
-    }
-    return Hive.box<Tag>('tags');
-  }
+  TagRepositoryImpl(this._service);
 
   @override
-  Future<List<Tag>> getTags() async {
-    final box = await _box;
-    return box.values.toList();
-  }
+  Future<List<Tag>> getTags() => _service.getAll();
 
   @override
-  Future<void> addTag(Tag tag) async {
-    final box = await _box;
-    await box.put(tag.id, tag);
-  }
+  Future<void> addTag(Tag tag) => _service.add(tag);
 
   @override
-  Future<void> updateTag(Tag tag) async {
-    final box = await _box;
-    await box.put(tag.id, tag);
-  }
+  Future<void> updateTag(Tag tag) => _service.update(tag);
 
   @override
-  Future<void> deleteTag(String id) async {
-    final box = await _box;
-    await box.delete(id);
-  }
+  Future<void> deleteTag(String id) => _service.delete(id);
 }
