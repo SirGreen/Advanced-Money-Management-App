@@ -2,36 +2,50 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
-// --- Imports from Master ---
 import 'domain/entities/expenditure.dart'; 
 import 'domain/entities/tag.dart';
 import 'domain/entities/settings.dart';
-import 'ui/controllers/settings_controller.dart';
-import 'ui/controllers/expenditure_controller.dart';
+import 'domain/entities/scheduled_expenditure.dart';
+
 import 'data/data_sources/database_service.dart';
 import 'data/data_sources/llm_service.dart';
-import 'data/repositories/receipt_repository_impl.dart'; 
-import 'domain/usecases/scan_receipt_usecase.dart';
-import 'l10n/app_localizations.dart';
-import 'ui/sections/camera_scanner_page.dart';
-
-// --- Imports from tags-Huy ---
 import 'data/data_sources/tag_local_data_source.dart';
+import 'data/data_sources/expenditure_service.dart';
+import 'data/data_sources/scheduled_expenditure_service.dart';
+import 'data/services/notification_service.dart';
+
+import 'data/repositories/receipt_repository_impl.dart'; 
 import 'data/repositories/tag_repository_impl.dart';
+import 'data/repositories/expenditure_repository_impl.dart';
+import 'data/repositories/scheduled_expenditure_repository_impl.dart';
+
+import 'domain/usecases/scan_receipt_usecase.dart';
 import 'domain/usecases/add_tag.dart';
 import 'domain/usecases/get_all_tags.dart';
 import 'domain/usecases/update_tag.dart';
-import 'ui/tags/manage_tags_page.dart';
+import 'domain/services/recurring_transaction_service.dart';
+import 'ui/controllers/settings_controller.dart';
+import 'ui/controllers/expenditure_controller.dart';
 import 'ui/tags/tag_view_model.dart';
+import 'ui/transaction/expenditure_view_model.dart';
+import 'ui/transaction/scheduled_expenditure_view_model.dart';
+
+import 'l10n/app_localizations.dart';
+import 'ui/sections/camera_scanner_page.dart';
+import 'ui/main_view.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Hive.initFlutter();
+  await initializeDateFormatting('vi_VN', null);
 
   Hive.registerAdapter(ExpenditureAdapter());
   Hive.registerAdapter(TagAdapter());
+  Hive.registerAdapter(ScheduledExpenditureAdapter());
+  Hive.registerAdapter(ScheduleTypeAdapter());
   Hive.registerAdapter(DividerTypeAdapter());
   Hive.registerAdapter(SettingsAdapter());
 
@@ -42,7 +56,6 @@ void main() async {
   await settingsController.initialize();
 
   final llmService = LLMService();
-
   final receiptRepository = ReceiptRepositoryImpl(llmService);
   final scanReceiptUseCase = ScanReceiptUseCase(receiptRepository);
 
@@ -68,20 +81,41 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final tagLocalDataSource = TagLocalDataSource();
     final tagRepository = TagRepositoryImpl(tagLocalDataSource);
+    final expenditureRepository = ExpenditureRepositoryImpl(ExpenditureService());
+    final scheduledRepository = ScheduledExpenditureRepositoryImpl(ScheduledExpenditureService());
 
-    final getAllTags = GetAllTags(tagRepository);
-    final addTag = AddTag(tagRepository);
-    final updateTag = UpdateTag(tagRepository);
+    final notificationService = NotificationService();
+    notificationService.init();
+
+    final recurringService = RecurringTransactionService(
+      scheduledRepository,
+      expenditureRepository,
+      notificationService,
+    );
+
+    recurringService.checkAndCreateTransactions().then((count) {
+      if (count > 0) debugPrint("Auto-created $count recurring transactions.");
+    });
 
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
           create: (_) => TagViewModel(
-            getAllTags: getAllTags,
-            addTag: addTag,
-            updateTag: updateTag,
+            getAllTags: GetAllTags(tagRepository),
+            addTag: AddTag(tagRepository),
+            updateTag: UpdateTag(tagRepository),
           ),
         ),
+        ChangeNotifierProvider(
+          create: (_) => ExpenditureViewModel(
+            repository: expenditureRepository,
+            tagRepository: tagRepository,
+          ),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => ScheduledExpenditureViewModel(scheduledRepository),
+        ),
+        Provider<RecurringTransactionService>.value(value: recurringService),
       ],
       child: Builder(
         builder: (context) {
@@ -101,9 +135,9 @@ class MyApp extends StatelessWidget {
               GlobalCupertinoLocalizations.delegate,
             ],
             supportedLocales: AppLocalizations.supportedLocales,
-            home: CameraScannerPage(),
+            home: const MainView(), 
           );
-        }
+        },
       ),
     );
   }
