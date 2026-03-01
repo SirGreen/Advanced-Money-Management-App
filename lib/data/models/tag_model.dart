@@ -18,20 +18,20 @@ class TagModel {
   });
 
   factory TagModel.fromEntity(Tag tag) => TagModel(
-        id: tag.id,
-        name: tag.name,
-        colorValue: tag.colorValue,
-        isDefault: tag.isDefault,
-        iconName: tag.iconName,
-        imagePath: tag.imagePath,
-      );
+    id: tag.id,
+    name: tag.name,
+    colorValue: tag.colorValue,
+    isDefault: tag.isDefault,
+    iconName: tag.iconName,
+    imagePath: tag.imagePath,
+  );
 
   Tag toEntity() => Tag(
-        id: id,
-        name: name,
-        colorValue: colorValue,
-        isDefault: isDefault,
-        iconName: iconName,
-        imagePath: imagePath,
-      );
+    id: id,
+    name: name,
+    colorValue: colorValue,
+    isDefault: isDefault,
+    iconName: iconName,
+    imagePath: imagePath,
+  );
 }

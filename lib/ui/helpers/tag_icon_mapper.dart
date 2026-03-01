@@ -41,9 +41,9 @@ IconData getIconForTag(String iconName) {
     case 'lightbulb':
       return Icons.lightbulb_outline;
     case 'construction':
-      return Icons.construction;  
+      return Icons.construction;
     case 'savings':
-      return Icons.savings_outlined;  
+      return Icons.savings_outlined;
     default:
       return Icons.help_outline;
   }

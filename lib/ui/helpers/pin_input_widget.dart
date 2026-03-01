@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 
 class PinInputWidget extends StatefulWidget {
   final Function(String) onCompleted;
-  final VoidCallback? onBiometric; 
+  final VoidCallback? onBiometric;
   final bool isCreatePin;
 
   const PinInputWidget({
     super.key,
     required this.onCompleted,
     this.onBiometric,
-    this.isCreatePin = false
+    this.isCreatePin = false,
   });
 
   @override
@@ -51,7 +51,9 @@ class _PinInputWidgetState extends State<PinInputWidget> {
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 border: Border.all(color: Colors.grey.shade400),
-                color: index < _pin.length ? Theme.of(context).primaryColor : Colors.transparent,
+                color: index < _pin.length
+                    ? Theme.of(context).primaryColor
+                    : Colors.transparent,
               ),
             );
           }),
@@ -73,9 +75,13 @@ class _PinInputWidgetState extends State<PinInputWidget> {
                     onPressed: widget.onBiometric,
                     tooltip: "Use Biometrics",
                   )
-                : Container(), 
+                : Container(),
             _buildNumberButton('0'),
-            IconButton(icon: const Icon(Icons.backspace_outlined), onPressed: _onBackspace, tooltip: "Backspace"),
+            IconButton(
+              icon: const Icon(Icons.backspace_outlined),
+              onPressed: _onBackspace,
+              tooltip: "Backspace",
+            ),
           ],
         ),
       ],

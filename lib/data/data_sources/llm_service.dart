@@ -101,9 +101,7 @@ class LLMService {
         return decodedJson as Map<String, dynamic>;
       } else {
         debugPrint("LLM API Error: Response text is null.");
-        debugPrint(
-          "Debugging info: ${response.promptFeedback?.blockReason}",
-        );
+        debugPrint("Debugging info: ${response.promptFeedback?.blockReason}");
         return null;
       }
     } catch (e) {
@@ -167,9 +165,7 @@ class LLMService {
         return decodedJson as Map<String, dynamic>;
       } else {
         debugPrint("LLM API Error: Response text is null.");
-        debugPrint(
-          "Debugging info: ${response.promptFeedback?.blockReason}",
-        );
+        debugPrint("Debugging info: ${response.promptFeedback?.blockReason}");
         return null;
       }
     } catch (e) {
@@ -180,32 +176,30 @@ class LLMService {
       return null;
     }
   }
-  
 
   Future<Map<String, dynamic>?> analyzeFinancialReport({
-  required String dateRangeStart,
-  required String dateRangeEnd,
-  required String? userContext,
-  required double totalIncome,
-  required double totalExpenses,
-  required List<Map<String, dynamic>> incomeBreakdown,
-  required List<Map<String, dynamic>> expenseBreakdown,
+    required String dateRangeStart,
+    required String dateRangeEnd,
+    required String? userContext,
+    required double totalIncome,
+    required double totalExpenses,
+    required List<Map<String, dynamic>> incomeBreakdown,
+    required List<Map<String, dynamic>> expenseBreakdown,
     required List<Map<String, dynamic>> transactionList,
-}) async {
-  if (_apiKey.isEmpty) {
-    debugPrint("ERROR: GEMINI_API_KEY is not set.");
-    return null;
-  }
+  }) async {
+    if (_apiKey.isEmpty) {
+      debugPrint("ERROR: GEMINI_API_KEY is not set.");
+      return null;
+    }
 
-  final model = GenerativeModel(
-    model: 'gemini-2.5-pro',
-    apiKey: _apiKey,
-    generationConfig: GenerationConfig(
-      responseMimeType: 'application/json',
-    ),
-  );
+    final model = GenerativeModel(
+      model: 'gemini-2.5-pro',
+      apiKey: _apiKey,
+      generationConfig: GenerationConfig(responseMimeType: 'application/json'),
+    );
 
-  final prompt = """
+    final prompt =
+        """
     You are an expert financial analyst AI. Your task is to provide a comprehensive analysis of a user's financial report for a specific period.
 
     **User's Provided Context:**
@@ -231,21 +225,21 @@ class LLMService {
     - `actionable_suggestions`: (List<String>) A list of 2-3 specific, actionable suggestions for improvement. These should be detailed and based on the transaction data. For example, "Your 'Subscriptions' category includes 'Gym Membership' and 'Streaming Service'. Consider if both are providing full value."
     """;
 
-  try {
-    final response = await model.generateContent([Content.text(prompt)]);
-    if (response.text != null) {
-      final decodedJson = jsonDecode(response.text!);
-      return decodedJson as Map<String, dynamic>;
-    } else {
-      debugPrint("LLM API Error: Response text is null.");
+    try {
+      final response = await model.generateContent([Content.text(prompt)]);
+      if (response.text != null) {
+        final decodedJson = jsonDecode(response.text!);
+        return decodedJson as Map<String, dynamic>;
+      } else {
+        debugPrint("LLM API Error: Response text is null.");
+        return null;
+      }
+    } catch (e) {
+      debugPrint("LLM Service Exception: $e");
+      if (e is GenerativeAIException) {
+        debugPrint("Gemini API Error details: ${e.message}");
+      }
       return null;
     }
-  } catch (e) {
-    debugPrint("LLM Service Exception: $e");
-    if (e is GenerativeAIException) {
-      debugPrint("Gemini API Error details: ${e.message}");
-    }
-    return null;
   }
-}
 }

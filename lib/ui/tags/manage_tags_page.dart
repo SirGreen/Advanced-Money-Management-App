@@ -5,6 +5,8 @@ import 'tag_detail_page.dart';
 import 'add_edit_tag_page.dart';
 
 class ManageTagsPage extends StatelessWidget {
+  const ManageTagsPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     final vm = context.watch<TagViewModel>();
@@ -13,22 +15,19 @@ class ManageTagsPage extends StatelessWidget {
       appBar: AppBar(title: const Text('Danh mục')),
       body: ListView(
         children: vm.tags
-            .map((t) => ListTile(
-                  title: Text(t.name),
-                  leading: CircleAvatar(
-                    backgroundColor: Color(t.colorValue),
-                    child: Icon(
-                      _iconForName(t.iconName),
-                      color: Colors.white,
-                    ),
-                  ),
-                  onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => TagDetailPage(tag: t),
-                    ),
-                  ),
-                ))
+            .map(
+              (t) => ListTile(
+                title: Text(t.name),
+                leading: CircleAvatar(
+                  backgroundColor: Color(t.colorValue),
+                  child: Icon(_iconForName(t.iconName), color: Colors.white),
+                ),
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => TagDetailPage(tag: t)),
+                ),
+              ),
+            )
             .toList(),
       ),
       floatingActionButton: FloatingActionButton(

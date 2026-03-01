@@ -4,18 +4,16 @@ class GradientTitle extends StatelessWidget {
   final String text;
   final List<Color>? gradientColors;
 
-  const GradientTitle({
-    super.key,
-    required this.text,
-    this.gradientColors,
-  });
+  const GradientTitle({super.key, required this.text, this.gradientColors});
 
   @override
   Widget build(BuildContext context) {
-    final colors = gradientColors ?? [
-      const Color.fromARGB(255, 30, 98, 36), // Darker green
-      const Color.fromARGB(255, 51, 137, 166), // Lighter green
-    ];
+    final colors =
+        gradientColors ??
+        [
+          const Color.fromARGB(255, 30, 98, 36), // Darker green
+          const Color.fromARGB(255, 51, 137, 166), // Lighter green
+        ];
 
     return ShaderMask(
       shaderCallback: (bounds) => LinearGradient(

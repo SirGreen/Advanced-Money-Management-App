@@ -3,7 +3,10 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import '../controllers/expenditure_controller.dart';
+
+// ViewModels (Clean Architecture)
+import '../transaction/expenditure_view_model.dart';
+
 import '../../../domain/entities/tag.dart';
 import 'add_edit_expenditure_page.dart';
 import '../helpers/glass_card.dart';
@@ -11,7 +14,8 @@ import '../helpers/gradient_background.dart';
 import '../helpers/gradient_title.dart';
 import '../../../l10n/app_localizations.dart';
 
-class CameraScannerAppBar extends StatelessWidget implements PreferredSizeWidget {
+class CameraScannerAppBar extends StatelessWidget
+    implements PreferredSizeWidget {
   final AppLocalizations l10n;
   const CameraScannerAppBar({super.key, required this.l10n});
 
@@ -54,10 +58,15 @@ class _CameraScannerPageState extends State<CameraScannerPage> {
 
     setState(() => _isProcessing = true);
 
-    final expenditureController = Provider.of<ExpenditureController>(context, listen: false);
-    
-    // Gọi hàm xử lý từ controller
-    final parsedData = await expenditureController.processReceipt(File(pickedFile.path));
+    // 1. Grab the ViewModel via context.read
+    final expenditureViewModel = context.read<ExpenditureViewModel>();
+
+    // 2. Call the scan method.
+    // Note: Make sure your ExpenditureViewModel has a `processReceipt` method
+    // that uses the `ScanReceiptUseCase` and returns the Map data!
+    final parsedData = await expenditureViewModel.processReceipt(
+      File(pickedFile.path),
+    );
 
     if (!mounted) {
       setState(() => _isProcessing = false);
@@ -71,7 +80,7 @@ class _CameraScannerPageState extends State<CameraScannerPage> {
 
     if (parsedData != null) {
       prefilledName = parsedData['store_name'] as String?;
-      
+
       final amountValue = parsedData['total_amount'];
       if (amountValue is num) {
         prefilledAmount = amountValue.toDouble();
@@ -80,8 +89,12 @@ class _CameraScannerPageState extends State<CameraScannerPage> {
       }
 
       if (parsedData['recommended_tags'] is List) {
-        List<String> suggestedNames = List<String>.from(parsedData['recommended_tags']);
-        recommendedTags = expenditureController.tags
+        List<String> suggestedNames = List<String>.from(
+          parsedData['recommended_tags'],
+        );
+
+        // Match suggested tag names with existing tags in the ViewModel
+        recommendedTags = expenditureViewModel.tags
             .where((t) => suggestedNames.contains(t.name))
             .toList();
       }
@@ -103,7 +116,6 @@ class _CameraScannerPageState extends State<CameraScannerPage> {
     );
   }
 
-  // Helper build card UI giữ nguyên như cũ...
   Widget _buildOptionCard({
     required IconData icon,
     required String title,

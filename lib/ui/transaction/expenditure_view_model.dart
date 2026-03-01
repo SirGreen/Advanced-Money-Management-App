@@ -1,13 +1,19 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
+
 import '../../domain/entities/expenditure.dart';
 import '../../domain/entities/tag.dart';
 import '../../domain/repositories/expenditure_repository.dart';
 import '../../domain/repositories/tag_repository.dart';
+import '../../domain/usecases/scan_receipt_usecase.dart';
 
 class ExpenditureViewModel extends ChangeNotifier {
   final ExpenditureRepository _repository;
   final TagRepository _tagRepository;
+
+  final ScanReceiptUseCase _scanReceiptUseCase;
 
   List<Expenditure> _normalExpenditures = [];
   List<Expenditure> get expenditures =>
@@ -24,8 +30,10 @@ class ExpenditureViewModel extends ChangeNotifier {
   ExpenditureViewModel({
     required ExpenditureRepository repository,
     required TagRepository tagRepository,
+    required ScanReceiptUseCase scanReceiptUseCase,
   }) : _repository = repository,
-       _tagRepository = tagRepository {
+       _tagRepository = tagRepository,
+       _scanReceiptUseCase = scanReceiptUseCase {
     _loadTags();
     loadExpenditures();
   }
@@ -94,6 +102,20 @@ class ExpenditureViewModel extends ChangeNotifier {
     }
   }
 
+  Future<void> addExpenditure(Expenditure expenditure) async {
+    isLoading = true;
+    notifyListeners();
+    try {
+      await _repository.addExpenditure(expenditure);
+      await loadExpenditures();
+    } catch (e) {
+      errorMessage = e.toString();
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+  }
+
   Future<void> addQuickExpenditure({
     required double amount,
     required bool isIncome,
@@ -150,5 +172,22 @@ class ExpenditureViewModel extends ChangeNotifier {
       isLoading = false;
       notifyListeners();
     }
+  }
+
+  Future<Map<String, dynamic>?> processReceipt(File imageFile) async {
+    try {
+      final t = await _tagRepository.getAllTags();
+      final tagNames = t.map((t) => t.name).toList();
+      return await _scanReceiptUseCase.call(imageFile, tagNames);
+    } catch (e) {
+      errorMessage = e.toString();
+      notifyListeners();
+      return null;
+    }
+  }
+
+  // TODO: implement this
+  Future<List<Object>> recommendTags(String articleName) async {
+    return [];
   }
 }

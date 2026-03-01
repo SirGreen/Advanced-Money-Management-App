@@ -8,7 +8,10 @@ class ReceiptRepositoryImpl implements ReceiptRepository {
   ReceiptRepositoryImpl(this._llmService);
 
   @override
-  Future<Map<String, dynamic>?> scanReceipt(File image, List<String> existingTagNames) async {
+  Future<Map<String, dynamic>?> scanReceipt(
+    File image,
+    List<String> existingTagNames,
+  ) async {
     // Gọi trực tiếp service cũ của bạn
     return await _llmService.processReceiptImage(image, existingTagNames);
   }

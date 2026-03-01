@@ -8,24 +8,25 @@ class SharedAxisPageRoute extends PageRouteBuilder {
     required Widget page,
     SharedAxisTransitionType transitionType = SharedAxisTransitionType.scaled,
   }) : super(
-          pageBuilder: (
-            BuildContext context,
-            Animation<double> animation,
-            Animation<double> secondaryAnimation,
-          ) =>
-              page,
-          transitionsBuilder: (
-            BuildContext context,
-            Animation<double> animation,
-            Animation<double> secondaryAnimation,
-            Widget child,
-          ) {
-            return SharedAxisTransition(
-              animation: animation,
-              secondaryAnimation: secondaryAnimation,
-              transitionType: transitionType,
-              child: child,
-            );
-          },
-        );
+         pageBuilder:
+             (
+               BuildContext context,
+               Animation<double> animation,
+               Animation<double> secondaryAnimation,
+             ) => page,
+         transitionsBuilder:
+             (
+               BuildContext context,
+               Animation<double> animation,
+               Animation<double> secondaryAnimation,
+               Widget child,
+             ) {
+               return SharedAxisTransition(
+                 animation: animation,
+                 secondaryAnimation: secondaryAnimation,
+                 transitionType: transitionType,
+                 child: child,
+               );
+             },
+       );
 }

@@ -24,7 +24,7 @@ class TagLocalDataSource {
       isDefault: true,
     ),
   ];
-  
+
   Future<List<TagModel>> getAll() async {
     return List<TagModel>.from(_storage);
   }

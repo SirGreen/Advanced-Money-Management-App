@@ -4,36 +4,36 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
-import 'domain/entities/expenditure.dart'; 
+import 'domain/entities/expenditure.dart';
 import 'domain/entities/tag.dart';
 import 'domain/entities/settings.dart';
 import 'domain/entities/scheduled_expenditure.dart';
 
-import 'data/data_sources/database_service.dart';
 import 'data/data_sources/llm_service.dart';
 import 'data/data_sources/tag_local_data_source.dart';
 import 'data/data_sources/expenditure_service.dart';
 import 'data/data_sources/scheduled_expenditure_service.dart';
+import 'data/data_sources/settings_service.dart';
 import 'data/services/notification_service.dart';
 
-import 'data/repositories/receipt_repository_impl.dart'; 
+import 'data/repositories/receipt_repository_impl.dart';
 import 'data/repositories/tag_repository_impl.dart';
 import 'data/repositories/expenditure_repository_impl.dart';
 import 'data/repositories/scheduled_expenditure_repository_impl.dart';
+import 'data/repositories/settings_repository_impl.dart';
 
 import 'domain/usecases/scan_receipt_usecase.dart';
 import 'domain/usecases/add_tag.dart';
 import 'domain/usecases/get_all_tags.dart';
 import 'domain/usecases/update_tag.dart';
 import 'domain/services/recurring_transaction_service.dart';
-import 'ui/controllers/settings_controller.dart';
-import 'ui/controllers/expenditure_controller.dart';
+
 import 'ui/tags/tag_view_model.dart';
 import 'ui/transaction/expenditure_view_model.dart';
 import 'ui/transaction/scheduled_expenditure_view_model.dart';
+import 'ui/settings/settings_view_model.dart';
 
 import 'l10n/app_localizations.dart';
-import 'ui/sections/camera_scanner_page.dart';
 import 'ui/main_view.dart';
 
 void main() async {
@@ -49,56 +49,69 @@ void main() async {
   Hive.registerAdapter(DividerTypeAdapter());
   Hive.registerAdapter(SettingsAdapter());
 
-  final databaseService = DatabaseService();
-  await databaseService.openBoxes();
+  final notificationService = NotificationService();
+  await notificationService.init();
 
-  final settingsController = SettingsController();
-  await settingsController.initialize();
+  final settingsRepository = SettingsRepositoryImpl(SettingsService());
+  final tagRepository = TagRepositoryImpl(TagLocalDataSource());
+  final expenditureRepository = ExpenditureRepositoryImpl(ExpenditureService());
+  final scheduledRepository = ScheduledExpenditureRepositoryImpl(
+    ScheduledExpenditureService(),
+  );
+  final receiptRepository = ReceiptRepositoryImpl(LLMService());
 
-  final llmService = LLMService();
-  final receiptRepository = ReceiptRepositoryImpl(llmService);
   final scanReceiptUseCase = ScanReceiptUseCase(receiptRepository);
 
+  final settingsViewModel = SettingsViewModel(repository: settingsRepository);
+  await settingsViewModel.initialize();
+
+  final recurringService = RecurringTransactionService(
+    scheduledRepository,
+    expenditureRepository,
+    notificationService,
+  );
+
+  final count = await recurringService.checkAndCreateTransactions();
+  if (count > 0) debugPrint("Auto-created $count recurring transactions.");
+
   runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider.value(value: settingsController),
-        ChangeNotifierProvider(
-          create: (_) => ExpenditureController(
-            scanReceiptUseCase: scanReceiptUseCase,
-          ),
-        ),
-      ],
-      child: const MyApp(),
+    MyApp(
+      settingsViewModel: settingsViewModel,
+      tagRepository: tagRepository,
+      expenditureRepository: expenditureRepository,
+      scheduledRepository: scheduledRepository,
+      scanReceiptUseCase: scanReceiptUseCase,
+      recurringService: recurringService,
     ),
   );
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final SettingsViewModel settingsViewModel;
+  final TagRepositoryImpl tagRepository;
+  final ExpenditureRepositoryImpl expenditureRepository;
+  final ScheduledExpenditureRepositoryImpl scheduledRepository;
+  final ScanReceiptUseCase scanReceiptUseCase;
+  final RecurringTransactionService recurringService;
+
+  const MyApp({
+    super.key,
+    required this.settingsViewModel,
+    required this.tagRepository,
+    required this.expenditureRepository,
+    required this.scheduledRepository,
+    required this.scanReceiptUseCase,
+    required this.recurringService,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final tagLocalDataSource = TagLocalDataSource();
-    final tagRepository = TagRepositoryImpl(tagLocalDataSource);
-    final expenditureRepository = ExpenditureRepositoryImpl(ExpenditureService());
-    final scheduledRepository = ScheduledExpenditureRepositoryImpl(ScheduledExpenditureService());
-
-    final notificationService = NotificationService();
-    notificationService.init();
-
-    final recurringService = RecurringTransactionService(
-      scheduledRepository,
-      expenditureRepository,
-      notificationService,
-    );
-
-    recurringService.checkAndCreateTransactions().then((count) {
-      if (count > 0) debugPrint("Auto-created $count recurring transactions.");
-    });
-
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider.value(value: settingsViewModel),
+
+        Provider<RecurringTransactionService>.value(value: recurringService),
+
         ChangeNotifierProvider(
           create: (_) => TagViewModel(
             getAllTags: GetAllTags(tagRepository),
@@ -110,16 +123,16 @@ class MyApp extends StatelessWidget {
           create: (_) => ExpenditureViewModel(
             repository: expenditureRepository,
             tagRepository: tagRepository,
+            scanReceiptUseCase: scanReceiptUseCase,
           ),
         ),
         ChangeNotifierProvider(
           create: (_) => ScheduledExpenditureViewModel(scheduledRepository),
         ),
-        Provider<RecurringTransactionService>.value(value: recurringService),
       ],
       child: Builder(
         builder: (context) {
-          final settings = context.watch<SettingsController>();
+          final settingsViewModel = context.watch<SettingsViewModel>();
 
           return MaterialApp(
             debugShowCheckedModeBanner: false,
@@ -135,7 +148,7 @@ class MyApp extends StatelessWidget {
               GlobalCupertinoLocalizations.delegate,
             ],
             supportedLocales: AppLocalizations.supportedLocales,
-            home: const MainView(), 
+            home: const MainView(),
           );
         },
       ),

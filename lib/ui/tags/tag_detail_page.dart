@@ -4,7 +4,7 @@ import 'add_edit_tag_page.dart';
 
 class TagDetailPage extends StatelessWidget {
   final Tag tag;
-  const TagDetailPage({required this.tag, Key? key}) : super(key: key);
+  const TagDetailPage({required this.tag, super.key});
 
   IconData _iconForName(String? name) {
     switch (name) {
@@ -33,10 +33,7 @@ class TagDetailPage extends StatelessWidget {
                 CircleAvatar(
                   radius: 28,
                   backgroundColor: Color(tag.colorValue),
-                  child: Icon(
-                    _iconForName(tag.iconName),
-                    color: Colors.white,
-                  ),
+                  child: Icon(_iconForName(tag.iconName), color: Colors.white),
                 ),
                 const SizedBox(width: 12),
                 Text(tag.name, style: Theme.of(context).textTheme.titleLarge),

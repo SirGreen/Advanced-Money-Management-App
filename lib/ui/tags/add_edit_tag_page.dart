@@ -6,7 +6,7 @@ import 'package:uuid/uuid.dart';
 
 class AddEditTagPage extends StatefulWidget {
   final Tag? tag;
-  const AddEditTagPage({this.tag});
+  const AddEditTagPage({super.key, this.tag});
 
   @override
   State<AddEditTagPage> createState() => _AddEditTagPageState();
@@ -32,7 +32,9 @@ class _AddEditTagPageState extends State<AddEditTagPage> {
     final vm = context.read<TagViewModel>();
 
     return Scaffold(
-      appBar: AppBar(title: Text(widget.tag == null ? 'Thêm danh mục' : 'Sửa danh mục')),
+      appBar: AppBar(
+        title: Text(widget.tag == null ? 'Thêm danh mục' : 'Sửa danh mục'),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -52,7 +54,7 @@ class _AddEditTagPageState extends State<AddEditTagPage> {
                     },
                     icon: Icon(ic, color: selected ? Colors.blue : null),
                   );
-                }).toList(),
+                }),
               ],
             ),
             const SizedBox(height: 12),
@@ -61,22 +63,27 @@ class _AddEditTagPageState extends State<AddEditTagPage> {
                 const Text('Màu:'),
                 const SizedBox(width: 8),
                 ...[0xFFF48FB1, 0xFF90CAF9, 0xFF80CBC4, 0xFFFFF176, 0xFFCE93D8]
-                    .map((v) => GestureDetector(
-                          onTap: () => setState(() => color = Color(v)),
-                          child: Container(
-                            margin: const EdgeInsets.symmetric(horizontal: 6),
-                            width: 32,
-                            height: 32,
-                            decoration: BoxDecoration(
-                              color: Color(v),
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                  color: color.value == v ? Colors.black : Colors.transparent,
-                                  width: 2),
+                    .map(
+                      (v) => GestureDetector(
+                        onTap: () => setState(() => color = Color(v)),
+                        child: Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 6),
+                          width: 32,
+                          height: 32,
+                          decoration: BoxDecoration(
+                            color: Color(v),
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: color.value == v
+                                  ? Colors.black
+                                  : Colors.transparent,
+                              width: 2,
                             ),
                           ),
-                        ))
-                    .toList(),
+                        ),
+                      ),
+                    )
+                    ,
               ],
             ),
             const SizedBox(height: 16),
@@ -91,11 +98,13 @@ class _AddEditTagPageState extends State<AddEditTagPage> {
                     colorValue: color.value,
                     iconName: iconName,
                   );
-                  widget.tag == null ? await vm.create(tag) : await vm.edit(tag);
+                  widget.tag == null
+                      ? await vm.create(tag)
+                      : await vm.edit(tag);
                   Navigator.pop(context);
                 },
                 child: const Text('Lưu'),
-              )
+              ),
           ],
         ),
       ),

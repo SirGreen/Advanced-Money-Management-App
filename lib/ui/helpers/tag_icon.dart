@@ -15,7 +15,10 @@ class TagIcon extends StatelessWidget {
       radius: radius,
       backgroundColor: HSLColor.fromColor(Color(tag.colorValue))
           .withLightness(
-            (HSLColor.fromColor(Color(tag.colorValue)).lightness * 0.8).clamp(0.0, 1.0),
+            (HSLColor.fromColor(Color(tag.colorValue)).lightness * 0.8).clamp(
+              0.0,
+              1.0,
+            ),
           )
           .toColor()
           .withValues(alpha: 0.2),
