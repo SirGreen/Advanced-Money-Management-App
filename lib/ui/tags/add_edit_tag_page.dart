@@ -62,28 +62,32 @@ class _AddEditTagPageState extends State<AddEditTagPage> {
               children: [
                 const Text('Màu:'),
                 const SizedBox(width: 8),
-                ...[0xFFF48FB1, 0xFF90CAF9, 0xFF80CBC4, 0xFFFFF176, 0xFFCE93D8]
-                    .map(
-                      (v) => GestureDetector(
-                        onTap: () => setState(() => color = Color(v)),
-                        child: Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 6),
-                          width: 32,
-                          height: 32,
-                          decoration: BoxDecoration(
-                            color: Color(v),
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              color: color.value == v
-                                  ? Colors.black
-                                  : Colors.transparent,
-                              width: 2,
-                            ),
-                          ),
+                ...[
+                  0xFFF48FB1,
+                  0xFF90CAF9,
+                  0xFF80CBC4,
+                  0xFFFFF176,
+                  0xFFCE93D8,
+                ].map(
+                  (v) => GestureDetector(
+                    onTap: () => setState(() => color = Color(v)),
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 6),
+                      width: 32,
+                      height: 32,
+                      decoration: BoxDecoration(
+                        color: Color(v),
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: color.value == v
+                              ? Colors.black
+                              : Colors.transparent,
+                          width: 2,
                         ),
                       ),
-                    )
-                    ,
+                    ),
+                  ),
+                ),
               ],
             ),
             const SizedBox(height: 16),
