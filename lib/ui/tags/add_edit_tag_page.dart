@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../domain/entities/tag.dart';
+import '../../l10n/app_localizations.dart';
 import 'tag_view_model.dart';
 import 'package:uuid/uuid.dart';
 
@@ -29,11 +30,13 @@ class _AddEditTagPageState extends State<AddEditTagPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     final vm = context.read<TagViewModel>();
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.tag == null ? 'Thêm danh mục' : 'Sửa danh mục'),
+        title: Text(widget.tag == null ? l10n.addNewTag : l10n.editTag),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
@@ -43,7 +46,7 @@ class _AddEditTagPageState extends State<AddEditTagPage> {
             const SizedBox(height: 12),
             Row(
               children: [
-                const Text('Biểu tượng:'),
+                Text("${l10n.icon}: "),
                 const SizedBox(width: 8),
                 ...[null, 'fastfood', 'movie', 'directions_car'].map((n) {
                   final ic = _iconForName(n);
@@ -60,7 +63,7 @@ class _AddEditTagPageState extends State<AddEditTagPage> {
             const SizedBox(height: 12),
             Row(
               children: [
-                const Text('Màu:'),
+                Text("${l10n.color}: "),
                 const SizedBox(width: 8),
                 ...[
                   0xFFF48FB1,

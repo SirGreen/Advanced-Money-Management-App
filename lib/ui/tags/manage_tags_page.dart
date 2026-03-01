@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../l10n/app_localizations.dart';
 import 'tag_view_model.dart';
 import 'tag_detail_page.dart';
 import 'add_edit_tag_page.dart';
@@ -9,10 +10,11 @@ class ManageTagsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final vm = context.watch<TagViewModel>();
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Danh mục')),
+      appBar: AppBar(title: Text(l10n.tags)),
       body: ListView(
         children: vm.tags
             .map(

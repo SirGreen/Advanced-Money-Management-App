@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'sections/camera_scanner_page.dart';
 
+import 'settings/settings_view.dart';
 import 'transaction/add_transaction_view.dart';
 import 'transaction/add_scheduled_expenditure_view.dart';
 import 'transaction/expenditure_list_view.dart';
@@ -20,7 +21,7 @@ class _MainViewState extends State<MainView> {
   static const List<Widget> _widgetOptions = <Widget>[
     ExpenditureListView(),
     ScheduledExpenditureListView(),
-    Center(child: Text('Settings (Coming Soon)')),
+    SettingsView(),
   ];
 
   void _onItemTapped(int index) {
