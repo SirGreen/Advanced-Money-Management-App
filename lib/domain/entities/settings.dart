@@ -36,6 +36,8 @@ class Settings extends HiveObject {
   DateTime? lastBackupDate;
   @HiveField(10)
   String? userContext;
+  @HiveField(11)
+  bool privacyModeEnabled;
 
   Settings({
     this.dividerType = DividerType.monthly,
@@ -49,6 +51,7 @@ class Settings extends HiveObject {
     this.remindersEnabled = false,
     this.lastBackupDate,
     this.userContext,
+    this.privacyModeEnabled = false,
   });
 
   Map<String, dynamic> toJson() => {
@@ -63,6 +66,7 @@ class Settings extends HiveObject {
     'remindersEnabled': remindersEnabled,
     'lastBackupDate': lastBackupDate?.toIso8601String(),
     'userContext': userContext,
+    'privacyModeEnabled': privacyModeEnabled,
   };
 
   factory Settings.fromJson(Map<String, dynamic> json) => Settings(
@@ -79,5 +83,6 @@ class Settings extends HiveObject {
         ? DateTime.parse(json['lastBackupDate'])
         : null,
     userContext: json['userContext'],
+    privacyModeEnabled: json['privacyModeEnabled'] ?? false,
   );
 }

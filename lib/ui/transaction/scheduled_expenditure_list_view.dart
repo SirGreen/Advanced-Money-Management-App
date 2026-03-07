@@ -6,6 +6,8 @@ import 'expenditure_view_model.dart'; // Import this
 import 'add_scheduled_expenditure_view.dart';
 // import '../../domain/entities/tag.dart'; // Unused
 import '../../domain/entities/scheduled_expenditure.dart';
+import '../settings/settings_view_model.dart';
+import '../../data/services/privacy_mode_service.dart';
 
 class ScheduledExpenditureListView extends StatelessWidget {
   const ScheduledExpenditureListView({super.key});
@@ -52,7 +54,11 @@ class ScheduledExpenditureListView extends StatelessWidget {
                     final item = viewModel.scheduledExpenditures[index];
                     return ListTile(
                       title: Text(item.name),
-                      subtitle: Text(_getScheduleDescription(item)),
+                      subtitle: Consumer<SettingsViewModel>(
+                        builder: (context, settingsViewModel, _) {
+                          return Text(_getScheduleDescription(item, settingsViewModel.settings.privacyModeEnabled));
+                        },
+                      ),
                       trailing: Switch(
                         value: item.isActive,
                         onChanged: (val) {
@@ -97,15 +103,37 @@ class ScheduledExpenditureListView extends StatelessWidget {
                       leading: const Icon(Icons.history),
                       title: Text(item.articleName),
                       subtitle: Text(DateFormat.yMMMd().format(item.date)),
-                      trailing: Text(
-                        NumberFormat.currency(
-                          symbol: '₫',
-                          decimalDigits: 0,
-                        ).format(item.amount),
-                        style: TextStyle(
-                          color: item.isIncome ? Colors.green : Colors.red,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      trailing: Consumer<SettingsViewModel>(
+                        builder: (context, settingsViewModel, _) {
+                          final formattedAmount = NumberFormat.currency(
+                            symbol: '₫',
+                            decimalDigits: 0,
+                          ).format(item.amount);
+                          final displayAmount = settingsViewModel.settings.privacyModeEnabled
+                              ? PrivacyModeService.maskSymbol
+                              : formattedAmount;
+
+                          return Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                displayAmount,
+                                style: TextStyle(
+                                  color: item.isIncome ? Colors.green : Colors.red,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              if (settingsViewModel.settings.privacyModeEnabled) ...[
+                                const SizedBox(width: 4),
+                                Icon(
+                                  Icons.lock,
+                                  size: 14,
+                                  color: Colors.grey[600],
+                                ),
+                              ],
+                            ],
+                          );
+                        },
                       ),
                     );
                   },
@@ -118,7 +146,7 @@ class ScheduledExpenditureListView extends StatelessWidget {
     );
   }
 
-  String _getScheduleDescription(ScheduledExpenditure item) {
+  String _getScheduleDescription(ScheduledExpenditure item, bool privacyModeEnabled) {
     String freq = '';
     switch (item.scheduleType) {
       case ScheduleType.dayOfMonth:
@@ -134,6 +162,8 @@ class ScheduledExpenditureListView extends StatelessWidget {
         freq = 'Every ${item.scheduleValue} days';
         break;
     }
-    return '${NumberFormat.currency(symbol: '₫', decimalDigits: 0).format(item.amount)} - $freq';
+    final formattedAmount = NumberFormat.currency(symbol: '₫', decimalDigits: 0).format(item.amount);
+    final displayAmount = privacyModeEnabled ? PrivacyModeService.maskSymbol : formattedAmount;
+    return '$displayAmount - $freq';
   }
 }
