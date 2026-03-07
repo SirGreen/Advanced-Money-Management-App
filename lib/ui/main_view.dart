@@ -4,6 +4,7 @@ import 'sections/camera_scanner_page.dart';
 
 import 'settings/settings_view.dart';
 import 'transaction/add_transaction_view.dart';
+import 'transaction/search_page.dart';
 import 'transaction/add_scheduled_expenditure_view.dart';
 import 'transaction/expenditure_list_view.dart';
 import 'transaction/scheduled_expenditure_list_view.dart';
@@ -33,6 +34,20 @@ class _MainViewState extends State<MainView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Money Manager'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.search),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const SearchPage()),
+              );
+            },
+          ),
+        ],
+      ),
       body: Center(child: _widgetOptions.elementAt(_selectedIndex)),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
