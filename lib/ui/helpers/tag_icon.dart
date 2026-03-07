@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import '../../../domain/entities/tag.dart';
-import '../helpers/tag_icon_mapper.dart';
+import ../../data/models/tag.dart';
+import ../ui/helpers/tag_icon_mapper.dart';
 
 class TagIcon extends StatelessWidget {
   final Tag tag;

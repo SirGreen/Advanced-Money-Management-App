@@ -1,117 +1,136 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
-// 1. Import Entities & Adapters
-// LƯU Ý: Bạn cần import các file .g.dart hoặc file chứa Adapter được sinh ra
-import 'domain/entities/expenditure.dart'; 
-import 'domain/entities/tag.dart';
-import 'domain/entities/settings.dart';
-
-// 2. Import Controllers
-import '../ui/controllers/settings_controller.dart';
-import '../ui/controllers/expenditure_controller.dart';
-
-// 3. Import Services & Data Sources
-import 'data/data_sources/database_service.dart';
-import 'data/data_sources/llm_service.dart';
-
-// 4. Import Repositories & UseCases
-// Giả định bạn đã có file implementation của ReceiptRepository
-import 'data/repositories/receipt_repository_impl.dart'; 
-import 'domain/usecases/scan_receipt_usecase.dart';
-
-// 5. Import Localization
-import 'l10n/app_localizations.dart';
-
-// 6. Import Screens
-import 'ui/sections/camera_scanner_page.dart';
-// import 'presentation/pages/home_page.dart'; // Trang chủ của bạn
+import '../ui/controller/expenditure_controller.dart';
+import ../../ui/controller/settings_controller.dart';
+import ../../data/models/cached_rate.dart';
+import ../../app/models/custom_exchange_rate.dart';
+import ../../data/model/expenditure.dart';
+import ../../data/model/settings.dart';
+import ../../data/model/tag.dart';
+import ../services/database_service.dart';
+import ../../ui/sections/main_page.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import ../../l10n/app_localizations.dart';
 
 void main() async {
-  // 1. Đảm bảo Flutter Binding được khởi tạo trước khi gọi native code
   WidgetsFlutterBinding.ensureInitialized();
+  await initializeDateFormatting('ja', null);
+  await initializeDateFormatting('en', null);
+  await initializeDateFormatting('vi', null);
 
-  // 2. Khởi tạo Hive
   await Hive.initFlutter();
 
-  // 3. Đăng ký Hive Adapters
-  // LƯU Ý: Các class Adapter này (ExpenditureAdapter, TagAdapter, SettingsAdapter) 
-  // được sinh ra khi bạn chạy `flutter pub run build_runner build`.
-  // Hãy đảm bảo bạn đã generate code và import đúng.
   Hive.registerAdapter(ExpenditureAdapter());
   Hive.registerAdapter(TagAdapter());
   Hive.registerAdapter(SettingsAdapter());
-
-  // 4. Khởi tạo Database Service & Mở các Box cần thiết
-  final databaseService = DatabaseService();
-  await databaseService.openBoxes();
-
-  // 5. Khởi tạo SettingsController và load dữ liệu ban đầu
-  final settingsController = SettingsController();
-  await settingsController.initialize();
-
-  // 6. Setup Dependency Injection cho tính năng Scan
-  // LLMService -> Repository -> UseCase -> Controller
-  final llmService = LLMService();
+  Hive.registerAdapter(DividerTypeAdapter());
+  Hive.registerAdapter(CustomExchangeRateAdapter()); // used internally by CurrencyService
+  Hive.registerAdapter(CachedRateAdapter());         // used internally by CurrencyService
 
 
-  final receiptRepository = ReceiptRepositoryImpl(llmService);
-  final scanReceiptUseCase = ScanReceiptUseCase(receiptRepository);
-
-  runApp(
-    MultiProvider(
-      providers: [
-        // Cung cấp SettingsController đã được initialize
-        ChangeNotifierProvider.value(value: settingsController),
-
-        // Cung cấp ExpenditureController với UseCase được inject vào
-        ChangeNotifierProvider(
-          create: (_) => ExpenditureController(
-            scanReceiptUseCase: scanReceiptUseCase,
-          ),
-        ),
-      ],
-      child: const MyApp(),
-    ),
-  );
+  runApp(const AppRoot());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class AppRoot extends StatelessWidget {
+  const AppRoot({super.key});
 
-  
   @override
   Widget build(BuildContext context) {
-    // Lắng nghe SettingsController để cập nhật Theme hoặc Language nếu có
-    final _ = context.watch<SettingsController>();
-
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Finance App', // Tên App của bạn
-      
-      // Cấu hình Theme
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
-        useMaterial3: true,
-      ),
-      
-      // Cấu hình Localization (Đa ngôn ngữ)
-      localizationsDelegates: const [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => SettingsController()),
+        ChangeNotifierProvider(create: (context) => ExpenditureController()),
       ],
-      supportedLocales: AppLocalizations.supportedLocales,
-      
-      // Nếu bạn lưu locale trong settings, có thể dùng: 
-      // locale: settingsController.settings.locale,
+      child: const AppLifecycleManager(),
+    );
+  }
+}
 
-      // Màn hình chính
-      // Bạn có thể đổi thành HomePage() hoặc màn hình Dashboard của bạn
-      home: const CameraScannerPage(), 
+class AppLifecycleManager extends StatefulWidget {
+  const AppLifecycleManager({super.key});
+
+  @override
+  State<AppLifecycleManager> createState() => _AppLifecycleManagerState();
+}
+
+class _AppLifecycleManagerState extends State<AppLifecycleManager> {
+  bool _isInitialized = false;
+  @override
+  void initState() {
+    super.initState();
+    _initializeApp();
+  }
+
+  @override
+  void dispose() {
+    Hive.close();
+    super.dispose();
+  }
+
+  Future<void> _initializeApp() async {
+    await DatabaseService().openAllBoxes();
+
+    if (!mounted) return;
+
+    final settingsController =
+        Provider.of<SettingsController>(context, listen: false);
+    await settingsController.initialize();
+
+    if (!mounted) return;
+
+
+    final expenditureController =
+        Provider.of<ExpenditureController>(context, listen: false);
+    final locale = settingsController.settings.languageCode != null
+        ? Locale(settingsController.settings.languageCode!)
+        : WidgetsBinding.instance.platformDispatcher.locale;
+
+    final l10n = await AppLocalizations.delegate.load(locale);
+    await expenditureController.initialize(l10n, settingsController.settings);
+
+    if (mounted) {
+      setState(() {
+        _isInitialized = true;
+      });
+    }
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
+    if (!_isInitialized) {
+      return const MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: Scaffold(body: Center(child: CircularProgressIndicator())),
+      );
+    }
+
+    return Consumer<SettingsController>(
+      builder: (context, settingsController, child) {
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          onGenerateTitle: (context) =>
+              AppLocalizations.of(context)?.appName ?? 'Kakeibo',
+          theme: ThemeData(
+            useMaterial3: true,
+            colorScheme: ColorScheme.fromSeed(seedColor: Colors.teal),
+            inputDecorationTheme: const InputDecorationTheme(
+              border: OutlineInputBorder(),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.teal, width: 2.0),
+              ),
+            ),
+          ),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          locale: settingsController.settings.languageCode != null
+              ? Locale(settingsController.settings.languageCode!)
+              : null,
+          home: const MainPage(),
+        );
+      },
     );
   }
 }

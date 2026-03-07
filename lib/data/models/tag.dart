@@ -15,10 +15,6 @@ class Tag extends HiveObject {
   String? iconName;
   @HiveField(4)
   String? imagePath;
-  @HiveField(5)
-  double? budgetAmount;
-  @HiveField(6)
-  String budgetInterval;
 
   Tag({
     required this.id,
@@ -26,31 +22,25 @@ class Tag extends HiveObject {
     required this.colorValue,
     this.iconName,
     this.imagePath,
-    this.budgetAmount,
-    this.budgetInterval = 'None',
   });
 
   Color get color => Color(colorValue);
 
   Map<String, dynamic> toJson() => {
-    'id': id,
-    'name': name,
-    'colorValue': colorValue,
-    'iconName': iconName,
-    'imagePath': imagePath,
-    'budgetAmount': budgetAmount,
-    'budgetInterval': budgetInterval,
-  };
+        'id': id,
+        'name': name,
+        'colorValue': colorValue,
+        'iconName': iconName,
+        'imagePath': imagePath,
+      };
 
   factory Tag.fromJson(Map<String, dynamic> json) => Tag(
-    id: json['id'],
-    name: json['name'],
-    colorValue: json['colorValue'],
-    iconName: json['iconName'],
-    imagePath: json['imagePath'],
-    budgetAmount: json['budgetAmount'],
-    budgetInterval: json['budgetInterval'],
-  );
+        id: json['id'],
+        name: json['name'],
+        colorValue: json['colorValue'],
+        iconName: json['iconName'],
+        imagePath: json['imagePath'],
+      );
 
   @override
   bool operator ==(Object other) =>

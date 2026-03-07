@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:adv_money_mana/l10n/app_localizations.dart';
+import '../../l10n/app_localizations.dart';
 
 const Map<String, String> currencyFlags = {
   'JPY': '🇯🇵',
