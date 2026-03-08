@@ -37,6 +37,12 @@ class FakeSettingsRepository implements SettingsRepository {
 
   @override
   Future<void> saveSettings(Settings settings) async {}
+
+  @override
+  Future<bool> getAppLockEnabled() async => false;
+
+  @override
+  Future<void> setAppLockEnabled(bool enabled) async {}
 }
 
 void main() {
