@@ -1,22 +1,22 @@
-import '../models/tag_model.dart';
+import 'package:adv_money_mana/domain/entities/tag.dart';
 
 class TagLocalDataSource {
-  final List<TagModel> _storage = [
-    TagModel(
+  final List<Tag> _storage = [
+    Tag(
       id: 'default_eat',
       name: 'Ăn uống',
       colorValue: 0xFFF48FB1, // pink
       iconName: 'fastfood',
       isDefault: true,
     ),
-    TagModel(
+    Tag(
       id: 'default_entertainment',
       name: 'Giải trí',
       colorValue: 0xFF90CAF9, // light blue
       iconName: 'movie',
       isDefault: true,
     ),
-    TagModel(
+    Tag(
       id: 'default_transport',
       name: 'Phương tiện',
       colorValue: 0xFF80CBC4, // teal
@@ -25,13 +25,13 @@ class TagLocalDataSource {
     ),
   ];
 
-  Future<List<TagModel>> getAll() async {
-    return List<TagModel>.from(_storage);
+  Future<List<Tag>> getAll() async {
+    return List<Tag>.from(_storage);
   }
 
-  Future<void> add(TagModel tag) async {
+  Future<void> add(Tag tag) async {
     // ensure user-created tags are not marked as default
-    final toAdd = TagModel(
+    final toAdd = Tag(
       id: tag.id,
       name: tag.name,
       colorValue: tag.colorValue,
@@ -42,7 +42,7 @@ class TagLocalDataSource {
     _storage.add(toAdd);
   }
 
-  Future<void> update(TagModel tag) async {
+  Future<void> update(Tag tag) async {
     final index = _storage.indexWhere((e) => e.id == tag.id);
     if (index != -1) {
       // do not allow updating default tags
