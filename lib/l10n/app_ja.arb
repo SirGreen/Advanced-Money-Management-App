@@ -433,11 +433,11 @@
             }
         }
     },
-    "confirmDeleteBudget": "「{tag}」タグの予算を本当に削除しますか？",
+    "confirmDeleteBudget": "「{tagName}」タグの予算を本当に削除しますか？",
     "@confirmDeleteBudget": {
         "description": "予算削除の確認メッセージ",
         "placeholders": {
-            "tag": {
+            "tagName": {
                 "type": "String"
             }
         }

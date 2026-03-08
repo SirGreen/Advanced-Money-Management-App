@@ -12,8 +12,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get recentTransactions => 'Chi tiêu gần đây';
 
   @override
-  String get noTransactions =>
-      'Chưa có chi tiêu nào. Hãy thử thêm một cái nhé!';
+  String get noTransactions => 'Chưa có chi tiêu nào. Hãy thử thêm một cái nhé!';
 
   @override
   String get reports => 'Báo cáo';
@@ -82,8 +81,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get confirmDelete => 'Xác nhận xóa';
 
   @override
-  String get confirmDeleteMessage =>
-      'Bạn có chắc chắn muốn xóa ghi chép này không?';
+  String get confirmDeleteMessage => 'Bạn có chắc chắn muốn xóa ghi chép này không?';
 
   @override
   String get selectDate => 'Chọn ngày';
@@ -131,8 +129,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get amountChanged => 'Số tiền đã thay đổi';
 
   @override
-  String get confirmUpdateAllExpenses =>
-      'Bạn có muốn cập nhật tất cả các chi tiêu trước đây với số tiền mới này không?';
+  String get confirmUpdateAllExpenses => 'Bạn có muốn cập nhật tất cả các chi tiêu trước đây với số tiền mới này không?';
 
   @override
   String get noChange => 'Giữ nguyên các khoản cũ';
@@ -141,12 +138,10 @@ class AppLocalizationsVi extends AppLocalizations {
   String get updateAll => 'Cập nhật tất cả';
 
   @override
-  String get applyForRelatedTransaction =>
-      'Áp dụng cho các khoản chi liên quan';
+  String get applyForRelatedTransaction => 'Áp dụng cho các khoản chi liên quan';
 
   @override
-  String get confirmDeleteRuleInstance =>
-      'Khi xóa quy tắc chi tiêu tự động này, bạn có muốn xóa cả các khoản chi đã được tạo trước đó không?';
+  String get confirmDeleteRuleInstance => 'Khi xóa quy tắc chi tiêu tự động này, bạn có muốn xóa cả các khoản chi đã được tạo trước đó không?';
 
   @override
   String get leaveUnchanged => 'Không, giữ nguyên các khoản cũ';
@@ -158,12 +153,10 @@ class AppLocalizationsVi extends AppLocalizations {
   String get finalConfirm => 'Xác nhận cuối cùng';
 
   @override
-  String get confirmShouldDeleteInstance =>
-      'Bạn có chắc chắn muốn xóa quy tắc này và tất cả các khoản chi liên quan không? Hành động này không thể hoàn tác.';
+  String get confirmShouldDeleteInstance => 'Bạn có chắc chắn muốn xóa quy tắc này và tất cả các khoản chi liên quan không? Hành động này không thể hoàn tác.';
 
   @override
-  String get confirmDeleteOnlyRule =>
-      'Bạn có chắc chắn muốn xóa quy tắc này không? Các khoản chi trước đó sẽ được giữ lại dưới dạng thủ công.';
+  String get confirmDeleteOnlyRule => 'Bạn có chắc chắn muốn xóa quy tắc này không? Các khoản chi trước đó sẽ được giữ lại dưới dạng thủ công.';
 
   @override
   String get performDeleteion => 'Tiến hành xóa';
@@ -277,8 +270,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get confirmReset => 'Bạn có chắc chắn muốn đặt lại không?';
 
   @override
-  String get confirmDeleteEverything =>
-      'Tất cả chi tiêu, thẻ và quy tắc chi tiêu tự động sẽ bị xóa. Hành động này không thể hoàn tác.';
+  String get confirmDeleteEverything => 'Tất cả chi tiêu, thẻ và quy tắc chi tiêu tự động sẽ bị xóa. Hành động này không thể hoàn tác.';
 
   @override
   String get reset => 'Đặt lại';
@@ -296,8 +288,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get paydayCycle => 'Chu kỳ trả lương';
 
   @override
-  String get msgPaydayCycle =>
-      'Tính từ ngày bắt đầu đã chọn đến ngày trước của tháng tiếp theo.';
+  String get msgPaydayCycle => 'Tính từ ngày bắt đầu đã chọn đến ngày trước của tháng tiếp theo.';
 
   @override
   String get cycleStartDate => 'Ngày bắt đầu chu kỳ';
@@ -384,7 +375,29 @@ class AppLocalizationsVi extends AppLocalizations {
   String get dateRange => 'Phạm vi ngày';
 
   @override
-  String get changeCurrency => 'Thay đổi tiền tệ';
+  String warningTagInUse(String tagName) {
+    return 'Thẻ \"$tagName\" đang được sử dụng cho các khoản chi tiêu. Nếu xóa, các khoản liên quan sẽ được chuyển vào danh mục \"Khác\". Bạn có muốn tiếp tục không?';
+  }
+
+  @override
+  String removeTag(String tagName) {
+    return 'Bạn có chắc chắn muốn xóa thẻ \"$tagName\" không?';
+  }
+
+  @override
+  String currencyValue(String value) {
+    return '$value₫';
+  }
+
+  @override
+  String imageSaveFailed(Object error) {
+    return 'Lưu ảnh thất bại: $error';
+  }
+
+  @override
+  String dayOfMonthLabel(int day) {
+    return 'Ngày $day';
+  }
 
   @override
   String get sortBy => 'Sắp xếp theo';
@@ -418,9 +431,6 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get anyDate => 'Bất kỳ ngày nào';
-
-  @override
-  String get tags => 'Thẻ';
 
   @override
   String get currencyConverter => 'Chuyển đổi tiền tệ';
@@ -486,37 +496,6 @@ class AppLocalizationsVi extends AppLocalizations {
   String get scanYourReceipt => 'Quét hóa đơn của bạn';
 
   @override
-  String get proceed => 'Tiếp tục';
-
-  @override
-  String get exchangeRateError =>
-      'Không thể lấy tỷ giá hối đoái. Vui lòng thử lại sau.';
-
-  @override
-  String get addCustomRate => 'Thêm tỷ giá tùy chỉnh';
-
-  @override
-  String get exchangeRate => 'Tỷ giá hối đoái';
-
-  @override
-  String get add => 'Thêm';
-
-  @override
-  String get language => 'Ngôn ngữ';
-
-  @override
-  String get systemDefault => 'Mặc định hệ thống';
-
-  @override
-  String get primaryCurrency => 'Tiền tệ chính';
-
-  @override
-  String get customExchangeRates => 'Tỷ giá tùy chỉnh';
-
-  @override
-  String get noTransactionsFound => 'Không tìm thấy giao dịch nào';
-
-  @override
   String get exportingData => 'Đang xuất dữ liệu';
 
   @override
@@ -526,8 +505,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get warning => 'Cảnh báo';
 
   @override
-  String get importWarningMessage =>
-      'Hành động này có thể ảnh hưởng đến dữ liệu hiện tại. Tiếp tục?';
+  String get importWarningMessage => 'Hành động này có thể ảnh hưởng đến dữ liệu hiện tại. Tiếp tục?';
 
   @override
   String get importSuccess => 'Nhập dữ liệu thành công';
@@ -549,9 +527,6 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get importDataSubtitle => 'Khôi phục từ bản sao lưu';
-
-  @override
-  String get allTimeBalance => 'Số dư tổng';
 
   @override
   String get searchByName => 'Tìm theo tên';
@@ -615,6 +590,114 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get display => 'Hiển thị';
+
+  @override
+  String daysBeforeEndOfMonthWithValue(int value) {
+    return '$value ngày trước cuối tháng';
+  }
+
+  @override
+  String fixedIntervalWithValue(int value) {
+    return 'Mỗi $value ngày';
+  }
+
+  @override
+  String exportSuccess(String path) {
+    return 'Xuất dữ liệu thành công: $path';
+  }
+
+  @override
+  String get tags => 'Thẻ';
+
+  @override
+  String get allTimeBalance => 'Số dư tổng';
+
+  @override
+  String get changeCurrency => 'Thay đổi tiền tệ';
+
+  @override
+  String confirmCurrencyConversion(String oldCode, String newCode) {
+    return 'Bạn có muốn chuyển tất cả các bản ghi từ $oldCode sang $newCode? Thao tác này cần lấy tỷ giá hối đoái.';
+  }
+
+  @override
+  String get proceed => 'Tiếp tục';
+
+  @override
+  String get exchangeRateError => 'Không thể lấy tỷ giá hối đoái. Vui lòng thử lại sau.';
+
+  @override
+  String get addCustomRate => 'Thêm tỷ giá tùy chỉnh';
+
+  @override
+  String get exchangeRate => 'Tỷ giá hối đoái';
+
+  @override
+  String get add => 'Thêm';
+
+  @override
+  String get language => 'Ngôn ngữ';
+
+  @override
+  String get systemDefault => 'Mặc định hệ thống';
+
+  @override
+  String get primaryCurrency => 'Tiền tệ chính';
+
+  @override
+  String get customExchangeRates => 'Tỷ giá tùy chỉnh';
+
+  @override
+  String get noTransactionsFound => 'Không tìm thấy giao dịch nào';
+
+  @override
+  String languageName(String languageCode) {
+    String _temp0 = intl.Intl.selectLogic(
+      languageCode,
+      {
+        'ja': '日本語',
+        'en': 'English',
+        'vi': 'Tiếng Việt',
+        'other': 'Không xác định',
+      },
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String currencyName(String currencyCode) {
+    String _temp0 = intl.Intl.selectLogic(
+      currencyCode,
+      {
+        'JPY': 'Yên Nhật (JPY)',
+        'USD': 'Đô la Mỹ (USD)',
+        'EUR': 'Euro (EUR)',
+        'CNY': 'Nhân dân tệ Trung Quốc (CNY)',
+        'RUB': 'Rúp Nga (RUB)',
+        'VND': 'Đồng Việt Nam (VND)',
+        'AUD': 'Đô la Úc (AUD)',
+        'KRW': 'Won Hàn Quốc (KRW)',
+        'THB': 'Baht Thái (THB)',
+        'PHP': 'Peso Philippines (PHP)',
+        'MYR': 'Ringgit Malaysia (MYR)',
+        'GBP': 'Bảng Anh (GBP)',
+        'CAD': 'Đô la Canada (CAD)',
+        'CHF': 'Franc Thụy Sĩ (CHF)',
+        'HKD': 'Đô la Hồng Kông (HKD)',
+        'SGD': 'Đô la Singapore (SGD)',
+        'INR': 'Rupee Ấn Độ (INR)',
+        'BRL': 'Real Brazil (BRL)',
+        'ZAR': 'Rand Nam Phi (ZAR)',
+        'other': 'Không xác định',
+      },
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String daysUnit(int day) {
+    return '$day ngày';
+  }
 
   @override
   String get editSavingGoal => 'Chỉnh sửa mục tiêu tiết kiệm';
@@ -701,6 +784,11 @@ class AppLocalizationsVi extends AppLocalizations {
   String get inputAverageBuyPrice => 'Nhập giá mua trung bình';
 
   @override
+  String estimatedValueAt(String date) {
+    return 'Giá trị ước tính tại';
+  }
+
+  @override
   String get editSavingAccount => 'Chỉnh sửa tài khoản tiết kiệm';
 
   @override
@@ -776,8 +864,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get disablePin => 'Tắt mã PIN';
 
   @override
-  String get disablePinMessage =>
-      'Tắt khóa mã PIN sẽ xóa toàn bộ dữ liệu, hãy đảm bảo bạn đã sao lưu! Bạn có chắc chắn muốn tắt khóa mã PIN không?';
+  String get disablePinMessage => 'Tắt khóa mã PIN sẽ xóa toàn bộ dữ liệu, hãy đảm bảo bạn đã sao lưu! Bạn có chắc chắn muốn tắt khóa mã PIN không?';
 
   @override
   String get disable => 'Tắt';
@@ -816,7 +903,16 @@ class AppLocalizationsVi extends AppLocalizations {
   String get transaction => 'Giao dịch';
 
   @override
-  String get transactionsSingle => 'Giao dịch';
+  String transactions(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count giao dịch',
+      one: '1 giao dịch',
+      zero: 'Không có giao dịch',
+    );
+    return '$_temp0';
+  }
 
   @override
   String get timeline => 'Dòng thời gian';
@@ -835,6 +931,12 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get lastUpdated => 'Cập nhật lần cuối';
+
+  @override
+  String get restartToApply => 'Nhập dữ liệu thành công. Vui lòng khởi động lại ứng dụng để áp dụng thay đổi.';
+
+  @override
+  String get restartNow => 'Khởi động lại ngay';
 
   @override
   String get budgets => 'Ngân sách';
@@ -867,24 +969,41 @@ class AppLocalizationsVi extends AppLocalizations {
   String get saveBudget => 'Lưu Ngân sách';
 
   @override
-  String get restartToApply =>
-      'Nhập dữ liệu thành công. Vui lòng khởi động lại ứng dụng để áp dụng thay đổi.';
-
-  @override
-  String get restartNow => 'Khởi động lại ngay';
-
-  @override
   String get trans => 'Giao dịch';
 
   @override
-  String get noTransactionsInPeriod =>
-      'Không có giao dịch trong khoảng thời gian này';
+  String get noTransactionsInPeriod => 'Không có giao dịch trong khoảng thời gian này';
 
   @override
   String get total => 'Tổng cộng';
 
   @override
   String get clearTags => 'Xóa thẻ';
+
+  @override
+  String resetsOn(String date) {
+    return 'Đặt lại vào $date';
+  }
+
+  @override
+  String confirmDeleteBudget(String tagName) {
+    return 'Bạn có chắc chắn muốn xóa ngân sách cho \"$tagName\" không?';
+  }
+
+  @override
+  String overBudgetBy(String amount) {
+    return 'Vượt ngân sách $amount';
+  }
+
+  @override
+  String remaining(String amount) {
+    return 'Còn lại: $amount';
+  }
+
+  @override
+  String budgetPeriodName(String period) {
+    return 'Chu kỳ $period';
+  }
 
   @override
   String get exportFailed => 'Xuất dữ liệu thất bại. Vui lòng thử lại.';
@@ -899,8 +1018,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get importNoPassword => 'Nhập bị hủy: Không có mật khẩu.';
 
   @override
-  String get importWrongPassword =>
-      'Nhập thất bại: Sai mật khẩu hoặc tệp bị hỏng.';
+  String get importWrongPassword => 'Nhập thất bại: Sai mật khẩu hoặc tệp bị hỏng.';
 
   @override
   String get backupPassword => 'Mật khẩu sao lưu';
@@ -927,8 +1045,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get resetConfirmation => 'Đặt lại ứng dụng?';
 
   @override
-  String get resetWarningMessage =>
-      'Thao tác này sẽ xóa toàn bộ dữ liệu, bao gồm giao dịch, cài đặt và sao lưu. Bạn có chắc chắn muốn tiếp tục?';
+  String get resetWarningMessage => 'Thao tác này sẽ xóa toàn bộ dữ liệu, bao gồm giao dịch, cài đặt và sao lưu. Bạn có chắc chắn muốn tiếp tục?';
 
   @override
   String get resetAndStartOver => 'Xóa & Đặt lại';
@@ -946,15 +1063,13 @@ class AppLocalizationsVi extends AppLocalizations {
   String get notificationReminderTitle => 'Nhắc nhở';
 
   @override
-  String get notificationReminderBody =>
-      'Đừng quên thêm giao dịch của bạn hôm nay.';
+  String get notificationReminderBody => 'Đừng quên thêm giao dịch của bạn hôm nay.';
 
   @override
   String get reminders => 'Nhắc nhở';
 
   @override
-  String get enableRemindersSubtitle =>
-      'Bật nhắc nhở để được thông báo khi cần thêm giao dịch.';
+  String get enableRemindersSubtitle => 'Bật nhắc nhở để được thông báo khi cần thêm giao dịch.';
 
   @override
   String get enableReminders => 'Bật nhắc nhở';
@@ -963,14 +1078,21 @@ class AppLocalizationsVi extends AppLocalizations {
   String get openSettings => 'Mở cài đặt';
 
   @override
-  String get notificationPermissionGuide =>
-      'Để sử dụng nhắc nhở, vui lòng cho phép thông báo trong cài đặt.';
+  String get notificationPermissionGuide => 'Để sử dụng nhắc nhở, vui lòng cho phép thông báo trong cài đặt.';
 
   @override
   String get permissionDenied => 'Quyền thông báo đã bị từ chối.';
 
   @override
   String get notificationIncompleteTitle => 'Giao dịch chưa hoàn tất';
+
+  @override
+  String notificationIncompleteBody(int incompleteCount) {
+    return 'Có $incompleteCount giao dịch chưa hoàn tất. Vui lòng kiểm tra lại.';
+  }
+
+  @override
+  String get transactionsSingle => 'Giao dịch';
 
   @override
   String get clearFilter => 'Xóa bộ lọc';
@@ -995,6 +1117,11 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get overBudget => 'Vượt ngân sách';
+
+  @override
+  String itemsNeedAttention(int count) {
+    return '$count mục cần chú ý';
+  }
 
   @override
   String get noRecentTransactions => 'Không có giao dịch gần đây';
@@ -1033,8 +1160,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get backupReminderTitle => 'Đừng quên sao lưu!';
 
   @override
-  String get backupReminderSubtitle =>
-      'Hãy sao lưu dữ liệu thường xuyên để tránh mất mát.';
+  String get backupReminderSubtitle => 'Hãy sao lưu dữ liệu thường xuyên để tránh mất mát.';
 
   @override
   String get analyzing => 'Đang phân tích...';
@@ -1046,8 +1172,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get budgetAnalysis => 'Phân tích ngân sách';
 
   @override
-  String get noAnalysisSummary =>
-      'Không có tóm tắt phân tích cho giai đoạn này.';
+  String get noAnalysisSummary => 'Không có tóm tắt phân tích cho giai đoạn này.';
 
   @override
   String get onTrackToMeetBudget => 'Đang theo đúng ngân sách';
@@ -1068,19 +1193,21 @@ class AppLocalizationsVi extends AppLocalizations {
   String get financialContextTitle => 'Hoàn cảnh tài chính của bạn';
 
   @override
-  String get financialContextDescription =>
-      'Lưu hoàn cảnh của bạn để nhận được gợi ý phù hợp hơn.';
+  String get financialContextDescription => 'Lưu hoàn cảnh của bạn để nhận được gợi ý phù hợp hơn.';
 
   @override
-  String get financialContextHint =>
-      'vd: Sinh viên, Thu nhập đơn, Freelancer, v.v.';
+  String get financialContextHint => 'vd: Sinh viên, Thu nhập đơn, Freelancer, v.v.';
 
   @override
   String get yourContext => 'Hoàn cảnh của bạn';
 
   @override
-  String get financialContextSubTitle =>
-      'Nhận các gợi ý được cá nhân hóa dựa trên thói quen chi tiêu và mục tiêu của bạn.';
+  String get financialContextSubTitle => 'Nhận các gợi ý được cá nhân hóa dựa trên thói quen chi tiêu và mục tiêu của bạn.';
+
+  @override
+  String confidence(String confidence) {
+    return 'Độ tin cậy: $confidence%';
+  }
 
   @override
   String get getInsights => 'Xem phân tích';
@@ -1098,147 +1225,46 @@ class AppLocalizationsVi extends AppLocalizations {
   String get expenses => 'Chi tiêu';
 
   @override
-  String confidence(String confidence) {
-    return 'Độ tin cậy: $confidence%';
+  String get backup => 'Sao lưu';
+
+  @override
+  String get restore => 'Khôi phục';
+
+  @override
+  String get backupData => 'Sao lưu dữ liệu';
+
+  @override
+  String get restoreData => 'Khôi phục dữ liệu';
+
+  @override
+  String get backupDescription => 'Lưu toàn bộ dữ liệu tài chính của bạn vào một tệp để sao lưu và chuyển đổi';
+
+  @override
+  String get restoreDescription => 'Khôi phục dữ liệu tài chính của bạn từ tệp sao lưu';
+
+  @override
+  String get backupSuccess => 'Sao lưu dữ liệu thành công';
+
+  @override
+  String get restoreSuccess => 'Khôi phục dữ liệu thành công';
+
+  @override
+  String get backupFailed => 'Sao lưu dữ liệu thất bại';
+
+  @override
+  String get restoreFailed => 'Khôi phục dữ liệu thất bại';
+
+  @override
+  String get selectBackupFile => 'Chọn tệp sao lưu để khôi phục';
+
+  @override
+  String get confirmRestore => 'Bạn có chắc chắn muốn khôi phục dữ liệu không? Dữ liệu hiện tại sẽ bị ghi đè.';
+
+  @override
+  String backupFileName(Object date) {
+    return 'backup_$date.json';
   }
 
   @override
-  String itemsNeedAttention(int count) {
-    return '$count mục cần chú ý';
-  }
-
-  @override
-  String notificationIncompleteBody(int incompleteCount) {
-    return 'Có $incompleteCount giao dịch chưa hoàn tất. Vui lòng kiểm tra lại.';
-  }
-
-  @override
-  String exportSuccess(String path) {
-    return 'Xuất dữ liệu thành công: $path';
-  }
-
-  @override
-  String resetsOn(String date) {
-    return 'Đặt lại vào $date';
-  }
-
-  @override
-  String confirmDeleteBudget(String tag) {
-    return 'Bạn có chắc chắn muốn xóa ngân sách cho \"$tagName\" không?';
-  }
-
-  @override
-  String overBudgetBy(String amount) {
-    return 'Vượt ngân sách $amount';
-  }
-
-  @override
-  String remaining(String amount) {
-    return 'Còn lại: $amount';
-  }
-
-  @override
-  String budgetPeriodName(String period) {
-    return 'Chu kỳ $period';
-  }
-
-  @override
-  String transactions(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count giao dịch',
-      one: '1 giao dịch',
-      zero: 'Không có giao dịch',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String estimatedValueAt(String date) {
-    return 'Giá trị ước tính tại';
-  }
-
-  @override
-  String daysBeforeEndOfMonthWithValue(int value) {
-    return '$value ngày trước cuối tháng';
-  }
-
-  @override
-  String fixedIntervalWithValue(int value) {
-    return 'Mỗi $value ngày';
-  }
-
-  @override
-  String confirmCurrencyConversion(String oldCode, String newCode) {
-    return 'Bạn có muốn chuyển tất cả các bản ghi từ $oldCode sang $newCode? Thao tác này cần lấy tỷ giá hối đoái.';
-  }
-
-  @override
-  String languageName(String languageCode) {
-    String _temp0 = intl.Intl.selectLogic(languageCode, {
-      'ja': '日本語',
-      'en': 'English',
-      'vi': 'Tiếng Việt',
-      'other': 'Không xác định',
-    });
-    return '$_temp0';
-  }
-
-  @override
-  String currencyName(String currencyCode) {
-    String _temp0 = intl.Intl.selectLogic(currencyCode, {
-      'JPY': 'Yên Nhật (JPY)',
-      'USD': 'Đô la Mỹ (USD)',
-      'EUR': 'Euro (EUR)',
-      'CNY': 'Nhân dân tệ Trung Quốc (CNY)',
-      'RUB': 'Rúp Nga (RUB)',
-      'VND': 'Đồng Việt Nam (VND)',
-      'AUD': 'Đô la Úc (AUD)',
-      'KRW': 'Won Hàn Quốc (KRW)',
-      'THB': 'Baht Thái (THB)',
-      'PHP': 'Peso Philippines (PHP)',
-      'MYR': 'Ringgit Malaysia (MYR)',
-      'GBP': 'Bảng Anh (GBP)',
-      'CAD': 'Đô la Canada (CAD)',
-      'CHF': 'Franc Thụy Sĩ (CHF)',
-      'HKD': 'Đô la Hồng Kông (HKD)',
-      'SGD': 'Đô la Singapore (SGD)',
-      'INR': 'Rupee Ấn Độ (INR)',
-      'BRL': 'Real Brazil (BRL)',
-      'ZAR': 'Rand Nam Phi (ZAR)',
-      'other': 'Không xác định',
-    });
-    return '$_temp0';
-  }
-
-  @override
-  String daysUnit(int day) {
-    return '$day ngày';
-  }
-
-  @override
-  String warningTagInUse(String tagName) {
-    return 'Thẻ \"$tagName\" đang được sử dụng cho các khoản chi tiêu. Nếu xóa, các khoản liên quan sẽ được chuyển vào danh mục \"Khác\". Bạn có muốn tiếp tục không?';
-  }
-
-  @override
-  String removeTag(String tagName) {
-    return 'Bạn có chắc chắn muốn xóa thẻ \"$tagName\" không?';
-  }
-
-  @override
-  String currencyValue(String value) {
-    return '$value₫';
-  }
-
-  @override
-  String imageSaveFailed(Object error) {
-    return 'Lưu ảnh thất bại: $error';
-  }
-
-  @override
-  String dayOfMonthLabel(int day) {
-    return 'Ngày $day';
-  }
+  String get noBackupFile => 'Không có tệp được chọn';
 }

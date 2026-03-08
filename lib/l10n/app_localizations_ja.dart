@@ -141,8 +141,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get applyForRelatedTransaction => '関連する支出の扱い';
 
   @override
-  String get confirmDeleteRuleInstance =>
-      'この自動支出ルールを削除する際、過去に作成された支出も一緒に削除しますか？';
+  String get confirmDeleteRuleInstance => 'この自動支出ルールを削除する際、過去に作成された支出も一緒に削除しますか？';
 
   @override
   String get leaveUnchanged => 'いいえ、過去分は残す';
@@ -154,8 +153,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get finalConfirm => '最終確認';
 
   @override
-  String get confirmShouldDeleteInstance =>
-      '本当にこのルールと関連するすべての支出を削除しますか？この操作は元に戻せません。';
+  String get confirmShouldDeleteInstance => '本当にこのルールと関連するすべての支出を削除しますか？この操作は元に戻せません。';
 
   @override
   String get confirmDeleteOnlyRule => '本当にこのルールを削除しますか？過去の支出は手動の支出として残ります。';
@@ -272,8 +270,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get confirmReset => '本当にリセットしますか？';
 
   @override
-  String get confirmDeleteEverything =>
-      'すべての支出、タグ、自動支出ルールが削除されます。この操作は元に戻せません。';
+  String get confirmDeleteEverything => 'すべての支出、タグ、自動支出ルールが削除されます。この操作は元に戻せません。';
 
   @override
   String get reset => 'リセット';
@@ -378,7 +375,29 @@ class AppLocalizationsJa extends AppLocalizations {
   String get dateRange => '期間';
 
   @override
-  String get changeCurrency => '通貨の変更';
+  String warningTagInUse(String tagName) {
+    return '「$tagName」タグは支出に使用されています。削除した場合、関連する支出は「その他」カテゴリに移動します。続行しますか？';
+  }
+
+  @override
+  String removeTag(String tagName) {
+    return '「$tagName」タグを本当に削除しますか？';
+  }
+
+  @override
+  String currencyValue(String value) {
+    return '¥$value';
+  }
+
+  @override
+  String imageSaveFailed(Object error) {
+    return '画像の保存に失敗しました: $error';
+  }
+
+  @override
+  String dayOfMonthLabel(int day) {
+    return '$day 日';
+  }
 
   @override
   String get sortBy => '並び替え';
@@ -412,9 +431,6 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get anyDate => 'すべての日付';
-
-  @override
-  String get tags => 'タグ';
 
   @override
   String get currencyConverter => '通貨換算機';
@@ -480,36 +496,6 @@ class AppLocalizationsJa extends AppLocalizations {
   String get scanYourReceipt => 'レシートをスキャン';
 
   @override
-  String get proceed => '実行';
-
-  @override
-  String get exchangeRateError => '為替レートの取得に失敗しました。後でもう一度お試しください。';
-
-  @override
-  String get addCustomRate => 'カスタム為替レートを追加';
-
-  @override
-  String get exchangeRate => '為替レート';
-
-  @override
-  String get add => '追加';
-
-  @override
-  String get language => '言語';
-
-  @override
-  String get systemDefault => 'システムデフォルト';
-
-  @override
-  String get primaryCurrency => '基本通貨';
-
-  @override
-  String get customExchangeRates => 'カスタム為替レート';
-
-  @override
-  String get noTransactionsFound => 'トランザクションが見つかりませんでした';
-
-  @override
   String get exportingData => 'データをエクスポート中...';
 
   @override
@@ -519,8 +505,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get warning => '警告';
 
   @override
-  String get importWarningMessage =>
-      'この操作はアプリ内の現在のデータをすべて上書きします。この操作は元に戻せません。続行してもよろしいですか？';
+  String get importWarningMessage => 'この操作はアプリ内の現在のデータをすべて上書きします。この操作は元に戻せません。続行してもよろしいですか？';
 
   @override
   String get importSuccess => 'データのインポートに成功しました！';
@@ -542,9 +527,6 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get importDataSubtitle => 'ファイルからデータを復元します。';
-
-  @override
-  String get allTimeBalance => '総資産';
 
   @override
   String get searchByName => '名前で検索';
@@ -608,6 +590,114 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get display => '表示';
+
+  @override
+  String daysBeforeEndOfMonthWithValue(int value) {
+    return '月末の$value日前';
+  }
+
+  @override
+  String fixedIntervalWithValue(int value) {
+    return '$value日ごと';
+  }
+
+  @override
+  String exportSuccess(String path) {
+    return 'データを正常にエクスポートしました: $path';
+  }
+
+  @override
+  String get tags => 'タグ';
+
+  @override
+  String get allTimeBalance => '総資産';
+
+  @override
+  String get changeCurrency => '通貨の変更';
+
+  @override
+  String confirmCurrencyConversion(String oldCode, String newCode) {
+    return 'すべての記録を $oldCode から $newCode に換算しますか？この操作には為替レートの取得が必要です。';
+  }
+
+  @override
+  String get proceed => '実行';
+
+  @override
+  String get exchangeRateError => '為替レートの取得に失敗しました。後でもう一度お試しください。';
+
+  @override
+  String get addCustomRate => 'カスタム為替レートを追加';
+
+  @override
+  String get exchangeRate => '為替レート';
+
+  @override
+  String get add => '追加';
+
+  @override
+  String get language => '言語';
+
+  @override
+  String get systemDefault => 'システムデフォルト';
+
+  @override
+  String get primaryCurrency => '基本通貨';
+
+  @override
+  String get customExchangeRates => 'カスタム為替レート';
+
+  @override
+  String get noTransactionsFound => 'トランザクションが見つかりませんでした';
+
+  @override
+  String languageName(String languageCode) {
+    String _temp0 = intl.Intl.selectLogic(
+      languageCode,
+      {
+        'ja': '日本語',
+        'en': 'English',
+        'vi': 'Tiếng Việt',
+        'other': 'Unknown',
+      },
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String currencyName(String currencyCode) {
+    String _temp0 = intl.Intl.selectLogic(
+      currencyCode,
+      {
+        'JPY': '日本円 (JPY)',
+        'USD': '米ドル (USD)',
+        'EUR': 'ユーロ (EUR)',
+        'CNY': '中国人民元 (CNY)',
+        'RUB': 'ロシア・ルーブル (RUB)',
+        'VND': 'ベトナム・ドン (VND)',
+        'AUD': 'オーストラリア・ドル (AUD)',
+        'KRW': '韓国ウォン (KRW)',
+        'THB': 'タイ・バーツ (THB)',
+        'PHP': 'フィリピン・ペソ (PHP)',
+        'MYR': 'マレーシア・リンギット (MYR)',
+        'GBP': '英ポンド (GBP)',
+        'CAD': 'カナダ・ドル (CAD)',
+        'CHF': 'スイス・フラン (CHF)',
+        'HKD': '香港ドル (HKD)',
+        'SGD': 'シンガポール・ドル (SGD)',
+        'INR': 'インド・ルピー (INR)',
+        'BRL': 'ブラジル・レアル (BRL)',
+        'ZAR': '南アフリカ・ランド (ZAR)',
+        'other': 'Unknown',
+      },
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String daysUnit(int day) {
+    return '$day 日間';
+  }
 
   @override
   String get editSavingGoal => '貯金目標を編集';
@@ -694,6 +784,11 @@ class AppLocalizationsJa extends AppLocalizations {
   String get inputAverageBuyPrice => '平均購入価格を入力してください';
 
   @override
+  String estimatedValueAt(String date) {
+    return '$date 時点の予測値';
+  }
+
+  @override
   String get editSavingAccount => '貯蓄口座を編集';
 
   @override
@@ -769,8 +864,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get disablePin => 'PINを無効にする';
 
   @override
-  String get disablePinMessage =>
-      'PINロックを無効にするとすべてのデータが消去されます。必ずバックアップを用意してください。PINロックを無効にしてもよろしいですか？';
+  String get disablePinMessage => 'PINロックを無効にするとすべてのデータが消去されます。必ずバックアップを用意してください。PINロックを無効にしてもよろしいですか？';
 
   @override
   String get disable => '無効にする';
@@ -809,7 +903,16 @@ class AppLocalizationsJa extends AppLocalizations {
   String get transaction => '取引';
 
   @override
-  String get transactionsSingle => '取引一覧';
+  String transactions(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 件の取引',
+      one: '1 件の取引',
+      zero: '取引なし',
+    );
+    return '$_temp0';
+  }
 
   @override
   String get timeline => 'タイムライン';
@@ -828,6 +931,12 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get lastUpdated => '最終更新日';
+
+  @override
+  String get restartToApply => 'インポートが成功しました。変更を適用するにはアプリを再起動してください。';
+
+  @override
+  String get restartNow => '今すぐ再起動';
 
   @override
   String get budgets => '予算';
@@ -860,12 +969,6 @@ class AppLocalizationsJa extends AppLocalizations {
   String get saveBudget => '予算を保存';
 
   @override
-  String get restartToApply => 'インポートが成功しました。変更を適用するにはアプリを再起動してください。';
-
-  @override
-  String get restartNow => '今すぐ再起動';
-
-  @override
   String get trans => '取引';
 
   @override
@@ -876,6 +979,31 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get clearTags => 'タグをクリア';
+
+  @override
+  String resetsOn(String date) {
+    return '$date にリセット';
+  }
+
+  @override
+  String confirmDeleteBudget(String tagName) {
+    return '「$tagName」タグの予算を本当に削除しますか？';
+  }
+
+  @override
+  String overBudgetBy(String amount) {
+    return '予算超過：$amount';
+  }
+
+  @override
+  String remaining(String amount) {
+    return '残り：$amount';
+  }
+
+  @override
+  String budgetPeriodName(String period) {
+    return '$period の期間';
+  }
 
   @override
   String get exportFailed => 'エクスポートに失敗しました。もう一度お試しください。';
@@ -917,8 +1045,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get resetConfirmation => 'アプリをリセットしますか？';
 
   @override
-  String get resetWarningMessage =>
-      'この操作はすべてのアプリデータ（取引、設定、バックアップを含む）を完全に削除します。この操作は元に戻せません。続行してもよろしいですか？';
+  String get resetWarningMessage => 'この操作はすべてのアプリデータ（取引、設定、バックアップを含む）を完全に削除します。この操作は元に戻せません。続行してもよろしいですか？';
 
   @override
   String get resetAndStartOver => '削除してリセット';
@@ -951,14 +1078,21 @@ class AppLocalizationsJa extends AppLocalizations {
   String get openSettings => '設定を開く';
 
   @override
-  String get notificationPermissionGuide =>
-      'リマインダーを使用するには通知の許可が必要です。設定で許可を有効にしてください。';
+  String get notificationPermissionGuide => 'リマインダーを使用するには通知の許可が必要です。設定で許可を有効にしてください。';
 
   @override
   String get permissionDenied => '通知の許可が拒否されました';
 
   @override
   String get notificationIncompleteTitle => '未完了の通知';
+
+  @override
+  String notificationIncompleteBody(int incompleteCount) {
+    return '$incompleteCount 件の未完了の取引があります。確認してください。';
+  }
+
+  @override
+  String get transactionsSingle => '取引一覧';
 
   @override
   String get clearFilter => 'フィルターをクリア';
@@ -983,6 +1117,11 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get overBudget => '予算オーバー';
+
+  @override
+  String itemsNeedAttention(int count) {
+    return '$count 件の項目に注意が必要です';
+  }
 
   @override
   String get noRecentTransactions => '最近の取引はありません';
@@ -1054,8 +1193,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get financialContextTitle => '財務コンテキスト';
 
   @override
-  String get financialContextDescription =>
-      'あなたの収入、支出、目標などに基づいて、より良い提案を受け取るための情報です。';
+  String get financialContextDescription => 'あなたの収入、支出、目標などに基づいて、より良い提案を受け取るための情報です。';
 
   @override
   String get financialContextHint => '例: 学生で月収は5万円、節約中です。';
@@ -1065,6 +1203,11 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get financialContextSubTitle => '支出の傾向や目標に基づいて、パーソナライズされた提案を受け取りましょう。';
+
+  @override
+  String confidence(String confidence) {
+    return '信頼度: $confidence%';
+  }
 
   @override
   String get getInsights => 'インサイトを取得';
@@ -1082,147 +1225,46 @@ class AppLocalizationsJa extends AppLocalizations {
   String get expenses => '支出';
 
   @override
-  String confidence(String confidence) {
-    return '信頼度: $confidence%';
+  String get backup => 'バックアップ';
+
+  @override
+  String get restore => '復元';
+
+  @override
+  String get backupData => 'データをバックアップ';
+
+  @override
+  String get restoreData => 'データを復元';
+
+  @override
+  String get backupDescription => 'すべてのファイナンシャルデータをファイルに保存してバックアップおよび転送します';
+
+  @override
+  String get restoreDescription => 'バックアップファイルからファイナンシャルデータを復元します';
+
+  @override
+  String get backupSuccess => 'データをバックアップしました';
+
+  @override
+  String get restoreSuccess => 'データを復元しました';
+
+  @override
+  String get backupFailed => 'データのバックアップに失敗しました';
+
+  @override
+  String get restoreFailed => 'データの復元に失敗しました';
+
+  @override
+  String get selectBackupFile => '復元するバックアップファイルを選択';
+
+  @override
+  String get confirmRestore => 'データを復元してもよろしいですか？現在のデータは上書きされます。';
+
+  @override
+  String backupFileName(Object date) {
+    return 'backup_$date.json';
   }
 
   @override
-  String itemsNeedAttention(int count) {
-    return '$count 件の項目に注意が必要です';
-  }
-
-  @override
-  String notificationIncompleteBody(int incompleteCount) {
-    return '$incompleteCount 件の未完了の取引があります。確認してください。';
-  }
-
-  @override
-  String exportSuccess(String path) {
-    return 'データを正常にエクスポートしました: $path';
-  }
-
-  @override
-  String resetsOn(String date) {
-    return '$date にリセット';
-  }
-
-  @override
-  String confirmDeleteBudget(String tag) {
-    return '「$tag」タグの予算を本当に削除しますか？';
-  }
-
-  @override
-  String overBudgetBy(String amount) {
-    return '予算超過：$amount';
-  }
-
-  @override
-  String remaining(String amount) {
-    return '残り：$amount';
-  }
-
-  @override
-  String budgetPeriodName(String period) {
-    return '$period の期間';
-  }
-
-  @override
-  String transactions(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count 件の取引',
-      one: '1 件の取引',
-      zero: '取引なし',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String estimatedValueAt(String date) {
-    return '$date 時点の予測値';
-  }
-
-  @override
-  String daysBeforeEndOfMonthWithValue(int value) {
-    return '月末の$value日前';
-  }
-
-  @override
-  String fixedIntervalWithValue(int value) {
-    return '$value日ごと';
-  }
-
-  @override
-  String confirmCurrencyConversion(String oldCode, String newCode) {
-    return 'すべての記録を $oldCode から $newCode に換算しますか？この操作には為替レートの取得が必要です。';
-  }
-
-  @override
-  String languageName(String languageCode) {
-    String _temp0 = intl.Intl.selectLogic(languageCode, {
-      'ja': '日本語',
-      'en': 'English',
-      'vi': 'Tiếng Việt',
-      'other': 'Unknown',
-    });
-    return '$_temp0';
-  }
-
-  @override
-  String currencyName(String currencyCode) {
-    String _temp0 = intl.Intl.selectLogic(currencyCode, {
-      'JPY': '日本円 (JPY)',
-      'USD': '米ドル (USD)',
-      'EUR': 'ユーロ (EUR)',
-      'CNY': '中国人民元 (CNY)',
-      'RUB': 'ロシア・ルーブル (RUB)',
-      'VND': 'ベトナム・ドン (VND)',
-      'AUD': 'オーストラリア・ドル (AUD)',
-      'KRW': '韓国ウォン (KRW)',
-      'THB': 'タイ・バーツ (THB)',
-      'PHP': 'フィリピン・ペソ (PHP)',
-      'MYR': 'マレーシア・リンギット (MYR)',
-      'GBP': '英ポンド (GBP)',
-      'CAD': 'カナダ・ドル (CAD)',
-      'CHF': 'スイス・フラン (CHF)',
-      'HKD': '香港ドル (HKD)',
-      'SGD': 'シンガポール・ドル (SGD)',
-      'INR': 'インド・ルピー (INR)',
-      'BRL': 'ブラジル・レアル (BRL)',
-      'ZAR': '南アフリカ・ランド (ZAR)',
-      'other': 'Unknown',
-    });
-    return '$_temp0';
-  }
-
-  @override
-  String daysUnit(int day) {
-    return '$day 日間';
-  }
-
-  @override
-  String warningTagInUse(String tagName) {
-    return '「$tagName」タグは支出に使用されています。削除した場合、関連する支出は「その他」カテゴリに移動します。続行しますか？';
-  }
-
-  @override
-  String removeTag(String tagName) {
-    return '「$tagName」タグを本当に削除しますか？';
-  }
-
-  @override
-  String currencyValue(String value) {
-    return '¥$value';
-  }
-
-  @override
-  String imageSaveFailed(Object error) {
-    return '画像の保存に失敗しました: $error';
-  }
-
-  @override
-  String dayOfMonthLabel(int day) {
-    return '$day 日';
-  }
+  String get noBackupFile => 'ファイルが選択されていません';
 }

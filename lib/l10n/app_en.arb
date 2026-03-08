@@ -507,7 +507,14 @@
     "notificationPermissionGuide": "To use reminders, allow notifications in settings.",
     "permissionDenied": "Notification permission denied.",
     "notificationIncompleteTitle": "Incomplete Transactions",
-    "notificationIncompleteBody": "{incompleteCount} transactions still incomplete. Please review them.",
+    "notificationIncompleteBody": "{incompleteCount} matches found",
+    "@notificationIncompleteBody": {
+        "placeholders": {
+            "incompleteCount": {
+                "type": "int"
+            }
+        }
+    },
     "transactionsSingle": "Transaction",
     "clearFilter": "Clear Filter",
     "sortByOverbudget": "Sort by Overbudget",
@@ -518,6 +525,13 @@
     "unspecifiedTransactions": "Unspecified Transactions",
     "overBudget": "Over Budget",
     "itemsNeedAttention": "{count} items need attention",
+    "@itemsNeedAttention": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
     "noRecentTransactions": "No recent transactions",
     "viewAll": "View All",
     "highSpendingAlert": "High Spending Alert",
@@ -546,6 +560,13 @@
     "yourContext": "Your Context",
     "financialContextSubTitle": "Get personalized suggestions based on your spending habits and goals.",
     "confidence": "Confidence: {confidence}%",
+    "@confidence": {
+        "placeholders": {
+            "confidence": {
+                "type": "String"
+            }
+        }
+    },
     "getInsights": "Get Insights",
     "analyzeWithAI": "Analyze with AI",
     "reportAnalysis": "Report Analysis",

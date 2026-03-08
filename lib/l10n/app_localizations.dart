@@ -63,8 +63,7 @@ import 'app_localizations_vi.dart';
 /// be consistent with the languages listed in the AppLocalizations.supportedLocales
 /// property.
 abstract class AppLocalizations {
-  AppLocalizations(String locale)
-    : localeName = intl.Intl.canonicalizedLocale(locale.toString());
+  AppLocalizations(String locale) : localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   final String localeName;
 
@@ -72,8 +71,7 @@ abstract class AppLocalizations {
     return Localizations.of<AppLocalizations>(context, AppLocalizations);
   }
 
-  static const LocalizationsDelegate<AppLocalizations> delegate =
-      _AppLocalizationsDelegate();
+  static const LocalizationsDelegate<AppLocalizations> delegate = _AppLocalizationsDelegate();
 
   /// A list of this localizations delegate along with the default localizations
   /// delegates.
@@ -85,2286 +83,2368 @@ abstract class AppLocalizations {
   /// Additional delegates can be added by appending to this list in
   /// MaterialApp. This list does not have to be used at all if a custom list
   /// of delegates is preferred or required.
-  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
-      <LocalizationsDelegate<dynamic>>[
-        delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-      ];
+  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates = <LocalizationsDelegate<dynamic>>[
+    delegate,
+    GlobalMaterialLocalizations.delegate,
+    GlobalCupertinoLocalizations.delegate,
+    GlobalWidgetsLocalizations.delegate,
+  ];
 
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
     Locale('en'),
     Locale('ja'),
-    Locale('vi'),
+    Locale('vi')
   ];
 
   /// No description provided for @recentTransactions.
   ///
-  /// In ja, this message translates to:
-  /// **'最近の支出'**
+  /// In en, this message translates to:
+  /// **'Recent Transactions'**
   String get recentTransactions;
 
   /// No description provided for @noTransactions.
   ///
-  /// In ja, this message translates to:
-  /// **'支出がありません。追加してみましょう！'**
+  /// In en, this message translates to:
+  /// **'No transactions yet. Let\'s add one!'**
   String get noTransactions;
 
   /// No description provided for @reports.
   ///
-  /// In ja, this message translates to:
-  /// **'レポート'**
+  /// In en, this message translates to:
+  /// **'Reports'**
   String get reports;
 
   /// No description provided for @manageTags.
   ///
-  /// In ja, this message translates to:
-  /// **'タグの管理'**
+  /// In en, this message translates to:
+  /// **'Manage Tags'**
   String get manageTags;
 
   /// No description provided for @settings.
   ///
-  /// In ja, this message translates to:
-  /// **'設定'**
+  /// In en, this message translates to:
+  /// **'Settings'**
   String get settings;
 
   /// No description provided for @manageScheduled.
   ///
-  /// In ja, this message translates to:
-  /// **'自動支出の管理'**
+  /// In en, this message translates to:
+  /// **'Manage Scheduled'**
   String get manageScheduled;
 
   /// No description provided for @addTransaction.
   ///
-  /// In ja, this message translates to:
-  /// **'取引を追加'**
+  /// In en, this message translates to:
+  /// **'Add Transaction'**
   String get addTransaction;
 
   /// No description provided for @editTransaction.
   ///
-  /// In ja, this message translates to:
-  /// **'取引を編集'**
+  /// In en, this message translates to:
+  /// **'Edit Transaction'**
   String get editTransaction;
 
   /// No description provided for @transactionType.
   ///
-  /// In ja, this message translates to:
-  /// **'タイプ'**
+  /// In en, this message translates to:
+  /// **'Type'**
   String get transactionType;
 
   /// No description provided for @expense.
   ///
-  /// In ja, this message translates to:
-  /// **'支出'**
+  /// In en, this message translates to:
+  /// **'Expense'**
   String get expense;
 
   /// No description provided for @expenseName.
   ///
-  /// In ja, this message translates to:
-  /// **'支出名'**
+  /// In en, this message translates to:
+  /// **'Expense Name'**
   String get expenseName;
 
   /// No description provided for @income.
   ///
-  /// In ja, this message translates to:
-  /// **'収入'**
+  /// In en, this message translates to:
+  /// **'Income'**
   String get income;
 
   /// No description provided for @source.
   ///
-  /// In ja, this message translates to:
-  /// **'収入源'**
+  /// In en, this message translates to:
+  /// **'Income Source'**
   String get source;
 
   /// No description provided for @articleName.
   ///
-  /// In ja, this message translates to:
-  /// **'品名'**
+  /// In en, this message translates to:
+  /// **'Item Name'**
   String get articleName;
 
   /// No description provided for @amount.
   ///
-  /// In ja, this message translates to:
-  /// **'金額'**
+  /// In en, this message translates to:
+  /// **'Amount'**
   String get amount;
 
   /// No description provided for @amountOptional.
   ///
-  /// In ja, this message translates to:
-  /// **'金額（オプション）'**
+  /// In en, this message translates to:
+  /// **'Amount (optional)'**
   String get amountOptional;
 
   /// No description provided for @date.
   ///
-  /// In ja, this message translates to:
-  /// **'日付'**
+  /// In en, this message translates to:
+  /// **'Date'**
   String get date;
 
   /// No description provided for @mainTag.
   ///
-  /// In ja, this message translates to:
-  /// **'メインタグ'**
+  /// In en, this message translates to:
+  /// **'Main Tag'**
   String get mainTag;
 
   /// No description provided for @subTags.
   ///
-  /// In ja, this message translates to:
-  /// **'サブタグ'**
+  /// In en, this message translates to:
+  /// **'Sub-tags'**
   String get subTags;
 
   /// No description provided for @save.
   ///
-  /// In ja, this message translates to:
-  /// **'保存'**
+  /// In en, this message translates to:
+  /// **'Save'**
   String get save;
 
   /// No description provided for @update.
   ///
-  /// In ja, this message translates to:
-  /// **'更新'**
+  /// In en, this message translates to:
+  /// **'Update'**
   String get update;
 
   /// No description provided for @delete.
   ///
-  /// In ja, this message translates to:
-  /// **'削除'**
+  /// In en, this message translates to:
+  /// **'Delete'**
   String get delete;
 
   /// No description provided for @cancel.
   ///
-  /// In ja, this message translates to:
-  /// **'キャンセル'**
+  /// In en, this message translates to:
+  /// **'Cancel'**
   String get cancel;
 
   /// No description provided for @confirmDelete.
   ///
-  /// In ja, this message translates to:
-  /// **'削除の確認'**
+  /// In en, this message translates to:
+  /// **'Confirm Deletion'**
   String get confirmDelete;
 
   /// No description provided for @confirmDeleteMessage.
   ///
-  /// In ja, this message translates to:
-  /// **'この記録を本当に削除しますか？'**
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete this record?'**
   String get confirmDeleteMessage;
 
   /// No description provided for @selectDate.
   ///
-  /// In ja, this message translates to:
-  /// **'日付を選択'**
+  /// In en, this message translates to:
+  /// **'Select Date'**
   String get selectDate;
 
   /// No description provided for @selectTags.
   ///
-  /// In ja, this message translates to:
-  /// **'タグを選択'**
+  /// In en, this message translates to:
+  /// **'Select Tags'**
   String get selectTags;
 
   /// No description provided for @addNewTag.
   ///
-  /// In ja, this message translates to:
-  /// **'新しいタグを追加'**
+  /// In en, this message translates to:
+  /// **'Add New Tag'**
   String get addNewTag;
 
   /// No description provided for @noAmountSet.
   ///
-  /// In ja, this message translates to:
-  /// **'金額未設定'**
+  /// In en, this message translates to:
+  /// **'Amount Not Set'**
   String get noAmountSet;
 
   /// No description provided for @netBalance.
   ///
-  /// In ja, this message translates to:
-  /// **'収支'**
+  /// In en, this message translates to:
+  /// **'Net Balance'**
   String get netBalance;
 
   /// No description provided for @spendingReport.
   ///
-  /// In ja, this message translates to:
-  /// **'支出レポート'**
+  /// In en, this message translates to:
+  /// **'Spending Report'**
   String get spendingReport;
 
   /// No description provided for @totalSpending.
   ///
-  /// In ja, this message translates to:
-  /// **'合計支出'**
+  /// In en, this message translates to:
+  /// **'Total Spending'**
   String get totalSpending;
 
   /// No description provided for @byCategory.
   ///
-  /// In ja, this message translates to:
-  /// **'カテゴリ別'**
+  /// In en, this message translates to:
+  /// **'By Category'**
   String get byCategory;
 
   /// No description provided for @nameInput.
   ///
-  /// In ja, this message translates to:
-  /// **'名前を入力してください'**
+  /// In en, this message translates to:
+  /// **'Please enter a name'**
   String get nameInput;
 
   /// No description provided for @validNumber.
   ///
-  /// In ja, this message translates to:
-  /// **'有効な数値を入力してください'**
+  /// In en, this message translates to:
+  /// **'Please enter a valid number'**
   String get validNumber;
 
   /// No description provided for @selectMainTag.
   ///
-  /// In ja, this message translates to:
-  /// **'メインタグを選択してください'**
+  /// In en, this message translates to:
+  /// **'Please select a main tag'**
   String get selectMainTag;
 
   /// No description provided for @selectSubTag.
   ///
-  /// In ja, this message translates to:
-  /// **'サブタグを選択'**
+  /// In en, this message translates to:
+  /// **'Select Sub-tags'**
   String get selectSubTag;
 
   /// No description provided for @selectTag.
   ///
-  /// In ja, this message translates to:
-  /// **'タグを選択してください'**
+  /// In en, this message translates to:
+  /// **'Please select a tag'**
   String get selectTag;
 
   /// No description provided for @end.
   ///
-  /// In ja, this message translates to:
-  /// **'完了'**
+  /// In en, this message translates to:
+  /// **'Done'**
   String get end;
 
   /// No description provided for @amountChanged.
   ///
-  /// In ja, this message translates to:
-  /// **'金額が変更されました'**
+  /// In en, this message translates to:
+  /// **'Amount Changed'**
   String get amountChanged;
 
   /// No description provided for @confirmUpdateAllExpenses.
   ///
-  /// In ja, this message translates to:
-  /// **'過去に作成されたすべての支出もこの新しい金額に更新しますか？'**
+  /// In en, this message translates to:
+  /// **'Update all past transactions with this new amount?'**
   String get confirmUpdateAllExpenses;
 
   /// No description provided for @noChange.
   ///
-  /// In ja, this message translates to:
-  /// **'過去分はそのまま'**
+  /// In en, this message translates to:
+  /// **'No, keep past amounts'**
   String get noChange;
 
   /// No description provided for @updateAll.
   ///
-  /// In ja, this message translates to:
-  /// **'すべて更新'**
+  /// In en, this message translates to:
+  /// **'Yes, update all'**
   String get updateAll;
 
   /// No description provided for @applyForRelatedTransaction.
   ///
-  /// In ja, this message translates to:
-  /// **'関連する支出の扱い'**
+  /// In en, this message translates to:
+  /// **'Handle Past Transactions'**
   String get applyForRelatedTransaction;
 
   /// No description provided for @confirmDeleteRuleInstance.
   ///
-  /// In ja, this message translates to:
-  /// **'この自動支出ルールを削除する際、過去に作成された支出も一緒に削除しますか？'**
+  /// In en, this message translates to:
+  /// **'When deleting this rule, do you want to also delete all past transactions it created?'**
   String get confirmDeleteRuleInstance;
 
   /// No description provided for @leaveUnchanged.
   ///
-  /// In ja, this message translates to:
-  /// **'いいえ、過去分は残す'**
+  /// In en, this message translates to:
+  /// **'No, keep past transactions'**
   String get leaveUnchanged;
 
   /// No description provided for @changeAll.
   ///
-  /// In ja, this message translates to:
-  /// **'はい、すべて削除'**
+  /// In en, this message translates to:
+  /// **'Yes, delete everything'**
   String get changeAll;
 
   /// No description provided for @finalConfirm.
   ///
-  /// In ja, this message translates to:
-  /// **'最終確認'**
+  /// In en, this message translates to:
+  /// **'Final Confirmation'**
   String get finalConfirm;
 
   /// No description provided for @confirmShouldDeleteInstance.
   ///
-  /// In ja, this message translates to:
-  /// **'本当にこのルールと関連するすべての支出を削除しますか？この操作は元に戻せません。'**
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete this rule AND all of its related transactions? This action cannot be undone.'**
   String get confirmShouldDeleteInstance;
 
   /// No description provided for @confirmDeleteOnlyRule.
   ///
-  /// In ja, this message translates to:
-  /// **'本当にこのルールを削除しますか？過去の支出は手動の支出として残ります。'**
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete this rule? Past transactions will be kept as manual entries.'**
   String get confirmDeleteOnlyRule;
 
   /// No description provided for @performDeleteion.
   ///
-  /// In ja, this message translates to:
-  /// **'削除を実行'**
+  /// In en, this message translates to:
+  /// **'Perform Deletion'**
   String get performDeleteion;
 
   /// No description provided for @editAutoTrans.
   ///
-  /// In ja, this message translates to:
-  /// **'自動支出の編集'**
+  /// In en, this message translates to:
+  /// **'Edit Scheduled Transaction'**
   String get editAutoTrans;
 
   /// No description provided for @addAutoTrans.
   ///
-  /// In ja, this message translates to:
-  /// **'自動支出の追加'**
+  /// In en, this message translates to:
+  /// **'Add Scheduled Transaction'**
   String get addAutoTrans;
 
   /// No description provided for @repeatSetting.
   ///
-  /// In ja, this message translates to:
-  /// **'繰り返し設定'**
+  /// In en, this message translates to:
+  /// **'Repeat Settings'**
   String get repeatSetting;
 
   /// No description provided for @repeatType.
   ///
-  /// In ja, this message translates to:
-  /// **'繰り返しタイプ'**
+  /// In en, this message translates to:
+  /// **'Repeat Type'**
   String get repeatType;
 
   /// No description provided for @dayOfMonth.
   ///
-  /// In ja, this message translates to:
-  /// **'毎月特定の日'**
+  /// In en, this message translates to:
+  /// **'Specific day of the month'**
   String get dayOfMonth;
 
   /// No description provided for @endOfMonth.
   ///
-  /// In ja, this message translates to:
-  /// **'毎月末日'**
+  /// In en, this message translates to:
+  /// **'Last day of the month'**
   String get endOfMonth;
 
   /// No description provided for @daysBeforeEoM.
   ///
-  /// In ja, this message translates to:
-  /// **'毎月末日からN日前'**
+  /// In en, this message translates to:
+  /// **'N days before end of month'**
   String get daysBeforeEoM;
 
   /// No description provided for @fixedInterval.
   ///
-  /// In ja, this message translates to:
-  /// **'固定日'**
+  /// In en, this message translates to:
+  /// **'Fixed Interval'**
   String get fixedInterval;
 
   /// No description provided for @msgFixedInterval.
   ///
-  /// In ja, this message translates to:
-  /// **'指定した日数ごとに区切ります。'**
+  /// In en, this message translates to:
+  /// **'Group by a set number of days.'**
   String get msgFixedInterval;
 
   /// No description provided for @startDate.
   ///
-  /// In ja, this message translates to:
-  /// **'開始日'**
+  /// In en, this message translates to:
+  /// **'Start Date'**
   String get startDate;
 
   /// No description provided for @endDateOptional.
   ///
-  /// In ja, this message translates to:
-  /// **'終了日 (オプション)'**
+  /// In en, this message translates to:
+  /// **'End Date (optional)'**
   String get endDateOptional;
 
   /// No description provided for @noEndDate.
   ///
-  /// In ja, this message translates to:
-  /// **'設定しない (無期限)'**
+  /// In en, this message translates to:
+  /// **'No end date (repeats forever)'**
   String get noEndDate;
 
   /// No description provided for @clearEndDate.
   ///
-  /// In ja, this message translates to:
-  /// **'終了日をクリア'**
+  /// In en, this message translates to:
+  /// **'Clear End Date'**
   String get clearEndDate;
 
   /// No description provided for @howManyDaysBefore.
   ///
-  /// In ja, this message translates to:
-  /// **'何日前'**
+  /// In en, this message translates to:
+  /// **'Days before'**
   String get howManyDaysBefore;
 
   /// No description provided for @enterOneOrMoreDay.
   ///
-  /// In ja, this message translates to:
-  /// **'1以上の日数を入力してください'**
+  /// In en, this message translates to:
+  /// **'Please enter a number greater than 0'**
   String get enterOneOrMoreDay;
 
   /// No description provided for @intervalDays.
   ///
-  /// In ja, this message translates to:
-  /// **'間隔日数'**
+  /// In en, this message translates to:
+  /// **'Interval (in days)'**
   String get intervalDays;
 
   /// No description provided for @chooseColor.
   ///
-  /// In ja, this message translates to:
-  /// **'色を選択'**
+  /// In en, this message translates to:
+  /// **'Choose Color'**
   String get chooseColor;
 
   /// No description provided for @editTag.
   ///
-  /// In ja, this message translates to:
-  /// **'タグの編集'**
+  /// In en, this message translates to:
+  /// **'Edit Tag'**
   String get editTag;
 
   /// No description provided for @addTag.
   ///
-  /// In ja, this message translates to:
-  /// **'新しいタグを追加'**
+  /// In en, this message translates to:
+  /// **'Add New Tag'**
   String get addTag;
 
   /// No description provided for @tagName.
   ///
-  /// In ja, this message translates to:
-  /// **'タグ名'**
+  /// In en, this message translates to:
+  /// **'Tag Name'**
   String get tagName;
 
   /// No description provided for @inputTagName.
   ///
-  /// In ja, this message translates to:
-  /// **'タグ名を入力してください'**
+  /// In en, this message translates to:
+  /// **'Please enter a tag name'**
   String get inputTagName;
 
   /// No description provided for @color.
   ///
-  /// In ja, this message translates to:
-  /// **'色'**
+  /// In en, this message translates to:
+  /// **'Color'**
   String get color;
 
   /// No description provided for @icon.
   ///
-  /// In ja, this message translates to:
-  /// **'アイコン'**
+  /// In en, this message translates to:
+  /// **'Icon'**
   String get icon;
 
   /// No description provided for @selectImgFromGallery.
   ///
-  /// In ja, this message translates to:
-  /// **'ギャラリーから画像を選択'**
+  /// In en, this message translates to:
+  /// **'Select image from gallery'**
   String get selectImgFromGallery;
 
   /// No description provided for @msgAddTrans.
   ///
-  /// In ja, this message translates to:
-  /// **'トランザクションの追加'**
+  /// In en, this message translates to:
+  /// **'Add Transaction'**
   String get msgAddTrans;
 
   /// No description provided for @addNewRule.
   ///
-  /// In ja, this message translates to:
-  /// **'新しいルールを追加'**
+  /// In en, this message translates to:
+  /// **'Add New Rule'**
   String get addNewRule;
 
   /// No description provided for @noAutoRule.
   ///
-  /// In ja, this message translates to:
-  /// **'自動支出ルールがありません。'**
+  /// In en, this message translates to:
+  /// **'No scheduled transaction rules exist.'**
   String get noAutoRule;
 
   /// No description provided for @noTag.
   ///
-  /// In ja, this message translates to:
-  /// **'タグがありません。'**
+  /// In en, this message translates to:
+  /// **'No tags exist.'**
   String get noTag;
 
   /// No description provided for @deleteRule.
   ///
-  /// In ja, this message translates to:
-  /// **'このルールを削除'**
+  /// In en, this message translates to:
+  /// **'Delete this rule'**
   String get deleteRule;
 
   /// No description provided for @noDataForReport.
   ///
-  /// In ja, this message translates to:
-  /// **'レポートを作成するデータがありません。'**
+  /// In en, this message translates to:
+  /// **'Not enough data to create a report.'**
   String get noDataForReport;
 
   /// No description provided for @interval.
   ///
-  /// In ja, this message translates to:
-  /// **'間隔'**
+  /// In en, this message translates to:
+  /// **'Interval'**
   String get interval;
 
   /// No description provided for @days.
   ///
-  /// In ja, this message translates to:
-  /// **'日間'**
+  /// In en, this message translates to:
+  /// **'Days'**
   String get days;
 
   /// No description provided for @custom.
   ///
-  /// In ja, this message translates to:
-  /// **'カスタム...'**
+  /// In en, this message translates to:
+  /// **'Custom...'**
   String get custom;
 
   /// No description provided for @customDays.
   ///
-  /// In ja, this message translates to:
-  /// **'カスタム日数 (1-180)'**
+  /// In en, this message translates to:
+  /// **'Custom Days (1-180)'**
   String get customDays;
 
   /// No description provided for @enterNumOfDays.
   ///
-  /// In ja, this message translates to:
-  /// **'日数を入力'**
+  /// In en, this message translates to:
+  /// **'Enter number of days'**
   String get enterNumOfDays;
 
   /// No description provided for @confirmReset.
   ///
-  /// In ja, this message translates to:
-  /// **'本当にリセットしますか？'**
+  /// In en, this message translates to:
+  /// **'Are you sure you want to reset?'**
   String get confirmReset;
 
   /// No description provided for @confirmDeleteEverything.
   ///
-  /// In ja, this message translates to:
-  /// **'すべての支出、タグ、自動支出ルールが削除されます。この操作は元に戻せません。'**
+  /// In en, this message translates to:
+  /// **'All expenditures, tags, and scheduled rules will be deleted. This action cannot be undone.'**
   String get confirmDeleteEverything;
 
   /// No description provided for @reset.
   ///
-  /// In ja, this message translates to:
-  /// **'リセット'**
+  /// In en, this message translates to:
+  /// **'Reset'**
   String get reset;
 
   /// No description provided for @transListGroup.
   ///
-  /// In ja, this message translates to:
-  /// **'支出リストのグループ化'**
+  /// In en, this message translates to:
+  /// **'Transaction List Grouping'**
   String get transListGroup;
 
   /// No description provided for @calendarMonth.
   ///
-  /// In ja, this message translates to:
-  /// **'カレンダー月別'**
+  /// In en, this message translates to:
+  /// **'By Calendar Month'**
   String get calendarMonth;
 
   /// No description provided for @msgCalendarMonth.
   ///
-  /// In ja, this message translates to:
-  /// **'毎月1日から末日までで区切ります。'**
+  /// In en, this message translates to:
+  /// **'Group from the 1st to the end of the month.'**
   String get msgCalendarMonth;
 
   /// No description provided for @paydayCycle.
   ///
-  /// In ja, this message translates to:
-  /// **'給料日サイクル'**
+  /// In en, this message translates to:
+  /// **'By Payday Cycle'**
   String get paydayCycle;
 
   /// No description provided for @msgPaydayCycle.
   ///
-  /// In ja, this message translates to:
-  /// **'指定した開始日から翌月の前日までで区切ります。'**
+  /// In en, this message translates to:
+  /// **'Group from a specified start day to the day before in the next month.'**
   String get msgPaydayCycle;
 
   /// No description provided for @cycleStartDate.
   ///
-  /// In ja, this message translates to:
-  /// **'サイクル開始日'**
+  /// In en, this message translates to:
+  /// **'Cycle Start Day'**
   String get cycleStartDate;
 
   /// No description provided for @dangerousOperation.
   ///
-  /// In ja, this message translates to:
-  /// **'危険な操作'**
+  /// In en, this message translates to:
+  /// **'Dangerous Operations'**
   String get dangerousOperation;
 
   /// No description provided for @resetAllData.
   ///
-  /// In ja, this message translates to:
-  /// **'すべてのデータをリセット'**
+  /// In en, this message translates to:
+  /// **'Reset All Data'**
   String get resetAllData;
 
   /// No description provided for @resetApp.
   ///
-  /// In ja, this message translates to:
-  /// **'アプリを初期状態に戻します。'**
+  /// In en, this message translates to:
+  /// **'Returns the app to its initial state.'**
   String get resetApp;
 
   /// No description provided for @tagInUse.
   ///
-  /// In ja, this message translates to:
-  /// **'タグを使用中です'**
+  /// In en, this message translates to:
+  /// **'Tag in Use'**
   String get tagInUse;
 
   /// No description provided for @deleteAndContinue.
   ///
-  /// In ja, this message translates to:
-  /// **'削除して続行'**
+  /// In en, this message translates to:
+  /// **'Delete and Continue'**
   String get deleteAndContinue;
 
   /// No description provided for @food.
   ///
-  /// In ja, this message translates to:
-  /// **'食費'**
+  /// In en, this message translates to:
+  /// **'Food'**
   String get food;
 
   /// No description provided for @transport.
   ///
-  /// In ja, this message translates to:
-  /// **'交通費'**
+  /// In en, this message translates to:
+  /// **'Transport'**
   String get transport;
 
   /// No description provided for @shopping.
   ///
-  /// In ja, this message translates to:
-  /// **'買い物'**
+  /// In en, this message translates to:
+  /// **'Shopping'**
   String get shopping;
 
   /// No description provided for @entertainment.
   ///
-  /// In ja, this message translates to:
-  /// **'娯楽'**
+  /// In en, this message translates to:
+  /// **'Entertainment'**
   String get entertainment;
 
   /// No description provided for @other.
   ///
-  /// In ja, this message translates to:
-  /// **'その他'**
+  /// In en, this message translates to:
+  /// **'Other'**
   String get other;
 
   /// No description provided for @searchTransactions.
   ///
-  /// In ja, this message translates to:
-  /// **'支出を検索'**
+  /// In en, this message translates to:
+  /// **'Search Transactions'**
   String get searchTransactions;
 
   /// No description provided for @keyword.
   ///
-  /// In ja, this message translates to:
-  /// **'キーワード'**
+  /// In en, this message translates to:
+  /// **'Keyword'**
   String get keyword;
 
   /// No description provided for @search.
   ///
-  /// In ja, this message translates to:
-  /// **'検索'**
+  /// In en, this message translates to:
+  /// **'Search'**
   String get search;
 
   /// No description provided for @all.
   ///
-  /// In ja, this message translates to:
-  /// **'全部'**
+  /// In en, this message translates to:
+  /// **'All'**
   String get all;
 
   /// No description provided for @searchResults.
   ///
-  /// In ja, this message translates to:
-  /// **'検索結果'**
+  /// In en, this message translates to:
+  /// **'Search Results'**
   String get searchResults;
 
   /// No description provided for @noResultsFound.
   ///
-  /// In ja, this message translates to:
-  /// **'研究は見つかりませんでした'**
+  /// In en, this message translates to:
+  /// **'No results found'**
   String get noResultsFound;
 
   /// No description provided for @paginationLimit.
   ///
-  /// In ja, this message translates to:
-  /// **'表示件数の設定'**
+  /// In en, this message translates to:
+  /// **'Pagination Limit'**
   String get paginationLimit;
 
   /// No description provided for @done.
   ///
-  /// In ja, this message translates to:
-  /// **'終わり'**
+  /// In en, this message translates to:
+  /// **'Done'**
   String get done;
 
   /// No description provided for @selectDateRange.
   ///
-  /// In ja, this message translates to:
-  /// **'日付の範囲を指定'**
+  /// In en, this message translates to:
+  /// **'Select Date Range'**
   String get selectDateRange;
 
   /// No description provided for @filterByDate.
   ///
-  /// In ja, this message translates to:
-  /// **'日付で絞り込む'**
+  /// In en, this message translates to:
+  /// **'Filter by Date'**
   String get filterByDate;
 
   /// No description provided for @recommendations.
   ///
-  /// In ja, this message translates to:
-  /// **'おすすめタグ'**
+  /// In en, this message translates to:
+  /// **'Recommendations'**
   String get recommendations;
 
   /// No description provided for @enterMoreCharsForSuggestion.
   ///
-  /// In ja, this message translates to:
-  /// **'おすすめのためにさらに文字を入力してください'**
+  /// In en, this message translates to:
+  /// **'Enter more characters for suggestions'**
   String get enterMoreCharsForSuggestion;
 
   /// No description provided for @clearSelection.
   ///
-  /// In ja, this message translates to:
-  /// **'選択をクリア'**
+  /// In en, this message translates to:
+  /// **'Clear Selection'**
   String get clearSelection;
 
   /// No description provided for @expenseBreakdown.
   ///
-  /// In ja, this message translates to:
-  /// **'支出の内訳'**
+  /// In en, this message translates to:
+  /// **'Expense Breakdown'**
   String get expenseBreakdown;
 
   /// No description provided for @incomeBreakdown.
   ///
-  /// In ja, this message translates to:
-  /// **'収入の内訳'**
+  /// In en, this message translates to:
+  /// **'Income Breakdown'**
   String get incomeBreakdown;
 
   /// No description provided for @allTimeMoneyLeft.
   ///
-  /// In ja, this message translates to:
-  /// **'総資産'**
+  /// In en, this message translates to:
+  /// **'All-Time Balance'**
   String get allTimeMoneyLeft;
 
   /// No description provided for @dateRange.
   ///
-  /// In ja, this message translates to:
-  /// **'期間'**
+  /// In en, this message translates to:
+  /// **'Date Range'**
   String get dateRange;
 
-  /// No description provided for @changeCurrency.
+  /// Warning message that a tag is being used for an expense
   ///
-  /// In ja, this message translates to:
-  /// **'通貨の変更'**
-  String get changeCurrency;
+  /// In en, this message translates to:
+  /// **'The tag \"{tagName}\" is currently in use. If you delete it, related transactions will be moved to the \'Other\' category. Do you want to continue?'**
+  String warningTagInUse(String tagName);
+
+  /// Confirm delete tag
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete the \"{tagName}\" tag?'**
+  String removeTag(String tagName);
+
+  /// Formats a number as a currency value. The symbol will be determined by the locale.
+  ///
+  /// In en, this message translates to:
+  /// **'\${value}'**
+  String currencyValue(String value);
+
+  /// Error message shown when saving an image fails.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to save image: {error}'**
+  String imageSaveFailed(Object error);
+
+  /// Label for a specific day of the month.
+  ///
+  /// In en, this message translates to:
+  /// **'Day {day}'**
+  String dayOfMonthLabel(int day);
 
   /// No description provided for @sortBy.
   ///
-  /// In ja, this message translates to:
-  /// **'並び替え'**
+  /// In en, this message translates to:
+  /// **'Sort by'**
   String get sortBy;
 
   /// No description provided for @dateNewestFirst.
   ///
-  /// In ja, this message translates to:
-  /// **'日付（新しい順）'**
+  /// In en, this message translates to:
+  /// **'Date (Newest first)'**
   String get dateNewestFirst;
 
   /// No description provided for @dateOldestFirst.
   ///
-  /// In ja, this message translates to:
-  /// **'日付（古い順）'**
+  /// In en, this message translates to:
+  /// **'Date (Oldest first)'**
   String get dateOldestFirst;
 
   /// No description provided for @amountHighestFirst.
   ///
-  /// In ja, this message translates to:
-  /// **'金額（高い順）'**
+  /// In en, this message translates to:
+  /// **'Amount (High to low)'**
   String get amountHighestFirst;
 
   /// No description provided for @amountLowestFirst.
   ///
-  /// In ja, this message translates to:
-  /// **'金額（低い順）'**
+  /// In en, this message translates to:
+  /// **'Amount (Low to high)'**
   String get amountLowestFirst;
 
   /// No description provided for @nameAZ.
   ///
-  /// In ja, this message translates to:
-  /// **'名前（A-Z）'**
+  /// In en, this message translates to:
+  /// **'Name (A-Z)'**
   String get nameAZ;
 
   /// No description provided for @nameZA.
   ///
-  /// In ja, this message translates to:
-  /// **'名前（Z-A）'**
+  /// In en, this message translates to:
+  /// **'Name (Z-A)'**
   String get nameZA;
 
   /// No description provided for @advancedSearch.
   ///
-  /// In ja, this message translates to:
-  /// **'詳細検索'**
+  /// In en, this message translates to:
+  /// **'Advanced search'**
   String get advancedSearch;
 
   /// No description provided for @minAmount.
   ///
-  /// In ja, this message translates to:
-  /// **'最小金額'**
+  /// In en, this message translates to:
+  /// **'Min amount'**
   String get minAmount;
 
   /// No description provided for @maxAmount.
   ///
-  /// In ja, this message translates to:
-  /// **'最大金額'**
+  /// In en, this message translates to:
+  /// **'Max amount'**
   String get maxAmount;
 
   /// No description provided for @anyDate.
   ///
-  /// In ja, this message translates to:
-  /// **'すべての日付'**
+  /// In en, this message translates to:
+  /// **'Any date'**
   String get anyDate;
-
-  /// No description provided for @tags.
-  ///
-  /// In ja, this message translates to:
-  /// **'タグ'**
-  String get tags;
 
   /// No description provided for @currencyConverter.
   ///
-  /// In ja, this message translates to:
-  /// **'通貨換算機'**
+  /// In en, this message translates to:
+  /// **'Currency converter'**
   String get currencyConverter;
 
   /// No description provided for @amountToConvert.
   ///
-  /// In ja, this message translates to:
-  /// **'換算する金額'**
+  /// In en, this message translates to:
+  /// **'Amount to convert'**
   String get amountToConvert;
 
   /// No description provided for @swapCurrencies.
   ///
-  /// In ja, this message translates to:
-  /// **'通貨を入れ替える'**
+  /// In en, this message translates to:
+  /// **'Swap currencies'**
   String get swapCurrencies;
 
   /// No description provided for @scanReceipt.
   ///
-  /// In ja, this message translates to:
-  /// **'レシートをスキャン'**
+  /// In en, this message translates to:
+  /// **'Scan receipt'**
   String get scanReceipt;
 
   /// No description provided for @processingImage.
   ///
-  /// In ja, this message translates to:
-  /// **'画像を処理中'**
+  /// In en, this message translates to:
+  /// **'Processing image'**
   String get processingImage;
 
   /// No description provided for @takePicture.
   ///
-  /// In ja, this message translates to:
-  /// **'写真を撮る'**
+  /// In en, this message translates to:
+  /// **'Take a picture'**
   String get takePicture;
 
   /// No description provided for @selectFromGallery.
   ///
-  /// In ja, this message translates to:
-  /// **'ギャラリーから選択'**
+  /// In en, this message translates to:
+  /// **'Select from gallery'**
   String get selectFromGallery;
 
   /// No description provided for @moreOptions.
   ///
-  /// In ja, this message translates to:
-  /// **'その他のオプション'**
+  /// In en, this message translates to:
+  /// **'More options'**
   String get moreOptions;
 
   /// No description provided for @addManually.
   ///
-  /// In ja, this message translates to:
-  /// **'手動で追加'**
+  /// In en, this message translates to:
+  /// **'Add manually'**
   String get addManually;
 
   /// No description provided for @appName.
   ///
-  /// In ja, this message translates to:
-  /// **'家計簿アプリ'**
+  /// In en, this message translates to:
+  /// **'Household Budget App'**
   String get appName;
 
   /// No description provided for @notesOptional.
   ///
-  /// In ja, this message translates to:
-  /// **'メモ（任意）'**
+  /// In en, this message translates to:
+  /// **'Notes (optional)'**
   String get notesOptional;
 
   /// No description provided for @notesHint.
   ///
-  /// In ja, this message translates to:
-  /// **'メモを追加（例：詳細、場所など）'**
+  /// In en, this message translates to:
+  /// **'Add notes (e.g. details, location)'**
   String get notesHint;
 
   /// No description provided for @receipt.
   ///
-  /// In ja, this message translates to:
-  /// **'レシート'**
+  /// In en, this message translates to:
+  /// **'Receipt'**
   String get receipt;
 
   /// No description provided for @suggestTags.
   ///
-  /// In ja, this message translates to:
-  /// **'タグの提案'**
+  /// In en, this message translates to:
+  /// **'Suggest tags'**
   String get suggestTags;
 
   /// No description provided for @notes.
   ///
-  /// In ja, this message translates to:
-  /// **'メモ'**
+  /// In en, this message translates to:
+  /// **'Notes'**
   String get notes;
 
   /// No description provided for @optionalDetails.
   ///
-  /// In ja, this message translates to:
-  /// **'詳細（任意）'**
+  /// In en, this message translates to:
+  /// **'Details (optional)'**
   String get optionalDetails;
 
   /// No description provided for @analyzingYourReceipt.
   ///
-  /// In ja, this message translates to:
-  /// **'レシートを解析中'**
+  /// In en, this message translates to:
+  /// **'Analyzing your receipt'**
   String get analyzingYourReceipt;
 
   /// No description provided for @uploadAnExistingImage.
   ///
-  /// In ja, this message translates to:
-  /// **'既存の画像をアップロード'**
+  /// In en, this message translates to:
+  /// **'Upload an existing image'**
   String get uploadAnExistingImage;
 
   /// No description provided for @useYourCameraToScan.
   ///
-  /// In ja, this message translates to:
-  /// **'カメラでスキャンする'**
+  /// In en, this message translates to:
+  /// **'Use your camera to scan'**
   String get useYourCameraToScan;
 
   /// No description provided for @letAiDoTheHeavyLifting.
   ///
-  /// In ja, this message translates to:
-  /// **'AIにお任せください'**
+  /// In en, this message translates to:
+  /// **'Let AI do the heavy lifting'**
   String get letAiDoTheHeavyLifting;
 
   /// No description provided for @scanYourReceipt.
   ///
-  /// In ja, this message translates to:
-  /// **'レシートをスキャン'**
+  /// In en, this message translates to:
+  /// **'Scan your receipt'**
   String get scanYourReceipt;
-
-  /// No description provided for @proceed.
-  ///
-  /// In ja, this message translates to:
-  /// **'実行'**
-  String get proceed;
-
-  /// No description provided for @exchangeRateError.
-  ///
-  /// In ja, this message translates to:
-  /// **'為替レートの取得に失敗しました。後でもう一度お試しください。'**
-  String get exchangeRateError;
-
-  /// No description provided for @addCustomRate.
-  ///
-  /// In ja, this message translates to:
-  /// **'カスタム為替レートを追加'**
-  String get addCustomRate;
-
-  /// No description provided for @exchangeRate.
-  ///
-  /// In ja, this message translates to:
-  /// **'為替レート'**
-  String get exchangeRate;
-
-  /// No description provided for @add.
-  ///
-  /// In ja, this message translates to:
-  /// **'追加'**
-  String get add;
-
-  /// No description provided for @language.
-  ///
-  /// In ja, this message translates to:
-  /// **'言語'**
-  String get language;
-
-  /// No description provided for @systemDefault.
-  ///
-  /// In ja, this message translates to:
-  /// **'システムデフォルト'**
-  String get systemDefault;
-
-  /// No description provided for @primaryCurrency.
-  ///
-  /// In ja, this message translates to:
-  /// **'基本通貨'**
-  String get primaryCurrency;
-
-  /// No description provided for @customExchangeRates.
-  ///
-  /// In ja, this message translates to:
-  /// **'カスタム為替レート'**
-  String get customExchangeRates;
-
-  /// No description provided for @noTransactionsFound.
-  ///
-  /// In ja, this message translates to:
-  /// **'トランザクションが見つかりませんでした'**
-  String get noTransactionsFound;
 
   /// No description provided for @exportingData.
   ///
-  /// In ja, this message translates to:
-  /// **'データをエクスポート中...'**
+  /// In en, this message translates to:
+  /// **'Exporting data...'**
   String get exportingData;
 
   /// No description provided for @exportCancelled.
   ///
-  /// In ja, this message translates to:
-  /// **'エクスポートがキャンセルされました。'**
+  /// In en, this message translates to:
+  /// **'Export cancelled.'**
   String get exportCancelled;
 
   /// No description provided for @warning.
   ///
-  /// In ja, this message translates to:
-  /// **'警告'**
+  /// In en, this message translates to:
+  /// **'Warning'**
   String get warning;
 
   /// No description provided for @importWarningMessage.
   ///
-  /// In ja, this message translates to:
-  /// **'この操作はアプリ内の現在のデータをすべて上書きします。この操作は元に戻せません。続行してもよろしいですか？'**
+  /// In en, this message translates to:
+  /// **'This will overwrite all current data in the app. This action cannot be undone. Are you sure you want to proceed?'**
   String get importWarningMessage;
 
   /// No description provided for @importSuccess.
   ///
-  /// In ja, this message translates to:
-  /// **'データのインポートに成功しました！'**
+  /// In en, this message translates to:
+  /// **'Data imported successfully!'**
   String get importSuccess;
 
   /// No description provided for @importFailed.
   ///
-  /// In ja, this message translates to:
-  /// **'インポートに失敗しました。もう一度お試しください。'**
+  /// In en, this message translates to:
+  /// **'Import failed. Please try again.'**
   String get importFailed;
 
   /// No description provided for @dataManagement.
   ///
-  /// In ja, this message translates to:
-  /// **'データ管理'**
+  /// In en, this message translates to:
+  /// **'Data management'**
   String get dataManagement;
 
   /// No description provided for @exportData.
   ///
-  /// In ja, this message translates to:
-  /// **'データをエクスポート'**
+  /// In en, this message translates to:
+  /// **'Export Data'**
   String get exportData;
 
   /// No description provided for @exportDataSubtitle.
   ///
-  /// In ja, this message translates to:
-  /// **'データをファイルに保存します。'**
+  /// In en, this message translates to:
+  /// **'Save your data to a file.'**
   String get exportDataSubtitle;
 
   /// No description provided for @importData.
   ///
-  /// In ja, this message translates to:
-  /// **'データをインポート'**
+  /// In en, this message translates to:
+  /// **'Import Data'**
   String get importData;
 
   /// No description provided for @importDataSubtitle.
   ///
-  /// In ja, this message translates to:
-  /// **'ファイルからデータを復元します。'**
+  /// In en, this message translates to:
+  /// **'Restore data from a file.'**
   String get importDataSubtitle;
-
-  /// No description provided for @allTimeBalance.
-  ///
-  /// In ja, this message translates to:
-  /// **'総資産'**
-  String get allTimeBalance;
 
   /// No description provided for @searchByName.
   ///
-  /// In ja, this message translates to:
-  /// **'名前で検索'**
+  /// In en, this message translates to:
+  /// **'Search by name'**
   String get searchByName;
 
   /// No description provided for @amountRange.
   ///
-  /// In ja, this message translates to:
-  /// **'金額の範囲'**
+  /// In en, this message translates to:
+  /// **'Amount range'**
   String get amountRange;
 
   /// No description provided for @change.
   ///
-  /// In ja, this message translates to:
-  /// **'変更'**
+  /// In en, this message translates to:
+  /// **'Change'**
   String get change;
 
   /// No description provided for @select.
   ///
-  /// In ja, this message translates to:
-  /// **'選択'**
+  /// In en, this message translates to:
+  /// **'Select'**
   String get select;
 
   /// No description provided for @noTagsYet.
   ///
-  /// In ja, this message translates to:
-  /// **'タグがまだありません'**
+  /// In en, this message translates to:
+  /// **'No tags yet'**
   String get noTagsYet;
 
   /// No description provided for @noScheduledRules.
   ///
-  /// In ja, this message translates to:
-  /// **'自動ルールがありません'**
+  /// In en, this message translates to:
+  /// **'No scheduled rules'**
   String get noScheduledRules;
 
   /// No description provided for @tapToAddFirstRule.
   ///
-  /// In ja, this message translates to:
-  /// **'タップして最初のルールを追加'**
+  /// In en, this message translates to:
+  /// **'Tap to add your first rule'**
   String get tapToAddFirstRule;
 
   /// No description provided for @edit.
   ///
-  /// In ja, this message translates to:
-  /// **'編集'**
+  /// In en, this message translates to:
+  /// **'Edit'**
   String get edit;
 
   /// No description provided for @active.
   ///
-  /// In ja, this message translates to:
-  /// **'有効'**
+  /// In en, this message translates to:
+  /// **'Active'**
   String get active;
 
   /// No description provided for @inactive.
   ///
-  /// In ja, this message translates to:
-  /// **'無効'**
+  /// In en, this message translates to:
+  /// **'Inactive'**
   String get inactive;
 
   /// No description provided for @ruleName.
   ///
-  /// In ja, this message translates to:
-  /// **'ルール名'**
+  /// In en, this message translates to:
+  /// **'Rule name'**
   String get ruleName;
 
   /// No description provided for @endDate.
   ///
-  /// In ja, this message translates to:
-  /// **'終了日'**
+  /// In en, this message translates to:
+  /// **'End date'**
   String get endDate;
 
   /// No description provided for @optional.
   ///
-  /// In ja, this message translates to:
-  /// **'（任意）'**
+  /// In en, this message translates to:
+  /// **'(optional)'**
   String get optional;
 
   /// No description provided for @defaultTag.
   ///
-  /// In ja, this message translates to:
-  /// **'デフォルトタグ'**
+  /// In en, this message translates to:
+  /// **'Default tag'**
   String get defaultTag;
 
   /// No description provided for @tapToAddFirstTag.
   ///
-  /// In ja, this message translates to:
-  /// **'タップして最初のタグを追加'**
+  /// In en, this message translates to:
+  /// **'Tap to add your first tag'**
   String get tapToAddFirstTag;
 
   /// No description provided for @searchCurrency.
   ///
-  /// In ja, this message translates to:
-  /// **'通貨を検索'**
+  /// In en, this message translates to:
+  /// **'Search currency'**
   String get searchCurrency;
 
   /// No description provided for @error.
   ///
-  /// In ja, this message translates to:
-  /// **'エラー'**
+  /// In en, this message translates to:
+  /// **'Error'**
   String get error;
 
   /// No description provided for @convertFrom.
   ///
-  /// In ja, this message translates to:
-  /// **'変換元'**
+  /// In en, this message translates to:
+  /// **'Convert from'**
   String get convertFrom;
 
   /// No description provided for @convertTo.
   ///
-  /// In ja, this message translates to:
-  /// **'変換先'**
+  /// In en, this message translates to:
+  /// **'Convert to'**
   String get convertTo;
 
   /// No description provided for @general.
   ///
-  /// In ja, this message translates to:
-  /// **'一般'**
+  /// In en, this message translates to:
+  /// **'General'**
   String get general;
 
   /// No description provided for @display.
   ///
-  /// In ja, this message translates to:
-  /// **'表示'**
+  /// In en, this message translates to:
+  /// **'Display'**
   String get display;
 
-  /// No description provided for @editSavingGoal.
+  /// Label for N days before end of month.
   ///
-  /// In ja, this message translates to:
-  /// **'貯金目標を編集'**
-  String get editSavingGoal;
-
-  /// No description provided for @addSavingGoal.
-  ///
-  /// In ja, this message translates to:
-  /// **'貯金目標を追加'**
-  String get addSavingGoal;
-
-  /// No description provided for @goalName.
-  ///
-  /// In ja, this message translates to:
-  /// **'目標名'**
-  String get goalName;
-
-  /// No description provided for @targetAmount.
-  ///
-  /// In ja, this message translates to:
-  /// **'目標金額'**
-  String get targetAmount;
-
-  /// No description provided for @currentAmount.
-  ///
-  /// In ja, this message translates to:
-  /// **'現在の金額'**
-  String get currentAmount;
-
-  /// No description provided for @annualInterestRate.
-  ///
-  /// In ja, this message translates to:
-  /// **'年間利率'**
-  String get annualInterestRate;
-
-  /// No description provided for @assets.
-  ///
-  /// In ja, this message translates to:
-  /// **'資産'**
-  String get assets;
-
-  /// No description provided for @savings.
-  ///
-  /// In ja, this message translates to:
-  /// **'貯金'**
-  String get savings;
-
-  /// No description provided for @investments.
-  ///
-  /// In ja, this message translates to:
-  /// **'投資'**
-  String get investments;
-
-  /// No description provided for @featureComingSoon.
-  ///
-  /// In ja, this message translates to:
-  /// **'近日公開予定の機能'**
-  String get featureComingSoon;
-
-  /// No description provided for @noSavingGoals.
-  ///
-  /// In ja, this message translates to:
-  /// **'貯金目標がありません'**
-  String get noSavingGoals;
-
-  /// No description provided for @home.
-  ///
-  /// In ja, this message translates to:
-  /// **'ホーム'**
-  String get home;
-
-  /// No description provided for @addPortfolio.
-  ///
-  /// In ja, this message translates to:
-  /// **'ポートフォリオを追加'**
-  String get addPortfolio;
-
-  /// No description provided for @addNewPortfolio.
-  ///
-  /// In ja, this message translates to:
-  /// **'新しいポートフォリオ'**
-  String get addNewPortfolio;
-
-  /// No description provided for @portfolioName.
-  ///
-  /// In ja, this message translates to:
-  /// **'ポートフォリオ名'**
-  String get portfolioName;
-
-  /// No description provided for @noPortfolios.
-  ///
-  /// In ja, this message translates to:
-  /// **'ポートフォリオがありません'**
-  String get noPortfolios;
-
-  /// No description provided for @noInvestments.
-  ///
-  /// In ja, this message translates to:
-  /// **'投資がありません'**
-  String get noInvestments;
-
-  /// No description provided for @addInvestment.
-  ///
-  /// In ja, this message translates to:
-  /// **'投資の追加'**
-  String get addInvestment;
-
-  /// No description provided for @portfolioNameHint.
-  ///
-  /// In ja, this message translates to:
-  /// **'例: 株式、暗号資産'**
-  String get portfolioNameHint;
-
-  /// No description provided for @editInvestment.
-  ///
-  /// In ja, this message translates to:
-  /// **'投資の編集'**
-  String get editInvestment;
-
-  /// No description provided for @investmentSymbol.
-  ///
-  /// In ja, this message translates to:
-  /// **'シンボル'**
-  String get investmentSymbol;
-
-  /// No description provided for @investmentSymbolHint.
-  ///
-  /// In ja, this message translates to:
-  /// **'例: AAPL, BTC'**
-  String get investmentSymbolHint;
-
-  /// No description provided for @investmentName.
-  ///
-  /// In ja, this message translates to:
-  /// **'名前'**
-  String get investmentName;
-
-  /// No description provided for @investmentNameHint.
-  ///
-  /// In ja, this message translates to:
-  /// **'例: Apple Inc.'**
-  String get investmentNameHint;
-
-  /// No description provided for @quantity.
-  ///
-  /// In ja, this message translates to:
-  /// **'数量'**
-  String get quantity;
-
-  /// No description provided for @averageBuyPrice.
-  ///
-  /// In ja, this message translates to:
-  /// **'平均購入価格'**
-  String get averageBuyPrice;
-
-  /// No description provided for @inputQuantity.
-  ///
-  /// In ja, this message translates to:
-  /// **'数量を入力してください'**
-  String get inputQuantity;
-
-  /// No description provided for @inputAverageBuyPrice.
-  ///
-  /// In ja, this message translates to:
-  /// **'平均購入価格を入力してください'**
-  String get inputAverageBuyPrice;
-
-  /// No description provided for @editSavingAccount.
-  ///
-  /// In ja, this message translates to:
-  /// **'貯蓄口座を編集'**
-  String get editSavingAccount;
-
-  /// No description provided for @addSavingAccount.
-  ///
-  /// In ja, this message translates to:
-  /// **'貯蓄口座を追加'**
-  String get addSavingAccount;
-
-  /// No description provided for @accountName.
-  ///
-  /// In ja, this message translates to:
-  /// **'口座名'**
-  String get accountName;
-
-  /// No description provided for @currentBalance.
-  ///
-  /// In ja, this message translates to:
-  /// **'現在の残高'**
-  String get currentBalance;
-
-  /// No description provided for @openingDate.
-  ///
-  /// In ja, this message translates to:
-  /// **'開設日'**
-  String get openingDate;
-
-  /// No description provided for @closingDate.
-  ///
-  /// In ja, this message translates to:
-  /// **'解約日'**
-  String get closingDate;
-
-  /// No description provided for @stillActive.
-  ///
-  /// In ja, this message translates to:
-  /// **'まだ有効'**
-  String get stillActive;
-
-  /// No description provided for @clearClosingDate.
-  ///
-  /// In ja, this message translates to:
-  /// **'解約日をクリア'**
-  String get clearClosingDate;
-
-  /// No description provided for @savingAccounts.
-  ///
-  /// In ja, this message translates to:
-  /// **'貯蓄口座'**
-  String get savingAccounts;
-
-  /// No description provided for @noSavingAccounts.
-  ///
-  /// In ja, this message translates to:
-  /// **'貯蓄口座がありません'**
-  String get noSavingAccounts;
-
-  /// No description provided for @savingGoals.
-  ///
-  /// In ja, this message translates to:
-  /// **'貯蓄目標'**
-  String get savingGoals;
-
-  /// No description provided for @contribution.
-  ///
-  /// In ja, this message translates to:
-  /// **'拠出'**
-  String get contribution;
-
-  /// No description provided for @contributionAdded.
-  ///
-  /// In ja, this message translates to:
-  /// **'拠出が追加されました'**
-  String get contributionAdded;
-
-  /// No description provided for @addContribution.
-  ///
-  /// In ja, this message translates to:
-  /// **'拠出を追加'**
-  String get addContribution;
-
-  /// No description provided for @contributionAmount.
-  ///
-  /// In ja, this message translates to:
-  /// **'拠出額'**
-  String get contributionAmount;
-
-  /// No description provided for @saveAsTransaction.
-  ///
-  /// In ja, this message translates to:
-  /// **'支出として保存'**
-  String get saveAsTransaction;
-
-  /// No description provided for @selectCurrency.
-  ///
-  /// In ja, this message translates to:
-  /// **'通貨を選択'**
-  String get selectCurrency;
-
-  /// No description provided for @pinsDoNotMatch.
-  ///
-  /// In ja, this message translates to:
-  /// **'PINが一致しません'**
-  String get pinsDoNotMatch;
-
-  /// No description provided for @setupPin.
-  ///
-  /// In ja, this message translates to:
-  /// **'PINを設定'**
-  String get setupPin;
-
-  /// No description provided for @enterNewPin.
-  ///
-  /// In ja, this message translates to:
-  /// **'新しいPINを入力'**
-  String get enterNewPin;
-
-  /// No description provided for @confirmNewPin.
-  ///
-  /// In ja, this message translates to:
-  /// **'PINを確認'**
-  String get confirmNewPin;
-
-  /// No description provided for @pinLock.
-  ///
-  /// In ja, this message translates to:
-  /// **'PINロック'**
-  String get pinLock;
-
-  /// No description provided for @pinIsEnabled.
-  ///
-  /// In ja, this message translates to:
-  /// **'PINが有効です'**
-  String get pinIsEnabled;
-
-  /// No description provided for @pinIsDisabled.
-  ///
-  /// In ja, this message translates to:
-  /// **'PINが無効です'**
-  String get pinIsDisabled;
-
-  /// No description provided for @disablePin.
-  ///
-  /// In ja, this message translates to:
-  /// **'PINを無効にする'**
-  String get disablePin;
-
-  /// No description provided for @disablePinMessage.
-  ///
-  /// In ja, this message translates to:
-  /// **'PINロックを無効にするとすべてのデータが消去されます。必ずバックアップを用意してください。PINロックを無効にしてもよろしいですか？'**
-  String get disablePinMessage;
-
-  /// No description provided for @disable.
-  ///
-  /// In ja, this message translates to:
-  /// **'無効にする'**
-  String get disable;
-
-  /// No description provided for @security.
-  ///
-  /// In ja, this message translates to:
-  /// **'セキュリティ'**
-  String get security;
-
-  /// No description provided for @authenticateToUnlock.
-  ///
-  /// In ja, this message translates to:
-  /// **'ロック解除のため認証してください'**
-  String get authenticateToUnlock;
-
-  /// No description provided for @incorrectPin.
-  ///
-  /// In ja, this message translates to:
-  /// **'PINが間違っています。もう一度お試しください。'**
-  String get incorrectPin;
-
-  /// No description provided for @enterPin.
-  ///
-  /// In ja, this message translates to:
-  /// **'PINを入力してください'**
-  String get enterPin;
-
-  /// No description provided for @refresh.
-  ///
-  /// In ja, this message translates to:
-  /// **'更新'**
-  String get refresh;
-
-  /// No description provided for @addNew.
-  ///
-  /// In ja, this message translates to:
-  /// **'新規追加'**
-  String get addNew;
-
-  /// No description provided for @totalSavings.
-  ///
-  /// In ja, this message translates to:
-  /// **'貯蓄合計'**
-  String get totalSavings;
-
-  /// No description provided for @accounts.
-  ///
-  /// In ja, this message translates to:
-  /// **'口座'**
-  String get accounts;
-
-  /// No description provided for @goals.
-  ///
-  /// In ja, this message translates to:
-  /// **'目標'**
-  String get goals;
-
-  /// No description provided for @completed.
-  ///
-  /// In ja, this message translates to:
-  /// **'完了'**
-  String get completed;
-
-  /// No description provided for @transaction.
-  ///
-  /// In ja, this message translates to:
-  /// **'取引'**
-  String get transaction;
-
-  /// No description provided for @transactionsSingle.
-  ///
-  /// In ja, this message translates to:
-  /// **'取引一覧'**
-  String get transactionsSingle;
-
-  /// No description provided for @timeline.
-  ///
-  /// In ja, this message translates to:
-  /// **'タイムライン'**
-  String get timeline;
-
-  /// No description provided for @currency.
-  ///
-  /// In ja, this message translates to:
-  /// **'通貨'**
-  String get currency;
-
-  /// No description provided for @resetDate.
-  ///
-  /// In ja, this message translates to:
-  /// **'日付をリセット'**
-  String get resetDate;
-
-  /// No description provided for @cashFlowTimeline.
-  ///
-  /// In ja, this message translates to:
-  /// **'キャッシュフローのタイムライン'**
-  String get cashFlowTimeline;
-
-  /// No description provided for @createdOn.
-  ///
-  /// In ja, this message translates to:
-  /// **'作成日'**
-  String get createdOn;
-
-  /// No description provided for @lastUpdated.
-  ///
-  /// In ja, this message translates to:
-  /// **'最終更新日'**
-  String get lastUpdated;
-
-  /// No description provided for @budgets.
-  ///
-  /// In ja, this message translates to:
-  /// **'予算'**
-  String get budgets;
-
-  /// No description provided for @noBudgetsSet.
-  ///
-  /// In ja, this message translates to:
-  /// **'予算が設定されていません'**
-  String get noBudgetsSet;
-
-  /// No description provided for @editBudget.
-  ///
-  /// In ja, this message translates to:
-  /// **'予算を編集'**
-  String get editBudget;
-
-  /// No description provided for @addBudget.
-  ///
-  /// In ja, this message translates to:
-  /// **'予算を追加'**
-  String get addBudget;
-
-  /// No description provided for @editingBudgetForThisTag.
-  ///
-  /// In ja, this message translates to:
-  /// **'このタグの予算を編集中'**
-  String get editingBudgetForThisTag;
-
-  /// No description provided for @selectTagForBudget.
-  ///
-  /// In ja, this message translates to:
-  /// **'予算対象のタグを選択'**
-  String get selectTagForBudget;
-
-  /// No description provided for @budgetAmount.
-  ///
-  /// In ja, this message translates to:
-  /// **'予算金額'**
-  String get budgetAmount;
-
-  /// No description provided for @budgetPeriod.
-  ///
-  /// In ja, this message translates to:
-  /// **'予算期間'**
-  String get budgetPeriod;
-
-  /// No description provided for @deleteBudget.
-  ///
-  /// In ja, this message translates to:
-  /// **'予算を削除'**
-  String get deleteBudget;
-
-  /// No description provided for @saveBudget.
-  ///
-  /// In ja, this message translates to:
-  /// **'予算を保存'**
-  String get saveBudget;
-
-  /// No description provided for @restartToApply.
-  ///
-  /// In ja, this message translates to:
-  /// **'インポートが成功しました。変更を適用するにはアプリを再起動してください。'**
-  String get restartToApply;
-
-  /// No description provided for @restartNow.
-  ///
-  /// In ja, this message translates to:
-  /// **'今すぐ再起動'**
-  String get restartNow;
-
-  /// No description provided for @trans.
-  ///
-  /// In ja, this message translates to:
-  /// **'取引'**
-  String get trans;
-
-  /// No description provided for @noTransactionsInPeriod.
-  ///
-  /// In ja, this message translates to:
-  /// **'この期間には取引がありません'**
-  String get noTransactionsInPeriod;
-
-  /// No description provided for @total.
-  ///
-  /// In ja, this message translates to:
-  /// **'合計'**
-  String get total;
-
-  /// No description provided for @clearTags.
-  ///
-  /// In ja, this message translates to:
-  /// **'タグをクリア'**
-  String get clearTags;
-
-  /// No description provided for @exportFailed.
-  ///
-  /// In ja, this message translates to:
-  /// **'エクスポートに失敗しました。もう一度お試しください。'**
-  String get exportFailed;
-
-  /// No description provided for @exportNoPassword.
-  ///
-  /// In ja, this message translates to:
-  /// **'エクスポートがキャンセルされました: パスワードが入力されていません。'**
-  String get exportNoPassword;
-
-  /// No description provided for @importCancelled.
-  ///
-  /// In ja, this message translates to:
-  /// **'インポートがキャンセルされました。'**
-  String get importCancelled;
-
-  /// No description provided for @importNoPassword.
-  ///
-  /// In ja, this message translates to:
-  /// **'インポートがキャンセルされました: パスワードが入力されていません。'**
-  String get importNoPassword;
-
-  /// No description provided for @importWrongPassword.
-  ///
-  /// In ja, this message translates to:
-  /// **'インポートに失敗しました: パスワードが間違っているかファイルが破損しています。'**
-  String get importWrongPassword;
-
-  /// No description provided for @backupPassword.
-  ///
-  /// In ja, this message translates to:
-  /// **'バックアップパスワード'**
-  String get backupPassword;
-
-  /// No description provided for @enterPasswordForBackup.
-  ///
-  /// In ja, this message translates to:
-  /// **'バックアップ用のパスワードを入力してください'**
-  String get enterPasswordForBackup;
-
-  /// No description provided for @password.
-  ///
-  /// In ja, this message translates to:
-  /// **'パスワード'**
-  String get password;
-
-  /// No description provided for @passwordCannotBeEmpty.
-  ///
-  /// In ja, this message translates to:
-  /// **'パスワードは空にできません'**
-  String get passwordCannotBeEmpty;
-
-  /// No description provided for @ok.
-  ///
-  /// In ja, this message translates to:
-  /// **'OK'**
-  String get ok;
-
-  /// No description provided for @selectOutputFile.
-  ///
-  /// In ja, this message translates to:
-  /// **'出力ファイルを選択してください:'**
-  String get selectOutputFile;
-
-  /// No description provided for @forgotPin.
-  ///
-  /// In ja, this message translates to:
-  /// **'PINをお忘れですか？'**
-  String get forgotPin;
-
-  /// No description provided for @resetConfirmation.
-  ///
-  /// In ja, this message translates to:
-  /// **'アプリをリセットしますか？'**
-  String get resetConfirmation;
-
-  /// No description provided for @resetWarningMessage.
-  ///
-  /// In ja, this message translates to:
-  /// **'この操作はすべてのアプリデータ（取引、設定、バックアップを含む）を完全に削除します。この操作は元に戻せません。続行してもよろしいですか？'**
-  String get resetWarningMessage;
-
-  /// No description provided for @resetAndStartOver.
-  ///
-  /// In ja, this message translates to:
-  /// **'削除してリセット'**
-  String get resetAndStartOver;
-
-  /// No description provided for @addToTotal.
-  ///
-  /// In ja, this message translates to:
-  /// **'合計に追加'**
-  String get addToTotal;
-
-  /// No description provided for @additionalAmount.
-  ///
-  /// In ja, this message translates to:
-  /// **'追加金額'**
-  String get additionalAmount;
-
-  /// No description provided for @forgotToAddItem.
-  ///
-  /// In ja, this message translates to:
-  /// **'項目を追加し忘れましたか？ここで金額を追加できます。'**
-  String get forgotToAddItem;
-
-  /// No description provided for @notificationReminderTitle.
-  ///
-  /// In ja, this message translates to:
-  /// **'リマインダー通知'**
-  String get notificationReminderTitle;
-
-  /// No description provided for @notificationReminderBody.
-  ///
-  /// In ja, this message translates to:
-  /// **'取引の記録を忘れずに行いましょう。'**
-  String get notificationReminderBody;
-
-  /// No description provided for @reminders.
-  ///
-  /// In ja, this message translates to:
-  /// **'リマインダー'**
-  String get reminders;
-
-  /// No description provided for @enableRemindersSubtitle.
-  ///
-  /// In ja, this message translates to:
-  /// **'リマインダーを有効にすると、取引の追加を忘れないように通知が届きます。'**
-  String get enableRemindersSubtitle;
-
-  /// No description provided for @enableReminders.
-  ///
-  /// In ja, this message translates to:
-  /// **'リマインダーを有効にする'**
-  String get enableReminders;
-
-  /// No description provided for @openSettings.
-  ///
-  /// In ja, this message translates to:
-  /// **'設定を開く'**
-  String get openSettings;
-
-  /// No description provided for @notificationPermissionGuide.
-  ///
-  /// In ja, this message translates to:
-  /// **'リマインダーを使用するには通知の許可が必要です。設定で許可を有効にしてください。'**
-  String get notificationPermissionGuide;
-
-  /// No description provided for @permissionDenied.
-  ///
-  /// In ja, this message translates to:
-  /// **'通知の許可が拒否されました'**
-  String get permissionDenied;
-
-  /// No description provided for @notificationIncompleteTitle.
-  ///
-  /// In ja, this message translates to:
-  /// **'未完了の通知'**
-  String get notificationIncompleteTitle;
-
-  /// No description provided for @clearFilter.
-  ///
-  /// In ja, this message translates to:
-  /// **'フィルターをクリア'**
-  String get clearFilter;
-
-  /// No description provided for @sortByOverbudget.
-  ///
-  /// In ja, this message translates to:
-  /// **'予算超過順に並び替え'**
-  String get sortByOverbudget;
-
-  /// No description provided for @sortByPercent.
-  ///
-  /// In ja, this message translates to:
-  /// **'割合順に並び替え'**
-  String get sortByPercent;
-
-  /// No description provided for @sortByAmount.
-  ///
-  /// In ja, this message translates to:
-  /// **'金額順に並び替え'**
-  String get sortByAmount;
-
-  /// No description provided for @sortByName.
-  ///
-  /// In ja, this message translates to:
-  /// **'名前順に並び替え'**
-  String get sortByName;
-
-  /// No description provided for @dashboard.
-  ///
-  /// In ja, this message translates to:
-  /// **'ホーム'**
-  String get dashboard;
-
-  /// No description provided for @unspecifiedTransactions.
-  ///
-  /// In ja, this message translates to:
-  /// **'未分類の取引'**
-  String get unspecifiedTransactions;
-
-  /// No description provided for @overBudget.
-  ///
-  /// In ja, this message translates to:
-  /// **'予算オーバー'**
-  String get overBudget;
-
-  /// No description provided for @noRecentTransactions.
-  ///
-  /// In ja, this message translates to:
-  /// **'最近の取引はありません'**
-  String get noRecentTransactions;
-
-  /// No description provided for @viewAll.
-  ///
-  /// In ja, this message translates to:
-  /// **'すべて表示'**
-  String get viewAll;
-
-  /// No description provided for @highSpendingAlert.
-  ///
-  /// In ja, this message translates to:
-  /// **'高額支出の警告'**
-  String get highSpendingAlert;
-
-  /// No description provided for @spendingHigherThanAverage.
-  ///
-  /// In ja, this message translates to:
-  /// **'平均より支出が多いです'**
-  String get spendingHigherThanAverage;
-
-  /// No description provided for @goalsEndingSoon.
-  ///
-  /// In ja, this message translates to:
-  /// **'まもなく終了する目標'**
-  String get goalsEndingSoon;
-
-  /// No description provided for @endsOn.
-  ///
-  /// In ja, this message translates to:
-  /// **'終了日'**
-  String get endsOn;
-
-  /// No description provided for @upcoming.
-  ///
-  /// In ja, this message translates to:
-  /// **'今後の予定'**
-  String get upcoming;
-
-  /// No description provided for @cannotBeNegative.
-  ///
-  /// In ja, this message translates to:
-  /// **'負の値にはできません'**
-  String get cannotBeNegative;
-
-  /// No description provided for @adjustTotal.
-  ///
-  /// In ja, this message translates to:
-  /// **'合計を調整'**
-  String get adjustTotal;
-
-  /// No description provided for @adjustmentAmount.
-  ///
-  /// In ja, this message translates to:
-  /// **'調整額'**
-  String get adjustmentAmount;
-
-  /// No description provided for @removeFromTotal.
-  ///
-  /// In ja, this message translates to:
-  /// **'合計から削除'**
-  String get removeFromTotal;
-
-  /// No description provided for @backupReminderTitle.
-  ///
-  /// In ja, this message translates to:
-  /// **'バックアップのリマインダー'**
-  String get backupReminderTitle;
-
-  /// No description provided for @backupReminderSubtitle.
-  ///
-  /// In ja, this message translates to:
-  /// **'データを安全に保つため、定期的にバックアップを作成してください'**
-  String get backupReminderSubtitle;
-
-  /// No description provided for @analyzing.
-  ///
-  /// In ja, this message translates to:
-  /// **'分析中...'**
-  String get analyzing;
-
-  /// No description provided for @analysisFailed.
-  ///
-  /// In ja, this message translates to:
-  /// **'分析に失敗しました。もう一度お試しください。'**
-  String get analysisFailed;
-
-  /// No description provided for @budgetAnalysis.
-  ///
-  /// In ja, this message translates to:
-  /// **'予算分析'**
-  String get budgetAnalysis;
-
-  /// No description provided for @noAnalysisSummary.
-  ///
-  /// In ja, this message translates to:
-  /// **'分析の要約はありません。'**
-  String get noAnalysisSummary;
-
-  /// No description provided for @onTrackToMeetBudget.
-  ///
-  /// In ja, this message translates to:
-  /// **'予算達成の見込みあり'**
-  String get onTrackToMeetBudget;
-
-  /// No description provided for @atRiskOfExceedingBudget.
-  ///
-  /// In ja, this message translates to:
-  /// **'予算超過のリスクあり'**
-  String get atRiskOfExceedingBudget;
-
-  /// No description provided for @suggestions.
-  ///
-  /// In ja, this message translates to:
-  /// **'提案'**
-  String get suggestions;
-
-  /// No description provided for @contextSaved.
-  ///
-  /// In ja, this message translates to:
-  /// **'コンテキストが保存されました。'**
-  String get contextSaved;
-
-  /// No description provided for @errorSavingContext.
-  ///
-  /// In ja, this message translates to:
-  /// **'コンテキストの保存中にエラーが発生しました。'**
-  String get errorSavingContext;
-
-  /// No description provided for @financialContextTitle.
-  ///
-  /// In ja, this message translates to:
-  /// **'財務コンテキスト'**
-  String get financialContextTitle;
-
-  /// No description provided for @financialContextDescription.
-  ///
-  /// In ja, this message translates to:
-  /// **'あなたの収入、支出、目標などに基づいて、より良い提案を受け取るための情報です。'**
-  String get financialContextDescription;
-
-  /// No description provided for @financialContextHint.
-  ///
-  /// In ja, this message translates to:
-  /// **'例: 学生で月収は5万円、節約中です。'**
-  String get financialContextHint;
-
-  /// No description provided for @yourContext.
-  ///
-  /// In ja, this message translates to:
-  /// **'あなたのコンテキスト'**
-  String get yourContext;
-
-  /// No description provided for @financialContextSubTitle.
-  ///
-  /// In ja, this message translates to:
-  /// **'支出の傾向や目標に基づいて、パーソナライズされた提案を受け取りましょう。'**
-  String get financialContextSubTitle;
-
-  /// ユーザーに洞察を提供するボタンまたはアクションのラベル
-  ///
-  /// In ja, this message translates to:
-  /// **'インサイトを取得'**
-  String get getInsights;
-
-  /// AIを使って分析を行うためのラベルまたはボタン
-  ///
-  /// In ja, this message translates to:
-  /// **'AIで分析'**
-  String get analyzeWithAI;
-
-  /// AIや統計などのレポート分析セクションのタイトル
-  ///
-  /// In ja, this message translates to:
-  /// **'分析レポート'**
-  String get reportAnalysis;
-
-  /// ユーザーの財務行動で良かった点を表すラベル
-  ///
-  /// In ja, this message translates to:
-  /// **'良い点'**
-  String get goodPoints;
-
-  /// 費用や支出を表す一般的なラベル
-  ///
-  /// In ja, this message translates to:
-  /// **'支出'**
-  String get expenses;
-
-  /// No description provided for @confidence.
-  ///
-  /// In ja, this message translates to:
-  /// **'信頼度: {confidence}%'**
-  String confidence(String confidence);
-
-  /// No description provided for @itemsNeedAttention.
-  ///
-  /// In ja, this message translates to:
-  /// **'{count} 件の項目に注意が必要です'**
-  String itemsNeedAttention(int count);
-
-  /// No description provided for @notificationIncompleteBody.
-  ///
-  /// In ja, this message translates to:
-  /// **'{incompleteCount} 件の未完了の取引があります。確認してください。'**
-  String notificationIncompleteBody(int incompleteCount);
-
-  /// The path of successful export
-  ///
-  /// In ja, this message translates to:
-  /// **'データを正常にエクスポートしました: {path}'**
-  String exportSuccess(String path);
-
-  /// 予算のリセット日を示すメッセージ
-  ///
-  /// In ja, this message translates to:
-  /// **'{date} にリセット'**
-  String resetsOn(String date);
-
-  /// 予算削除の確認メッセージ
-  ///
-  /// In ja, this message translates to:
-  /// **'「{tag}」タグの予算を本当に削除しますか？'**
-  String confirmDeleteBudget(String tag);
-
-  /// 予算超過の金額
-  ///
-  /// In ja, this message translates to:
-  /// **'予算超過：{amount}'**
-  String overBudgetBy(String amount);
-
-  /// 予算の残額
-  ///
-  /// In ja, this message translates to:
-  /// **'残り：{amount}'**
-  String remaining(String amount);
-
-  /// 予算期間の名前
-  ///
-  /// In ja, this message translates to:
-  /// **'{period} の期間'**
-  String budgetPeriodName(String period);
-
-  /// 取引の件数
-  ///
-  /// In ja, this message translates to:
-  /// **'{count, plural, =0{取引なし} =1{1 件の取引} other{{count} 件の取引}}'**
-  String transactions(int count);
-
-  /// No description provided for @estimatedValueAt.
-  ///
-  /// In ja, this message translates to:
-  /// **'{date} 時点の予測値'**
-  String estimatedValueAt(String date);
-
-  /// No description provided for @daysBeforeEndOfMonthWithValue.
-  ///
-  /// In ja, this message translates to:
-  /// **'月末の{value}日前'**
+  /// In en, this message translates to:
+  /// **'{value} days before end of month'**
   String daysBeforeEndOfMonthWithValue(int value);
 
-  /// No description provided for @fixedIntervalWithValue.
+  /// Label for fixed interval in days.
   ///
-  /// In ja, this message translates to:
-  /// **'{value}日ごと'**
+  /// In en, this message translates to:
+  /// **'Every {value} days'**
   String fixedIntervalWithValue(int value);
 
-  /// No description provided for @confirmCurrencyConversion.
+  /// No description provided for @exportSuccess.
   ///
-  /// In ja, this message translates to:
-  /// **'すべての記録を {oldCode} から {newCode} に換算しますか？この操作には為替レートの取得が必要です。'**
+  /// In en, this message translates to:
+  /// **'Export successful: {path}'**
+  String exportSuccess(String path);
+
+  /// No description provided for @tags.
+  ///
+  /// In en, this message translates to:
+  /// **'Tags'**
+  String get tags;
+
+  /// No description provided for @allTimeBalance.
+  ///
+  /// In en, this message translates to:
+  /// **'All-time balance'**
+  String get allTimeBalance;
+
+  /// No description provided for @changeCurrency.
+  ///
+  /// In en, this message translates to:
+  /// **'Change Currency'**
+  String get changeCurrency;
+
+  /// Confirmation message for currency conversion.
+  ///
+  /// In en, this message translates to:
+  /// **'Convert all records from {oldCode} to {newCode}? This requires retrieving exchange rates.'**
   String confirmCurrencyConversion(String oldCode, String newCode);
 
-  /// The name of a language.
+  /// No description provided for @proceed.
   ///
-  /// In ja, this message translates to:
+  /// In en, this message translates to:
+  /// **'Proceed'**
+  String get proceed;
+
+  /// No description provided for @exchangeRateError.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to retrieve exchange rate. Please try again later.'**
+  String get exchangeRateError;
+
+  /// No description provided for @addCustomRate.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Custom Exchange Rate'**
+  String get addCustomRate;
+
+  /// No description provided for @exchangeRate.
+  ///
+  /// In en, this message translates to:
+  /// **'Exchange Rate'**
+  String get exchangeRate;
+
+  /// No description provided for @add.
+  ///
+  /// In en, this message translates to:
+  /// **'Add'**
+  String get add;
+
+  /// No description provided for @language.
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get language;
+
+  /// No description provided for @systemDefault.
+  ///
+  /// In en, this message translates to:
+  /// **'System Default'**
+  String get systemDefault;
+
+  /// No description provided for @primaryCurrency.
+  ///
+  /// In en, this message translates to:
+  /// **'Primary Currency'**
+  String get primaryCurrency;
+
+  /// No description provided for @customExchangeRates.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom Exchange Rates'**
+  String get customExchangeRates;
+
+  /// No description provided for @noTransactionsFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No transactions found'**
+  String get noTransactionsFound;
+
+  /// No description provided for @languageName.
+  ///
+  /// In en, this message translates to:
   /// **'{languageCode, select, ja{日本語} en{English} vi{Tiếng Việt} other{Unknown}}'**
   String languageName(String languageCode);
 
   /// The name of a currency.
   ///
-  /// In ja, this message translates to:
-  /// **'{currencyCode, select, JPY{日本円 (JPY)} USD{米ドル (USD)} EUR{ユーロ (EUR)} CNY{中国人民元 (CNY)} RUB{ロシア・ルーブル (RUB)} VND{ベトナム・ドン (VND)} AUD{オーストラリア・ドル (AUD)} KRW{韓国ウォン (KRW)} THB{タイ・バーツ (THB)} PHP{フィリピン・ペソ (PHP)} MYR{マレーシア・リンギット (MYR)} GBP{英ポンド (GBP)} CAD{カナダ・ドル (CAD)} CHF{スイス・フラン (CHF)} HKD{香港ドル (HKD)} SGD{シンガポール・ドル (SGD)} INR{インド・ルピー (INR)} BRL{ブラジル・レアル (BRL)} ZAR{南アフリカ・ランド (ZAR)} other{Unknown}}'**
+  /// In en, this message translates to:
+  /// **'{currencyCode, select, JPY{Japanese Yen (JPY)} USD{US Dollar (USD)} EUR{Euro (EUR)} CNY{Chinese Yuan (CNY)} RUB{Russian Ruble (RUB)} VND{Vietnamese Dong (VND)} AUD{Australian Dollar (AUD)} KRW{South Korean Won (KRW)} THB{Thai Baht (THB)} PHP{Philippine Peso (PHP)} MYR{Malaysian Ringgit (MYR)} GBP{British Pound (GBP)} CAD{Canadian Dollar (CAD)} CHF{Swiss Franc (CHF)} HKD{Hong Kong Dollar (HKD)} SGD{Singapore Dollar (SGD)} INR{Indian Rupee (INR)} BRL{Brazilian Real (BRL)} ZAR{South African Rand (ZAR)} other{Unknown}}'**
   String currencyName(String currencyCode);
 
-  /// No description provided for @daysUnit.
+  /// Label for days unit.
   ///
-  /// In ja, this message translates to:
-  /// **'{day} 日間'**
+  /// In en, this message translates to:
+  /// **'{day} days'**
   String daysUnit(int day);
 
-  /// Warning message that a tag is being used for expense
+  /// No description provided for @editSavingGoal.
   ///
-  /// In ja, this message translates to:
-  /// **'「{tagName}」タグは支出に使用されています。削除した場合、関連する支出は「その他」カテゴリに移動します。続行しますか？'**
-  String warningTagInUse(String tagName);
+  /// In en, this message translates to:
+  /// **'Edit Saving Goal'**
+  String get editSavingGoal;
 
-  /// Confirm delete tag
+  /// No description provided for @addSavingGoal.
   ///
-  /// In ja, this message translates to:
-  /// **'「{tagName}」タグを本当に削除しますか？'**
-  String removeTag(String tagName);
+  /// In en, this message translates to:
+  /// **'Add Saving Goal'**
+  String get addSavingGoal;
 
-  /// Formats a number as Japanese Yen currency.
+  /// No description provided for @goalName.
   ///
-  /// In ja, this message translates to:
-  /// **'¥{value}'**
-  String currencyValue(String value);
+  /// In en, this message translates to:
+  /// **'Goal Name'**
+  String get goalName;
 
-  /// Error message shown when saving an image fails.
+  /// No description provided for @targetAmount.
   ///
-  /// In ja, this message translates to:
-  /// **'画像の保存に失敗しました: {error}'**
-  String imageSaveFailed(Object error);
+  /// In en, this message translates to:
+  /// **'Target Amount'**
+  String get targetAmount;
 
-  /// Label for a specific day of the month.
+  /// No description provided for @currentAmount.
   ///
-  /// In ja, this message translates to:
-  /// **'{day} 日'**
-  String dayOfMonthLabel(int day);
+  /// In en, this message translates to:
+  /// **'Current Amount'**
+  String get currentAmount;
+
+  /// No description provided for @annualInterestRate.
+  ///
+  /// In en, this message translates to:
+  /// **'Annual Interest Rate'**
+  String get annualInterestRate;
+
+  /// No description provided for @assets.
+  ///
+  /// In en, this message translates to:
+  /// **'Assets'**
+  String get assets;
+
+  /// No description provided for @savings.
+  ///
+  /// In en, this message translates to:
+  /// **'Savings'**
+  String get savings;
+
+  /// No description provided for @investments.
+  ///
+  /// In en, this message translates to:
+  /// **'Investments'**
+  String get investments;
+
+  /// No description provided for @featureComingSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'This feature is coming soon'**
+  String get featureComingSoon;
+
+  /// No description provided for @noSavingGoals.
+  ///
+  /// In en, this message translates to:
+  /// **'No saving goals yet'**
+  String get noSavingGoals;
+
+  /// No description provided for @home.
+  ///
+  /// In en, this message translates to:
+  /// **'Home'**
+  String get home;
+
+  /// No description provided for @addPortfolio.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Portfolio'**
+  String get addPortfolio;
+
+  /// No description provided for @addNewPortfolio.
+  ///
+  /// In en, this message translates to:
+  /// **'Add New Portfolio'**
+  String get addNewPortfolio;
+
+  /// No description provided for @portfolioName.
+  ///
+  /// In en, this message translates to:
+  /// **'Portfolio Name'**
+  String get portfolioName;
+
+  /// No description provided for @noPortfolios.
+  ///
+  /// In en, this message translates to:
+  /// **'No portfolios yet'**
+  String get noPortfolios;
+
+  /// No description provided for @noInvestments.
+  ///
+  /// In en, this message translates to:
+  /// **'No investments yet'**
+  String get noInvestments;
+
+  /// No description provided for @addInvestment.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Investment'**
+  String get addInvestment;
+
+  /// No description provided for @portfolioNameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g., Stocks, Crypto'**
+  String get portfolioNameHint;
+
+  /// No description provided for @editInvestment.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Investment'**
+  String get editInvestment;
+
+  /// No description provided for @investmentSymbol.
+  ///
+  /// In en, this message translates to:
+  /// **'Symbol'**
+  String get investmentSymbol;
+
+  /// No description provided for @investmentSymbolHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g., AAPL, BTC'**
+  String get investmentSymbolHint;
+
+  /// No description provided for @investmentName.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get investmentName;
+
+  /// No description provided for @investmentNameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g., Apple Inc.'**
+  String get investmentNameHint;
+
+  /// No description provided for @quantity.
+  ///
+  /// In en, this message translates to:
+  /// **'Quantity'**
+  String get quantity;
+
+  /// No description provided for @averageBuyPrice.
+  ///
+  /// In en, this message translates to:
+  /// **'Average Buy Price'**
+  String get averageBuyPrice;
+
+  /// No description provided for @inputQuantity.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a quantity'**
+  String get inputQuantity;
+
+  /// No description provided for @inputAverageBuyPrice.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter an average buy price'**
+  String get inputAverageBuyPrice;
+
+  /// No description provided for @estimatedValueAt.
+  ///
+  /// In en, this message translates to:
+  /// **'Est. value at {date}'**
+  String estimatedValueAt(String date);
+
+  /// No description provided for @editSavingAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Saving Account'**
+  String get editSavingAccount;
+
+  /// No description provided for @addSavingAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Saving Account'**
+  String get addSavingAccount;
+
+  /// No description provided for @accountName.
+  ///
+  /// In en, this message translates to:
+  /// **'Account Name'**
+  String get accountName;
+
+  /// No description provided for @currentBalance.
+  ///
+  /// In en, this message translates to:
+  /// **'Current Balance'**
+  String get currentBalance;
+
+  /// No description provided for @openingDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Opening Date'**
+  String get openingDate;
+
+  /// No description provided for @closingDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Closing Date'**
+  String get closingDate;
+
+  /// No description provided for @stillActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Still Active'**
+  String get stillActive;
+
+  /// No description provided for @clearClosingDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear Closing Date'**
+  String get clearClosingDate;
+
+  /// No description provided for @savingAccounts.
+  ///
+  /// In en, this message translates to:
+  /// **'Saving Accounts'**
+  String get savingAccounts;
+
+  /// No description provided for @noSavingAccounts.
+  ///
+  /// In en, this message translates to:
+  /// **'No Saving Accounts'**
+  String get noSavingAccounts;
+
+  /// No description provided for @savingGoals.
+  ///
+  /// In en, this message translates to:
+  /// **'Saving Goals'**
+  String get savingGoals;
+
+  /// No description provided for @contribution.
+  ///
+  /// In en, this message translates to:
+  /// **'Contribution'**
+  String get contribution;
+
+  /// No description provided for @contributionAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'Contribution Added'**
+  String get contributionAdded;
+
+  /// No description provided for @addContribution.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Contribution'**
+  String get addContribution;
+
+  /// No description provided for @contributionAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Contribution Amount'**
+  String get contributionAmount;
+
+  /// No description provided for @saveAsTransaction.
+  ///
+  /// In en, this message translates to:
+  /// **'Save as Transaction'**
+  String get saveAsTransaction;
+
+  /// No description provided for @selectCurrency.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Currency'**
+  String get selectCurrency;
+
+  /// No description provided for @pinsDoNotMatch.
+  ///
+  /// In en, this message translates to:
+  /// **'PINs do not match'**
+  String get pinsDoNotMatch;
+
+  /// No description provided for @setupPin.
+  ///
+  /// In en, this message translates to:
+  /// **'Set up PIN'**
+  String get setupPin;
+
+  /// No description provided for @enterNewPin.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter New PIN'**
+  String get enterNewPin;
+
+  /// No description provided for @confirmNewPin.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm New PIN'**
+  String get confirmNewPin;
+
+  /// No description provided for @pinLock.
+  ///
+  /// In en, this message translates to:
+  /// **'PIN Lock'**
+  String get pinLock;
+
+  /// No description provided for @pinIsEnabled.
+  ///
+  /// In en, this message translates to:
+  /// **'PIN is enabled'**
+  String get pinIsEnabled;
+
+  /// No description provided for @pinIsDisabled.
+  ///
+  /// In en, this message translates to:
+  /// **'PIN is disabled'**
+  String get pinIsDisabled;
+
+  /// No description provided for @disablePin.
+  ///
+  /// In en, this message translates to:
+  /// **'Disable PIN'**
+  String get disablePin;
+
+  /// No description provided for @disablePinMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Disable pin lock will wipe all data, make sure that you have a backup ready! Are you sure you want to disable the PIN lock?'**
+  String get disablePinMessage;
+
+  /// No description provided for @disable.
+  ///
+  /// In en, this message translates to:
+  /// **'Disable'**
+  String get disable;
+
+  /// No description provided for @security.
+  ///
+  /// In en, this message translates to:
+  /// **'Security'**
+  String get security;
+
+  /// No description provided for @authenticateToUnlock.
+  ///
+  /// In en, this message translates to:
+  /// **'Authenticate to unlock'**
+  String get authenticateToUnlock;
+
+  /// No description provided for @incorrectPin.
+  ///
+  /// In en, this message translates to:
+  /// **'Incorrect PIN. Please try again.'**
+  String get incorrectPin;
+
+  /// No description provided for @enterPin.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter Your PIN'**
+  String get enterPin;
+
+  /// No description provided for @refresh.
+  ///
+  /// In en, this message translates to:
+  /// **'Refresh'**
+  String get refresh;
+
+  /// No description provided for @addNew.
+  ///
+  /// In en, this message translates to:
+  /// **'Add New'**
+  String get addNew;
+
+  /// No description provided for @totalSavings.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Savings'**
+  String get totalSavings;
+
+  /// No description provided for @accounts.
+  ///
+  /// In en, this message translates to:
+  /// **'Accounts'**
+  String get accounts;
+
+  /// No description provided for @goals.
+  ///
+  /// In en, this message translates to:
+  /// **'Goals'**
+  String get goals;
+
+  /// No description provided for @completed.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
+  String get completed;
+
+  /// No description provided for @transaction.
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction'**
+  String get transaction;
+
+  /// Number of transactions
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{No transactions} =1{1 transaction} other{{count} transactions}}'**
+  String transactions(int count);
+
+  /// No description provided for @timeline.
+  ///
+  /// In en, this message translates to:
+  /// **'Timeline'**
+  String get timeline;
+
+  /// No description provided for @currency.
+  ///
+  /// In en, this message translates to:
+  /// **'Currency'**
+  String get currency;
+
+  /// No description provided for @resetDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset Date'**
+  String get resetDate;
+
+  /// No description provided for @cashFlowTimeline.
+  ///
+  /// In en, this message translates to:
+  /// **'Cash Flow Timeline'**
+  String get cashFlowTimeline;
+
+  /// No description provided for @createdOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Created On'**
+  String get createdOn;
+
+  /// No description provided for @lastUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Last Updated'**
+  String get lastUpdated;
+
+  /// No description provided for @restartToApply.
+  ///
+  /// In en, this message translates to:
+  /// **'Import successful. Please restart the app to apply changes.'**
+  String get restartToApply;
+
+  /// No description provided for @restartNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Restart Now'**
+  String get restartNow;
+
+  /// No description provided for @budgets.
+  ///
+  /// In en, this message translates to:
+  /// **'Budgets'**
+  String get budgets;
+
+  /// No description provided for @noBudgetsSet.
+  ///
+  /// In en, this message translates to:
+  /// **'No budgets set'**
+  String get noBudgetsSet;
+
+  /// No description provided for @editBudget.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Budget'**
+  String get editBudget;
+
+  /// No description provided for @addBudget.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Budget'**
+  String get addBudget;
+
+  /// No description provided for @editingBudgetForThisTag.
+  ///
+  /// In en, this message translates to:
+  /// **'Editing budget for this tag'**
+  String get editingBudgetForThisTag;
+
+  /// No description provided for @selectTagForBudget.
+  ///
+  /// In en, this message translates to:
+  /// **'Select a tag for the budget'**
+  String get selectTagForBudget;
+
+  /// No description provided for @budgetAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Budget Amount'**
+  String get budgetAmount;
+
+  /// No description provided for @budgetPeriod.
+  ///
+  /// In en, this message translates to:
+  /// **'Budget Period'**
+  String get budgetPeriod;
+
+  /// No description provided for @deleteBudget.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Budget'**
+  String get deleteBudget;
+
+  /// No description provided for @saveBudget.
+  ///
+  /// In en, this message translates to:
+  /// **'Save Budget'**
+  String get saveBudget;
+
+  /// No description provided for @trans.
+  ///
+  /// In en, this message translates to:
+  /// **'Transactions'**
+  String get trans;
+
+  /// No description provided for @noTransactionsInPeriod.
+  ///
+  /// In en, this message translates to:
+  /// **'No transactions in this period'**
+  String get noTransactionsInPeriod;
+
+  /// No description provided for @total.
+  ///
+  /// In en, this message translates to:
+  /// **'Total'**
+  String get total;
+
+  /// No description provided for @clearTags.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear Tags'**
+  String get clearTags;
+
+  /// Shows the date when the budget resets
+  ///
+  /// In en, this message translates to:
+  /// **'Resets on {date}'**
+  String resetsOn(String date);
+
+  /// Confirmation message for deleting a budget
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete the budget for \"{tagName}\"?'**
+  String confirmDeleteBudget(String tagName);
+
+  /// Shows how much the user is over budget
+  ///
+  /// In en, this message translates to:
+  /// **'Over budget by {amount}'**
+  String overBudgetBy(String amount);
+
+  /// Shows how much budget remains
+  ///
+  /// In en, this message translates to:
+  /// **'Remaining: {amount}'**
+  String remaining(String amount);
+
+  /// Name of the budget period
+  ///
+  /// In en, this message translates to:
+  /// **'{period} period'**
+  String budgetPeriodName(String period);
+
+  /// No description provided for @exportFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Export failed. Please try again.'**
+  String get exportFailed;
+
+  /// No description provided for @exportNoPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Export cancelled: No password provided.'**
+  String get exportNoPassword;
+
+  /// No description provided for @importCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Import cancelled.'**
+  String get importCancelled;
+
+  /// No description provided for @importNoPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Import cancelled: No password provided.'**
+  String get importNoPassword;
+
+  /// No description provided for @importWrongPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Import failed: Wrong password or corrupted file.'**
+  String get importWrongPassword;
+
+  /// No description provided for @backupPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup Password'**
+  String get backupPassword;
+
+  /// No description provided for @enterPasswordForBackup.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a password for the backup'**
+  String get enterPasswordForBackup;
+
+  /// No description provided for @password.
+  ///
+  /// In en, this message translates to:
+  /// **'Password'**
+  String get password;
+
+  /// No description provided for @passwordCannotBeEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Password cannot be empty'**
+  String get passwordCannotBeEmpty;
+
+  /// No description provided for @ok.
+  ///
+  /// In en, this message translates to:
+  /// **'OK'**
+  String get ok;
+
+  /// No description provided for @selectOutputFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select an output file:'**
+  String get selectOutputFile;
+
+  /// No description provided for @forgotPin.
+  ///
+  /// In en, this message translates to:
+  /// **'Forgot PIN?'**
+  String get forgotPin;
+
+  /// No description provided for @resetConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset App?'**
+  String get resetConfirmation;
+
+  /// No description provided for @resetWarningMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This will permanently delete all your app data, including transactions, settings, and backups. This action cannot be undone. Are you sure you want to proceed?'**
+  String get resetWarningMessage;
+
+  /// No description provided for @resetAndStartOver.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete & Reset'**
+  String get resetAndStartOver;
+
+  /// No description provided for @addToTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Add to Total'**
+  String get addToTotal;
+
+  /// No description provided for @additionalAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Additional Amount'**
+  String get additionalAmount;
+
+  /// No description provided for @forgotToAddItem.
+  ///
+  /// In en, this message translates to:
+  /// **'Forgot to add an item? Add the amount here.'**
+  String get forgotToAddItem;
+
+  /// No description provided for @notificationReminderTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminder'**
+  String get notificationReminderTitle;
+
+  /// No description provided for @notificationReminderBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Don’t forget to add your transactions today.'**
+  String get notificationReminderBody;
+
+  /// No description provided for @reminders.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminders'**
+  String get reminders;
+
+  /// No description provided for @enableRemindersSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable reminders to get notified about adding transactions.'**
+  String get enableRemindersSubtitle;
+
+  /// No description provided for @enableReminders.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable Reminders'**
+  String get enableReminders;
+
+  /// No description provided for @openSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Settings'**
+  String get openSettings;
+
+  /// No description provided for @notificationPermissionGuide.
+  ///
+  /// In en, this message translates to:
+  /// **'To use reminders, allow notifications in settings.'**
+  String get notificationPermissionGuide;
+
+  /// No description provided for @permissionDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'Notification permission denied.'**
+  String get permissionDenied;
+
+  /// No description provided for @notificationIncompleteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Incomplete Transactions'**
+  String get notificationIncompleteTitle;
+
+  /// No description provided for @notificationIncompleteBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{incompleteCount} matches found'**
+  String notificationIncompleteBody(int incompleteCount);
+
+  /// No description provided for @transactionsSingle.
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction'**
+  String get transactionsSingle;
+
+  /// No description provided for @clearFilter.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear Filter'**
+  String get clearFilter;
+
+  /// No description provided for @sortByOverbudget.
+  ///
+  /// In en, this message translates to:
+  /// **'Sort by Overbudget'**
+  String get sortByOverbudget;
+
+  /// No description provided for @sortByPercent.
+  ///
+  /// In en, this message translates to:
+  /// **'Sort by Percent'**
+  String get sortByPercent;
+
+  /// No description provided for @sortByAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Sort by Amount'**
+  String get sortByAmount;
+
+  /// No description provided for @sortByName.
+  ///
+  /// In en, this message translates to:
+  /// **'Sort by Name'**
+  String get sortByName;
+
+  /// No description provided for @dashboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Dashboard'**
+  String get dashboard;
+
+  /// No description provided for @unspecifiedTransactions.
+  ///
+  /// In en, this message translates to:
+  /// **'Unspecified Transactions'**
+  String get unspecifiedTransactions;
+
+  /// No description provided for @overBudget.
+  ///
+  /// In en, this message translates to:
+  /// **'Over Budget'**
+  String get overBudget;
+
+  /// No description provided for @itemsNeedAttention.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} items need attention'**
+  String itemsNeedAttention(int count);
+
+  /// No description provided for @noRecentTransactions.
+  ///
+  /// In en, this message translates to:
+  /// **'No recent transactions'**
+  String get noRecentTransactions;
+
+  /// No description provided for @viewAll.
+  ///
+  /// In en, this message translates to:
+  /// **'View All'**
+  String get viewAll;
+
+  /// No description provided for @highSpendingAlert.
+  ///
+  /// In en, this message translates to:
+  /// **'High Spending Alert'**
+  String get highSpendingAlert;
+
+  /// No description provided for @spendingHigherThanAverage.
+  ///
+  /// In en, this message translates to:
+  /// **'Spending higher than average'**
+  String get spendingHigherThanAverage;
+
+  /// No description provided for @goalsEndingSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Goals Ending Soon'**
+  String get goalsEndingSoon;
+
+  /// No description provided for @endsOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Ends on'**
+  String get endsOn;
+
+  /// No description provided for @upcoming.
+  ///
+  /// In en, this message translates to:
+  /// **'Upcoming'**
+  String get upcoming;
+
+  /// No description provided for @cannotBeNegative.
+  ///
+  /// In en, this message translates to:
+  /// **'Cannot be negative'**
+  String get cannotBeNegative;
+
+  /// No description provided for @adjustTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Adjust Total'**
+  String get adjustTotal;
+
+  /// No description provided for @adjustmentAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Adjustment Amount'**
+  String get adjustmentAmount;
+
+  /// No description provided for @removeFromTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove from Total'**
+  String get removeFromTotal;
+
+  /// No description provided for @backupReminderTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Don\'t forget to back up!'**
+  String get backupReminderTitle;
+
+  /// No description provided for @backupReminderSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Make sure to regularly back up your data to avoid loss.'**
+  String get backupReminderSubtitle;
+
+  /// No description provided for @analyzing.
+  ///
+  /// In en, this message translates to:
+  /// **'Analyzing...'**
+  String get analyzing;
+
+  /// No description provided for @analysisFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Analysis failed. Please try again.'**
+  String get analysisFailed;
+
+  /// No description provided for @budgetAnalysis.
+  ///
+  /// In en, this message translates to:
+  /// **'Budget Analysis'**
+  String get budgetAnalysis;
+
+  /// No description provided for @noAnalysisSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'No analysis summary available for this period.'**
+  String get noAnalysisSummary;
+
+  /// No description provided for @onTrackToMeetBudget.
+  ///
+  /// In en, this message translates to:
+  /// **'On track to meet your budget'**
+  String get onTrackToMeetBudget;
+
+  /// No description provided for @atRiskOfExceedingBudget.
+  ///
+  /// In en, this message translates to:
+  /// **'At risk of exceeding your budget'**
+  String get atRiskOfExceedingBudget;
+
+  /// No description provided for @suggestions.
+  ///
+  /// In en, this message translates to:
+  /// **'Suggestions'**
+  String get suggestions;
+
+  /// No description provided for @contextSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Context saved successfully.'**
+  String get contextSaved;
+
+  /// No description provided for @errorSavingContext.
+  ///
+  /// In en, this message translates to:
+  /// **'Error saving context. Please try again.'**
+  String get errorSavingContext;
+
+  /// No description provided for @financialContextTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Financial Context'**
+  String get financialContextTitle;
+
+  /// No description provided for @financialContextDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Save your situation to receive more tailored recommendations.'**
+  String get financialContextDescription;
+
+  /// No description provided for @financialContextHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Student, Single income, Freelancer, etc.'**
+  String get financialContextHint;
+
+  /// No description provided for @yourContext.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Context'**
+  String get yourContext;
+
+  /// No description provided for @financialContextSubTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Get personalized suggestions based on your spending habits and goals.'**
+  String get financialContextSubTitle;
+
+  /// No description provided for @confidence.
+  ///
+  /// In en, this message translates to:
+  /// **'Confidence: {confidence}%'**
+  String confidence(String confidence);
+
+  /// No description provided for @getInsights.
+  ///
+  /// In en, this message translates to:
+  /// **'Get Insights'**
+  String get getInsights;
+
+  /// No description provided for @analyzeWithAI.
+  ///
+  /// In en, this message translates to:
+  /// **'Analyze with AI'**
+  String get analyzeWithAI;
+
+  /// No description provided for @reportAnalysis.
+  ///
+  /// In en, this message translates to:
+  /// **'Report Analysis'**
+  String get reportAnalysis;
+
+  /// No description provided for @goodPoints.
+  ///
+  /// In en, this message translates to:
+  /// **'Good Points'**
+  String get goodPoints;
+
+  /// No description provided for @expenses.
+  ///
+  /// In en, this message translates to:
+  /// **'Expenses'**
+  String get expenses;
+
+  /// No description provided for @backup.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup'**
+  String get backup;
+
+  /// No description provided for @restore.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore'**
+  String get restore;
+
+  /// No description provided for @backupData.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup Data'**
+  String get backupData;
+
+  /// No description provided for @restoreData.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore Data'**
+  String get restoreData;
+
+  /// No description provided for @backupDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Save all your financial data to a file for backup and transfer'**
+  String get backupDescription;
+
+  /// No description provided for @restoreDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore your financial data from a backup file'**
+  String get restoreDescription;
+
+  /// No description provided for @backupSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Data backed up successfully'**
+  String get backupSuccess;
+
+  /// No description provided for @restoreSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Data restored successfully. Please restart the app to apply changes.'**
+  String get restoreSuccess;
+
+  /// No description provided for @backupFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to backup data'**
+  String get backupFailed;
+
+  /// No description provided for @restoreFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to restore data'**
+  String get restoreFailed;
+
+  /// No description provided for @selectBackupFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Select a backup file to restore'**
+  String get selectBackupFile;
+
+  /// No description provided for @confirmRestore.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to restore data? Current data will be overwritten.'**
+  String get confirmRestore;
+
+  /// No description provided for @backupFileName.
+  ///
+  /// In en, this message translates to:
+  /// **'backup_{date}.json'**
+  String backupFileName(Object date);
+
+  /// No description provided for @noBackupFile.
+  ///
+  /// In en, this message translates to:
+  /// **'No file selected'**
+  String get noBackupFile;
 }
 
-class _AppLocalizationsDelegate
-    extends LocalizationsDelegate<AppLocalizations> {
+class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
   const _AppLocalizationsDelegate();
 
   @override
@@ -2373,28 +2453,26 @@ class _AppLocalizationsDelegate
   }
 
   @override
-  bool isSupported(Locale locale) =>
-      <String>['en', 'ja', 'vi'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => <String>['en', 'ja', 'vi'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
 }
 
 AppLocalizations lookupAppLocalizations(Locale locale) {
+
+
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
-    case 'en':
-      return AppLocalizationsEn();
-    case 'ja':
-      return AppLocalizationsJa();
-    case 'vi':
-      return AppLocalizationsVi();
+    case 'en': return AppLocalizationsEn();
+    case 'ja': return AppLocalizationsJa();
+    case 'vi': return AppLocalizationsVi();
   }
 
   throw FlutterError(
     'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
     'an issue with the localizations generation tool. Please file an issue '
     'on GitHub with a reproducible sample app and the gen-l10n configuration '
-    'that was used.',
+    'that was used.'
   );
 }

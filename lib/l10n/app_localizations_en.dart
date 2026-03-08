@@ -81,8 +81,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get confirmDelete => 'Confirm Deletion';
 
   @override
-  String get confirmDeleteMessage =>
-      'Are you sure you want to delete this record?';
+  String get confirmDeleteMessage => 'Are you sure you want to delete this record?';
 
   @override
   String get selectDate => 'Select Date';
@@ -130,8 +129,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get amountChanged => 'Amount Changed';
 
   @override
-  String get confirmUpdateAllExpenses =>
-      'Update all past transactions with this new amount?';
+  String get confirmUpdateAllExpenses => 'Update all past transactions with this new amount?';
 
   @override
   String get noChange => 'No, keep past amounts';
@@ -143,8 +141,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get applyForRelatedTransaction => 'Handle Past Transactions';
 
   @override
-  String get confirmDeleteRuleInstance =>
-      'When deleting this rule, do you want to also delete all past transactions it created?';
+  String get confirmDeleteRuleInstance => 'When deleting this rule, do you want to also delete all past transactions it created?';
 
   @override
   String get leaveUnchanged => 'No, keep past transactions';
@@ -156,12 +153,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get finalConfirm => 'Final Confirmation';
 
   @override
-  String get confirmShouldDeleteInstance =>
-      'Are you sure you want to delete this rule AND all of its related transactions? This action cannot be undone.';
+  String get confirmShouldDeleteInstance => 'Are you sure you want to delete this rule AND all of its related transactions? This action cannot be undone.';
 
   @override
-  String get confirmDeleteOnlyRule =>
-      'Are you sure you want to delete this rule? Past transactions will be kept as manual entries.';
+  String get confirmDeleteOnlyRule => 'Are you sure you want to delete this rule? Past transactions will be kept as manual entries.';
 
   @override
   String get performDeleteion => 'Perform Deletion';
@@ -275,8 +270,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get confirmReset => 'Are you sure you want to reset?';
 
   @override
-  String get confirmDeleteEverything =>
-      'All expenditures, tags, and scheduled rules will be deleted. This action cannot be undone.';
+  String get confirmDeleteEverything => 'All expenditures, tags, and scheduled rules will be deleted. This action cannot be undone.';
 
   @override
   String get reset => 'Reset';
@@ -294,8 +288,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get paydayCycle => 'By Payday Cycle';
 
   @override
-  String get msgPaydayCycle =>
-      'Group from a specified start day to the day before in the next month.';
+  String get msgPaydayCycle => 'Group from a specified start day to the day before in the next month.';
 
   @override
   String get cycleStartDate => 'Cycle Start Day';
@@ -364,8 +357,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get recommendations => 'Recommendations';
 
   @override
-  String get enterMoreCharsForSuggestion =>
-      'Enter more characters for suggestions';
+  String get enterMoreCharsForSuggestion => 'Enter more characters for suggestions';
 
   @override
   String get clearSelection => 'Clear Selection';
@@ -383,7 +375,29 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dateRange => 'Date Range';
 
   @override
-  String get changeCurrency => 'Change Currency';
+  String warningTagInUse(String tagName) {
+    return 'The tag \"$tagName\" is currently in use. If you delete it, related transactions will be moved to the \'Other\' category. Do you want to continue?';
+  }
+
+  @override
+  String removeTag(String tagName) {
+    return 'Are you sure you want to delete the \"$tagName\" tag?';
+  }
+
+  @override
+  String currencyValue(String value) {
+    return '\$$value';
+  }
+
+  @override
+  String imageSaveFailed(Object error) {
+    return 'Failed to save image: $error';
+  }
+
+  @override
+  String dayOfMonthLabel(int day) {
+    return 'Day $day';
+  }
 
   @override
   String get sortBy => 'Sort by';
@@ -417,9 +431,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get anyDate => 'Any date';
-
-  @override
-  String get tags => 'Tags';
 
   @override
   String get currencyConverter => 'Currency converter';
@@ -485,37 +496,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get scanYourReceipt => 'Scan your receipt';
 
   @override
-  String get proceed => 'Proceed';
-
-  @override
-  String get exchangeRateError =>
-      'Failed to retrieve exchange rate. Please try again later.';
-
-  @override
-  String get addCustomRate => 'Add Custom Exchange Rate';
-
-  @override
-  String get exchangeRate => 'Exchange Rate';
-
-  @override
-  String get add => 'Add';
-
-  @override
-  String get language => 'Language';
-
-  @override
-  String get systemDefault => 'System Default';
-
-  @override
-  String get primaryCurrency => 'Primary Currency';
-
-  @override
-  String get customExchangeRates => 'Custom Exchange Rates';
-
-  @override
-  String get noTransactionsFound => 'No transactions found';
-
-  @override
   String get exportingData => 'Exporting data...';
 
   @override
@@ -525,8 +505,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get warning => 'Warning';
 
   @override
-  String get importWarningMessage =>
-      'This will overwrite all current data in the app. This action cannot be undone. Are you sure you want to proceed?';
+  String get importWarningMessage => 'This will overwrite all current data in the app. This action cannot be undone. Are you sure you want to proceed?';
 
   @override
   String get importSuccess => 'Data imported successfully!';
@@ -548,9 +527,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get importDataSubtitle => 'Restore data from a file.';
-
-  @override
-  String get allTimeBalance => 'All-time balance';
 
   @override
   String get searchByName => 'Search by name';
@@ -614,6 +590,114 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get display => 'Display';
+
+  @override
+  String daysBeforeEndOfMonthWithValue(int value) {
+    return '$value days before end of month';
+  }
+
+  @override
+  String fixedIntervalWithValue(int value) {
+    return 'Every $value days';
+  }
+
+  @override
+  String exportSuccess(String path) {
+    return 'Export successful: $path';
+  }
+
+  @override
+  String get tags => 'Tags';
+
+  @override
+  String get allTimeBalance => 'All-time balance';
+
+  @override
+  String get changeCurrency => 'Change Currency';
+
+  @override
+  String confirmCurrencyConversion(String oldCode, String newCode) {
+    return 'Convert all records from $oldCode to $newCode? This requires retrieving exchange rates.';
+  }
+
+  @override
+  String get proceed => 'Proceed';
+
+  @override
+  String get exchangeRateError => 'Failed to retrieve exchange rate. Please try again later.';
+
+  @override
+  String get addCustomRate => 'Add Custom Exchange Rate';
+
+  @override
+  String get exchangeRate => 'Exchange Rate';
+
+  @override
+  String get add => 'Add';
+
+  @override
+  String get language => 'Language';
+
+  @override
+  String get systemDefault => 'System Default';
+
+  @override
+  String get primaryCurrency => 'Primary Currency';
+
+  @override
+  String get customExchangeRates => 'Custom Exchange Rates';
+
+  @override
+  String get noTransactionsFound => 'No transactions found';
+
+  @override
+  String languageName(String languageCode) {
+    String _temp0 = intl.Intl.selectLogic(
+      languageCode,
+      {
+        'ja': '日本語',
+        'en': 'English',
+        'vi': 'Tiếng Việt',
+        'other': 'Unknown',
+      },
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String currencyName(String currencyCode) {
+    String _temp0 = intl.Intl.selectLogic(
+      currencyCode,
+      {
+        'JPY': 'Japanese Yen (JPY)',
+        'USD': 'US Dollar (USD)',
+        'EUR': 'Euro (EUR)',
+        'CNY': 'Chinese Yuan (CNY)',
+        'RUB': 'Russian Ruble (RUB)',
+        'VND': 'Vietnamese Dong (VND)',
+        'AUD': 'Australian Dollar (AUD)',
+        'KRW': 'South Korean Won (KRW)',
+        'THB': 'Thai Baht (THB)',
+        'PHP': 'Philippine Peso (PHP)',
+        'MYR': 'Malaysian Ringgit (MYR)',
+        'GBP': 'British Pound (GBP)',
+        'CAD': 'Canadian Dollar (CAD)',
+        'CHF': 'Swiss Franc (CHF)',
+        'HKD': 'Hong Kong Dollar (HKD)',
+        'SGD': 'Singapore Dollar (SGD)',
+        'INR': 'Indian Rupee (INR)',
+        'BRL': 'Brazilian Real (BRL)',
+        'ZAR': 'South African Rand (ZAR)',
+        'other': 'Unknown',
+      },
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String daysUnit(int day) {
+    return '$day days';
+  }
 
   @override
   String get editSavingGoal => 'Edit Saving Goal';
@@ -700,6 +784,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get inputAverageBuyPrice => 'Please enter an average buy price';
 
   @override
+  String estimatedValueAt(String date) {
+    return 'Est. value at $date';
+  }
+
+  @override
   String get editSavingAccount => 'Edit Saving Account';
 
   @override
@@ -775,8 +864,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get disablePin => 'Disable PIN';
 
   @override
-  String get disablePinMessage =>
-      'Disable pin lock will wipe all data, make sure that you have a backup ready! Are you sure you want to disable the PIN lock?';
+  String get disablePinMessage => 'Disable pin lock will wipe all data, make sure that you have a backup ready! Are you sure you want to disable the PIN lock?';
 
   @override
   String get disable => 'Disable';
@@ -815,7 +903,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get transaction => 'Transaction';
 
   @override
-  String get transactionsSingle => 'Transaction';
+  String transactions(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count transactions',
+      one: '1 transaction',
+      zero: 'No transactions',
+    );
+    return '$_temp0';
+  }
 
   @override
   String get timeline => 'Timeline';
@@ -834,6 +931,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get lastUpdated => 'Last Updated';
+
+  @override
+  String get restartToApply => 'Import successful. Please restart the app to apply changes.';
+
+  @override
+  String get restartNow => 'Restart Now';
 
   @override
   String get budgets => 'Budgets';
@@ -866,13 +969,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get saveBudget => 'Save Budget';
 
   @override
-  String get restartToApply =>
-      'Import successful. Please restart the app to apply changes.';
-
-  @override
-  String get restartNow => 'Restart Now';
-
-  @override
   String get trans => 'Transactions';
 
   @override
@@ -883,6 +979,31 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get clearTags => 'Clear Tags';
+
+  @override
+  String resetsOn(String date) {
+    return 'Resets on $date';
+  }
+
+  @override
+  String confirmDeleteBudget(String tagName) {
+    return 'Are you sure you want to delete the budget for \"$tagName\"?';
+  }
+
+  @override
+  String overBudgetBy(String amount) {
+    return 'Over budget by $amount';
+  }
+
+  @override
+  String remaining(String amount) {
+    return 'Remaining: $amount';
+  }
+
+  @override
+  String budgetPeriodName(String period) {
+    return '$period period';
+  }
 
   @override
   String get exportFailed => 'Export failed. Please try again.';
@@ -897,8 +1018,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get importNoPassword => 'Import cancelled: No password provided.';
 
   @override
-  String get importWrongPassword =>
-      'Import failed: Wrong password or corrupted file.';
+  String get importWrongPassword => 'Import failed: Wrong password or corrupted file.';
 
   @override
   String get backupPassword => 'Backup Password';
@@ -925,8 +1045,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get resetConfirmation => 'Reset App?';
 
   @override
-  String get resetWarningMessage =>
-      'This will permanently delete all your app data, including transactions, settings, and backups. This action cannot be undone. Are you sure you want to proceed?';
+  String get resetWarningMessage => 'This will permanently delete all your app data, including transactions, settings, and backups. This action cannot be undone. Are you sure you want to proceed?';
 
   @override
   String get resetAndStartOver => 'Delete & Reset';
@@ -944,15 +1063,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get notificationReminderTitle => 'Reminder';
 
   @override
-  String get notificationReminderBody =>
-      'Don’t forget to add your transactions today.';
+  String get notificationReminderBody => 'Don’t forget to add your transactions today.';
 
   @override
   String get reminders => 'Reminders';
 
   @override
-  String get enableRemindersSubtitle =>
-      'Enable reminders to get notified about adding transactions.';
+  String get enableRemindersSubtitle => 'Enable reminders to get notified about adding transactions.';
 
   @override
   String get enableReminders => 'Enable Reminders';
@@ -961,14 +1078,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get openSettings => 'Open Settings';
 
   @override
-  String get notificationPermissionGuide =>
-      'To use reminders, allow notifications in settings.';
+  String get notificationPermissionGuide => 'To use reminders, allow notifications in settings.';
 
   @override
   String get permissionDenied => 'Notification permission denied.';
 
   @override
   String get notificationIncompleteTitle => 'Incomplete Transactions';
+
+  @override
+  String notificationIncompleteBody(int incompleteCount) {
+    return '$incompleteCount matches found';
+  }
+
+  @override
+  String get transactionsSingle => 'Transaction';
 
   @override
   String get clearFilter => 'Clear Filter';
@@ -993,6 +1117,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get overBudget => 'Over Budget';
+
+  @override
+  String itemsNeedAttention(int count) {
+    return '$count items need attention';
+  }
 
   @override
   String get noRecentTransactions => 'No recent transactions';
@@ -1031,8 +1160,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get backupReminderTitle => 'Don\'t forget to back up!';
 
   @override
-  String get backupReminderSubtitle =>
-      'Make sure to regularly back up your data to avoid loss.';
+  String get backupReminderSubtitle => 'Make sure to regularly back up your data to avoid loss.';
 
   @override
   String get analyzing => 'Analyzing...';
@@ -1044,8 +1172,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get budgetAnalysis => 'Budget Analysis';
 
   @override
-  String get noAnalysisSummary =>
-      'No analysis summary available for this period.';
+  String get noAnalysisSummary => 'No analysis summary available for this period.';
 
   @override
   String get onTrackToMeetBudget => 'On track to meet your budget';
@@ -1066,19 +1193,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get financialContextTitle => 'Your Financial Context';
 
   @override
-  String get financialContextDescription =>
-      'Save your situation to receive more tailored recommendations.';
+  String get financialContextDescription => 'Save your situation to receive more tailored recommendations.';
 
   @override
-  String get financialContextHint =>
-      'e.g. Student, Single income, Freelancer, etc.';
+  String get financialContextHint => 'e.g. Student, Single income, Freelancer, etc.';
 
   @override
   String get yourContext => 'Your Context';
 
   @override
-  String get financialContextSubTitle =>
-      'Get personalized suggestions based on your spending habits and goals.';
+  String get financialContextSubTitle => 'Get personalized suggestions based on your spending habits and goals.';
+
+  @override
+  String confidence(String confidence) {
+    return 'Confidence: $confidence%';
+  }
 
   @override
   String get getInsights => 'Get Insights';
@@ -1096,147 +1225,46 @@ class AppLocalizationsEn extends AppLocalizations {
   String get expenses => 'Expenses';
 
   @override
-  String confidence(String confidence) {
-    return 'Confidence: $confidence%';
+  String get backup => 'Backup';
+
+  @override
+  String get restore => 'Restore';
+
+  @override
+  String get backupData => 'Backup Data';
+
+  @override
+  String get restoreData => 'Restore Data';
+
+  @override
+  String get backupDescription => 'Save all your financial data to a file for backup and transfer';
+
+  @override
+  String get restoreDescription => 'Restore your financial data from a backup file';
+
+  @override
+  String get backupSuccess => 'Data backed up successfully';
+
+  @override
+  String get restoreSuccess => 'Data restored successfully. Please restart the app to apply changes.';
+
+  @override
+  String get backupFailed => 'Failed to backup data';
+
+  @override
+  String get restoreFailed => 'Failed to restore data';
+
+  @override
+  String get selectBackupFile => 'Select a backup file to restore';
+
+  @override
+  String get confirmRestore => 'Are you sure you want to restore data? Current data will be overwritten.';
+
+  @override
+  String backupFileName(Object date) {
+    return 'backup_$date.json';
   }
 
   @override
-  String itemsNeedAttention(int count) {
-    return '$count items need attention';
-  }
-
-  @override
-  String notificationIncompleteBody(int incompleteCount) {
-    return '$incompleteCount transactions still incomplete. Please review them.';
-  }
-
-  @override
-  String exportSuccess(String path) {
-    return 'Export successful: $path';
-  }
-
-  @override
-  String resetsOn(String date) {
-    return 'Resets on $date';
-  }
-
-  @override
-  String confirmDeleteBudget(String tag) {
-    return 'Are you sure you want to delete the budget for \"$tagName\"?';
-  }
-
-  @override
-  String overBudgetBy(String amount) {
-    return 'Over budget by $amount';
-  }
-
-  @override
-  String remaining(String amount) {
-    return 'Remaining: $amount';
-  }
-
-  @override
-  String budgetPeriodName(String period) {
-    return '$period period';
-  }
-
-  @override
-  String transactions(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count transactions',
-      one: '1 transaction',
-      zero: 'No transactions',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String estimatedValueAt(String date) {
-    return 'Est. value at $date';
-  }
-
-  @override
-  String daysBeforeEndOfMonthWithValue(int value) {
-    return '$value days before end of month';
-  }
-
-  @override
-  String fixedIntervalWithValue(int value) {
-    return 'Every $value days';
-  }
-
-  @override
-  String confirmCurrencyConversion(String oldCode, String newCode) {
-    return 'Convert all records from $oldCode to $newCode? This requires retrieving exchange rates.';
-  }
-
-  @override
-  String languageName(String languageCode) {
-    String _temp0 = intl.Intl.selectLogic(languageCode, {
-      'ja': '日本語',
-      'en': 'English',
-      'vi': 'Tiếng Việt',
-      'other': 'Unknown',
-    });
-    return '$_temp0';
-  }
-
-  @override
-  String currencyName(String currencyCode) {
-    String _temp0 = intl.Intl.selectLogic(currencyCode, {
-      'JPY': 'Japanese Yen (JPY)',
-      'USD': 'US Dollar (USD)',
-      'EUR': 'Euro (EUR)',
-      'CNY': 'Chinese Yuan (CNY)',
-      'RUB': 'Russian Ruble (RUB)',
-      'VND': 'Vietnamese Dong (VND)',
-      'AUD': 'Australian Dollar (AUD)',
-      'KRW': 'South Korean Won (KRW)',
-      'THB': 'Thai Baht (THB)',
-      'PHP': 'Philippine Peso (PHP)',
-      'MYR': 'Malaysian Ringgit (MYR)',
-      'GBP': 'British Pound (GBP)',
-      'CAD': 'Canadian Dollar (CAD)',
-      'CHF': 'Swiss Franc (CHF)',
-      'HKD': 'Hong Kong Dollar (HKD)',
-      'SGD': 'Singapore Dollar (SGD)',
-      'INR': 'Indian Rupee (INR)',
-      'BRL': 'Brazilian Real (BRL)',
-      'ZAR': 'South African Rand (ZAR)',
-      'other': 'Unknown',
-    });
-    return '$_temp0';
-  }
-
-  @override
-  String daysUnit(int day) {
-    return '$day days';
-  }
-
-  @override
-  String warningTagInUse(String tagName) {
-    return 'The tag \"$tagName\" is currently in use. If you delete it, related transactions will be moved to the \'Other\' category. Do you want to continue?';
-  }
-
-  @override
-  String removeTag(String tagName) {
-    return 'Are you sure you want to delete the \"$tagName\" tag?';
-  }
-
-  @override
-  String currencyValue(String value) {
-    return '\$$value';
-  }
-
-  @override
-  String imageSaveFailed(Object error) {
-    return 'Failed to save image: $error';
-  }
-
-  @override
-  String dayOfMonthLabel(int day) {
-    return 'Day $day';
-  }
+  String get noBackupFile => 'No file selected';
 }
