@@ -5,6 +5,7 @@ import 'package:uuid/uuid.dart';
 
 import '../../domain/entities/expenditure.dart';
 import '../../domain/entities/tag.dart';
+import '../../domain/entities/search_filter.dart';
 import '../../domain/repositories/expenditure_repository.dart';
 import '../../domain/repositories/tag_repository.dart';
 import '../../domain/usecases/scan_receipt_usecase.dart';
@@ -184,6 +185,60 @@ class ExpenditureViewModel extends ChangeNotifier {
       notifyListeners();
       return null;
     }
+  }
+
+  List<Expenditure> getFilteredExpenditures(SearchFilter filter) {
+    var results = List<Expenditure>.from(_normalExpenditures);
+
+    // Apply keywords
+    if (filter.keyword != null && filter.keyword!.trim().isNotEmpty) {
+      final key = filter.keyword!.trim().toLowerCase();
+      results = results.where((e) {
+        final nameMatch = e.articleName.toLowerCase().contains(key);
+        final notesMatch = e.notes?.toLowerCase().contains(key) ?? false;
+        return nameMatch || notesMatch;
+      }).toList();
+    }
+
+    // Apply date range
+    if (filter.startDate != null) {
+      results = results.where((e) {
+        final d = e.date;
+        return d.isAfter(filter.startDate!.subtract(const Duration(days: 1))) &&
+            d.isBefore(filter.endDate!.add(const Duration(days: 1)));
+      }).toList();
+    }
+
+    // Apply amount range
+    if (filter.minAmount != null) {
+      results = results
+          .where((e) => (e.amount ?? 0) >= filter.minAmount!)
+          .toList();
+    }
+    if (filter.maxAmount != null) {
+      results = results
+          .where((e) => (e.amount ?? 0) <= filter.maxAmount!)
+          .toList();
+    }
+
+    // Apply Tags
+    if (filter.tags != null && filter.tags!.isNotEmpty) {
+      final selectedTagIds = filter.tags!.map((t) => t.id).toSet();
+      results = results
+          .where((e) => selectedTagIds.contains(e.mainTagId))
+          .toList();
+    }
+
+    // Apply Transaction Type
+    if (filter.transactionType != TransactionTypeFilter.all) {
+      final wantsIncome =
+          filter.transactionType == TransactionTypeFilter.income;
+      results = results.where((e) => e.isIncome == wantsIncome).toList();
+    }
+
+    // Since sorting is handled in the UI in the legacy app, we can just return the filtered list,
+    // or apply the default sort here. The legacy UI does its own sorting.
+    return results;
   }
 
   // TODO: implement this

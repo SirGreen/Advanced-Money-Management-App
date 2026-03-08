@@ -8,8 +8,10 @@ class SettingsViewModel extends ChangeNotifier {
 
   Settings? _settings;
   bool isInitialized = false;
+  bool _isAppLockEnabled = false;
 
   Settings get settings => _settings ?? Settings();
+  bool get isAppLockEnabled => _isAppLockEnabled;
 
   SettingsViewModel({required SettingsRepository repository})
     : _repository = repository;
@@ -18,8 +20,20 @@ class SettingsViewModel extends ChangeNotifier {
     if (isInitialized) return;
 
     _settings = await _repository.getSettings();
+    _isAppLockEnabled = await _repository.getAppLockEnabled();
 
     isInitialized = true;
+    notifyListeners();
+  }
+
+  Future<void> refreshAppLockState() async {
+    _isAppLockEnabled = await _repository.getAppLockEnabled();
+    notifyListeners();
+  }
+
+  Future<void> toggleAppLock(bool value) async {
+    await _repository.setAppLockEnabled(value);
+    _isAppLockEnabled = value;
     notifyListeners();
   }
 
