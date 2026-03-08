@@ -488,6 +488,7 @@
     },
     "daysBeforeEndOfMonthWithValue": "月末の{value}日前",
     "@daysBeforeEndOfMonthWithValue": {
+        "description": "月末前のN日間のラベル。",
         "placeholders": {
             "value": {
                 "type": "int"
@@ -496,6 +497,7 @@
     },
     "fixedIntervalWithValue": "{value}日ごと",
     "@fixedIntervalWithValue": {
+        "description": "日数で示された固定間隔のラベル。",
         "placeholders": {
             "value": {
                 "type": "int"
@@ -592,5 +594,21 @@
                 "type": "int"
             }
         }
-    }
+    },
+    "backup": "バックアップ",
+    "restore": "復元",
+    "backupData": "データをバックアップ",
+    "restoreData": "データを復元",
+    "exportData": "データをエクスポート",
+    "importData": "データをインポート",
+    "backupDescription": "すべてのファイナンシャルデータをファイルに保存してバックアップおよび転送します",
+    "restoreDescription": "バックアップファイルからファイナンシャルデータを復元します",
+    "backupSuccess": "データをバックアップしました",
+    "restoreSuccess": "データを復元しました",
+    "backupFailed": "データのバックアップに失敗しました",
+    "restoreFailed": "データの復元に失敗しました",
+    "selectBackupFile": "復元するバックアップファイルを選択",
+    "confirmRestore": "データを復元してもよろしいですか？現在のデータは上書きされます。",
+    "backupFileName": "backup_{date}.json",
+    "noBackupFile": "ファイルが選択されていません"
 }

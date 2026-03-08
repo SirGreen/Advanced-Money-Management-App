@@ -43,4 +43,11 @@ class SettingsViewModel extends ChangeNotifier {
     _settings = updatedSettings;
     notifyListeners();
   }
+
+  Future<void> togglePrivacyMode(bool enabled) async {
+    if (_settings == null) return;
+
+    _settings!.privacyModeEnabled = enabled;
+    await saveSettings(_settings!);
+  }
 }

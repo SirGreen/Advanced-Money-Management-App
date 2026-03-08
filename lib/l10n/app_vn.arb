@@ -203,7 +203,23 @@
     "general": "Chung",
     "display": "Hiển thị",
     "daysBeforeEndOfMonthWithValue": "{value} ngày trước cuối tháng",
+    "@daysBeforeEndOfMonthWithValue": {
+        "description": "Nhãn cho N ngày trước cuối tháng.",
+        "placeholders": {
+            "value": {
+                "type": "int"
+            }
+        }
+    },
     "fixedIntervalWithValue": "Mỗi {value} ngày",
+    "@fixedIntervalWithValue": {
+        "description": "Nhãn cho khoảng cách cố định tính bằng ngày.",
+        "placeholders": {
+            "value": {
+                "type": "int"
+            }
+        }
+    },
     "exportSuccess": "Xuất dữ liệu thành công: {path}",
     "warningTagInUse": "Thẻ \"{tagName}\" đang được sử dụng cho các khoản chi tiêu. Nếu xóa, các khoản liên quan sẽ được chuyển vào danh mục \"Khác\". Bạn có muốn tiếp tục không?",
     "tags": "Thẻ",
@@ -254,6 +270,17 @@
     },
     "changeCurrency": "Thay đổi tiền tệ",
     "confirmCurrencyConversion": "Bạn có muốn chuyển tất cả các bản ghi từ {oldCode} sang {newCode}? Thao tác này cần lấy tỷ giá hối đoái.",
+    "@confirmCurrencyConversion": {
+        "description": "Thông báo xác nhận chuyển đổi tiền tệ.",
+        "placeholders": {
+            "oldCode": {
+                "type": "String"
+            },
+            "newCode": {
+                "type": "String"
+            }
+        }
+    },
     "proceed": "Tiếp tục",
     "exchangeRateError": "Không thể lấy tỷ giá hối đoái. Vui lòng thử lại sau.",
     "addCustomRate": "Thêm tỷ giá tùy chỉnh",
@@ -489,5 +516,21 @@
     "analyzeWithAI": "Phân tích bằng AI",
     "reportAnalysis": "Phân tích báo cáo",
     "goodPoints": "Điểm tích cực",
-    "expenses": "Chi tiêu"
+    "expenses": "Chi tiêu",
+    "backup": "Sao lưu",
+    "restore": "Khôi phục",
+    "backupData": "Sao lưu dữ liệu",
+    "restoreData": "Khôi phục dữ liệu",
+    "exportData": "Xuất dữ liệu",
+    "importData": "Nhập dữ liệu",
+    "backupDescription": "Lưu toàn bộ dữ liệu tài chính của bạn vào một tệp để sao lưu và chuyển đổi",
+    "restoreDescription": "Khôi phục dữ liệu tài chính của bạn từ tệp sao lưu",
+    "backupSuccess": "Sao lưu dữ liệu thành công",
+    "restoreSuccess": "Khôi phục dữ liệu thành công",
+    "backupFailed": "Sao lưu dữ liệu thất bại",
+    "restoreFailed": "Khôi phục dữ liệu thất bại",
+    "selectBackupFile": "Chọn tệp sao lưu để khôi phục",
+    "confirmRestore": "Bạn có chắc chắn muốn khôi phục dữ liệu không? Dữ liệu hiện tại sẽ bị ghi đè.",
+    "backupFileName": "backup_{date}.json",
+    "noBackupFile": "Không có tệp được chọn"
 }

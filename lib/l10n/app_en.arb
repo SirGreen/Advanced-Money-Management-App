@@ -238,12 +238,39 @@
     "general": "General",
     "display": "Display",
     "daysBeforeEndOfMonthWithValue": "{value} days before end of month",
+    "@daysBeforeEndOfMonthWithValue": {
+        "description": "Label for N days before end of month.",
+        "placeholders": {
+            "value": {
+                "type": "int"
+            }
+        }
+    },
     "fixedIntervalWithValue": "Every {value} days",
+    "@fixedIntervalWithValue": {
+        "description": "Label for fixed interval in days.",
+        "placeholders": {
+            "value": {
+                "type": "int"
+            }
+        }
+    },
     "exportSuccess": "Exported data successfully: {path}",
     "tags": "Tags",
     "allTimeBalance": "All-time balance",
     "changeCurrency": "Change Currency",
     "confirmCurrencyConversion": "Convert all records from {oldCode} to {newCode}? This requires retrieving exchange rates.",
+    "@confirmCurrencyConversion": {
+        "description": "Confirmation message for currency conversion.",
+        "placeholders": {
+            "oldCode": {
+                "type": "String"
+            },
+            "newCode": {
+                "type": "String"
+            }
+        }
+    },
     "proceed": "Proceed",
     "exchangeRateError": "Failed to retrieve exchange rate. Please try again later.",
     "addCustomRate": "Add Custom Exchange Rate",
@@ -265,6 +292,14 @@
         }
     },
     "daysUnit": "{day} days",
+    "@daysUnit": {
+        "description": "Label for days unit.",
+        "placeholders": {
+            "day": {
+                "type": "int"
+            }
+        }
+    },
     "editSavingGoal": "Edit Saving Goal",
     "addSavingGoal": "Add Saving Goal",
     "goalName": "Goal Name",
@@ -515,5 +550,21 @@
     "analyzeWithAI": "Analyze with AI",
     "reportAnalysis": "Report Analysis",
     "goodPoints": "Good Points",
-    "expenses": "Expenses"
+    "expenses": "Expenses",
+    "backup": "Backup",
+    "restore": "Restore",
+    "backupData": "Backup Data",
+    "restoreData": "Restore Data",
+    "exportData": "Export Data",
+    "importData": "Import Data",
+    "backupDescription": "Save all your financial data to a file for backup and transfer",
+    "restoreDescription": "Restore your financial data from a backup file",
+    "backupSuccess": "Data backed up successfully",
+    "restoreSuccess": "Data restored successfully. Please restart the app to apply changes.",
+    "backupFailed": "Failed to backup data",
+    "restoreFailed": "Failed to restore data",
+    "selectBackupFile": "Select a backup file to restore",
+    "confirmRestore": "Are you sure you want to restore data? Current data will be overwritten.",
+    "backupFileName": "backup_{date}.json",
+    "noBackupFile": "No file selected"
 }

@@ -4,6 +4,8 @@ import 'package:intl/intl.dart';
 import 'expenditure_view_model.dart';
 import 'add_transaction_view.dart'; // Import AddTransactionView
 import '../../domain/entities/tag.dart';
+import '../settings/settings_view_model.dart';
+import '../../data/services/privacy_mode_service.dart';
 
 class ExpenditureListView extends StatelessWidget {
   const ExpenditureListView({super.key});
@@ -91,13 +93,35 @@ class ExpenditureListView extends StatelessWidget {
               subtitle: Text(
                 DateFormat.yMMMd('vi_VN').format(expenditure.date),
               ),
-              trailing: Text(
-                '${expenditure.isIncome ? '+' : '-'}${NumberFormat.currency(locale: 'vi_VN', symbol: '₫', decimalDigits: 0).format(expenditure.amount ?? 0)}',
-                style: TextStyle(
-                  color: expenditure.isIncome ? Colors.green : Colors.red,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ),
+              trailing: Consumer<SettingsViewModel>(
+                builder: (context, settingsViewModel, _) {
+                  final formattedAmount = '${expenditure.isIncome ? '+' : '-'}${NumberFormat.currency(locale: 'vi_VN', symbol: '₫', decimalDigits: 0).format(expenditure.amount ?? 0)}';
+                  final displayAmount = settingsViewModel.settings.privacyModeEnabled
+                      ? PrivacyModeService.maskSymbol
+                      : formattedAmount;
+
+                  return Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        displayAmount,
+                        style: TextStyle(
+                          color: expenditure.isIncome ? Colors.green : Colors.red,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
+                      if (settingsViewModel.settings.privacyModeEnabled) ...[
+                        const SizedBox(width: 4),
+                        Icon(
+                          Icons.lock,
+                          size: 14,
+                          color: Colors.grey[600],
+                        ),
+                      ],
+                    ],
+                  );
+                },
               ),
             );
           },

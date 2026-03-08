@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
-
 import 'package:provider/provider.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:local_auth_android/local_auth_android.dart';
 import 'package:local_auth_darwin/local_auth_darwin.dart';
+
 import '../../l10n/app_localizations.dart';
 import '../tags/manage_tags_page.dart';
+import 'backup_restore_page.dart';
+import 'privacy_mode_page.dart';
 import 'settings_view_model.dart';
 
 class SettingsView extends StatelessWidget {
@@ -16,24 +18,60 @@ class SettingsView extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.settings)),
-      body: ListView(
-        children: [
-          ListTile(
-            leading: const Icon(Icons.category),
-            title: Text(l10n.tags),
-            trailing: const Icon(Icons.chevron_right),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const ManageTagsPage()),
-              );
-            },
-          ),
-          const Divider(),
-          Consumer<SettingsViewModel>(
-            builder: (context, viewModel, child) {
-              return SwitchListTile(
+      appBar: AppBar(
+        title: Text(l10n.settings),
+      ),
+      body: Consumer<SettingsViewModel>(
+        builder: (context, viewModel, _) {
+          final privacyMode = viewModel.settings.privacyModeEnabled;
+
+          return ListView(
+            children: [
+              ListTile(
+                leading: const Icon(Icons.visibility_off),
+                title: const Text('Privacy Mode'),
+                subtitle: Text(privacyMode ? 'Enabled' : 'Disabled'),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const PrivacyModePage(),
+                    ),
+                  );
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.category),
+                title: Text(l10n.tags),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const ManageTagsPage(),
+                    ),
+                  );
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.backup),
+                title: const Text('Backup & Restore'),
+                subtitle: const Text('Backup and restore your data'),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const BackupRestorePage(),
+                    ),
+                  );
+                },
+              ),
+              
+              const Divider(),
+
+              SwitchListTile(
                 secondary: const Icon(Icons.security),
                 title: const Text('App Lock (PIN & Biometrics)'),
                 subtitle: Text(
@@ -101,10 +139,10 @@ class SettingsView extends StatelessWidget {
                     }
                   }
                 },
-              );
-            },
-          ),
-        ],
+              ),
+            ],
+          );
+        },
       ),
     );
   }
