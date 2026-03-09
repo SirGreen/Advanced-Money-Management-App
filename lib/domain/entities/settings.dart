@@ -16,28 +16,42 @@ enum DividerType {
 class Settings extends HiveObject {
   @HiveField(0)
   DividerType dividerType;
+
   @HiveField(1)
   int paydayStartDay;
+
   @HiveField(2)
   int fixedIntervalDays;
+
   @HiveField(3)
   String? languageCode;
+
   @HiveField(4)
   int paginationLimit;
+
   @HiveField(5)
   String primaryCurrencyCode;
+
   @HiveField(6)
   String converterFromCurrency;
+
   @HiveField(7)
   String converterToCurrency;
+
   @HiveField(8)
   bool remindersEnabled;
+
   @HiveField(9)
   DateTime? lastBackupDate;
+
   @HiveField(10)
   String? userContext;
+
   @HiveField(11)
   bool privacyModeEnabled;
+
+  @HiveField(12)
+  String? geminiApiKey;
 
   Settings({
     this.dividerType = DividerType.monthly,
@@ -52,6 +66,7 @@ class Settings extends HiveObject {
     this.lastBackupDate,
     this.userContext,
     this.privacyModeEnabled = false,
+    this.geminiApiKey,
   });
 
   Map<String, dynamic> toJson() => {
@@ -67,6 +82,7 @@ class Settings extends HiveObject {
     'lastBackupDate': lastBackupDate?.toIso8601String(),
     'userContext': userContext,
     'privacyModeEnabled': privacyModeEnabled,
+    'geminiApiKey': geminiApiKey,
   };
 
   factory Settings.fromJson(Map<String, dynamic> json) => Settings(
@@ -84,5 +100,6 @@ class Settings extends HiveObject {
         : null,
     userContext: json['userContext'],
     privacyModeEnabled: json['privacyModeEnabled'] ?? false,
+    geminiApiKey: json['geminiApiKey'],
   );
 }
