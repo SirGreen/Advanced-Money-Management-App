@@ -1,34 +1,31 @@
 import 'package:flutter/material.dart';
+
 import '../../domain/entities/tag.dart';
-import '../../domain/usecases/add_tag.dart';
-import '../../domain/usecases/get_all_tags.dart';
-import '../../domain/usecases/update_tag.dart';
+import '../../domain/repositories/tag_repository.dart';
 
 class TagViewModel extends ChangeNotifier {
-  final GetAllTags getAllTags;
-  final AddTag addTag;
-  final UpdateTag updateTag;
+  final TagRepository _repository;
 
-  TagViewModel({
-    required this.getAllTags,
-    required this.addTag,
-    required this.updateTag,
-  });
+  TagViewModel(this._repository);
 
   List<Tag> tags = [];
 
   Future<void> load() async {
-    tags = await getAllTags();
+    tags = await _repository.getAllTags();
     notifyListeners();
   }
 
+  Future<void> initialize() async {
+    await load();
+  }
+
   Future<void> create(Tag tag) async {
-    await addTag(tag);
+    await _repository.addTag(tag);
     await load();
   }
 
   Future<void> edit(Tag tag) async {
-    await updateTag(tag);
+    await _repository.updateTag(tag);
     await load();
   }
 }

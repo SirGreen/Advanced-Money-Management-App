@@ -12,7 +12,7 @@ import 'package:adv_money_mana/domain/entities/tag.dart';
 import 'package:adv_money_mana/domain/entities/scheduled_expenditure.dart';
 import 'package:adv_money_mana/domain/entities/settings.dart';
 
-import 'package:adv_money_mana/data/data_sources/tag_local_data_source.dart';
+import 'package:adv_money_mana/data/data_sources/tag_service.dart';
 import 'package:adv_money_mana/data/data_sources/expenditure_service.dart';
 import 'package:adv_money_mana/data/data_sources/scheduled_expenditure_service.dart';
 import 'package:adv_money_mana/data/data_sources/llm_service.dart';
@@ -75,7 +75,7 @@ void main() {
     await mockNotificationService.init();
 
     final settingsRepository = FakeSettingsRepository();
-    final tagRepository = TagRepositoryImpl(TagLocalDataSource());
+    final tagRepository = TagRepositoryImpl(TagService());
     final expenditureRepository = ExpenditureRepositoryImpl(
       ExpenditureService(),
     );

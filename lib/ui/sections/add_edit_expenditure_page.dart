@@ -288,9 +288,7 @@ class _AddEditExpenditurePageState extends State<AddEditExpenditurePage> {
       );
 
       // 2. Pass to ViewModel
-      await tagViewModel.addTag.call(
-        newTag,
-      ); // Assuming AddTag usecase is callable like this
+      await tagViewModel.create(newTag);
     } else if (recommendation is Tag) {
       tagIdToApply = recommendation.id;
     }
