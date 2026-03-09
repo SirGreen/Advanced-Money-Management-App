@@ -1,3 +1,4 @@
+import '../../domain/entities/settings.dart';
 import '../../domain/entities/tag.dart';
 import '../../domain/repositories/tag_repository.dart';
 import '../data_sources/llm_service.dart';
@@ -57,9 +58,10 @@ class TagRepositoryImpl implements TagRepository {
 
   @override
   Future<Map<String, dynamic>?> recommendTags(
+    Settings settings,
     String articleName,
     List<String> existingTagNames,
   ) async {
-    return await _llm.recommendTags(articleName, existingTagNames);
+    return await _llm.recommendTags(settings, articleName, existingTagNames);
   }
 }

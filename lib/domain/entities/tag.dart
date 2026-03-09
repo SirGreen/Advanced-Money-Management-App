@@ -22,6 +22,12 @@ class Tag extends HiveObject {
   @HiveField(5)
   final String? imagePath;
 
+  @HiveField(6)
+  double? budgetAmount;
+
+  @HiveField(7)
+  String budgetInterval;
+
   Tag({
     required this.id,
     required this.name,
@@ -29,5 +35,7 @@ class Tag extends HiveObject {
     this.isDefault = false,
     this.iconName,
     this.imagePath,
+    this.budgetAmount,
+    this.budgetInterval = 'None',
   });
 }

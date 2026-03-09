@@ -99,6 +99,7 @@ void main() {
 
     await tester.pumpWidget(
       MyApp(
+        settingsRepository: settingsRepository,
         settingsViewModel: settingsViewModel,
         tagRepository: tagRepository,
         expenditureRepository: expenditureRepository,

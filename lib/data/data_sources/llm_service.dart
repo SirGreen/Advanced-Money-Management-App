@@ -3,16 +3,19 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 
+import '../../domain/entities/settings.dart';
+
 class LLMService {
-  static const String _apiKey = String.fromEnvironment('GEMINI_API_KEY');
+  // static const String _apiKey = String.fromEnvironment('GEMINI_API_KEY');
   // static const String _apiUrlGem15Fl =
   //     "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=$_apiKey";
 
   Future<Map<String, dynamic>?> recommendTags(
+    Settings settings,
     String articleName,
     List<String> existingTagNames,
   ) async {
-    if (_apiKey.isEmpty) {
+    if (settings.geminiApiKey == null) {
       debugPrint(
         "ERROR: GEMINI_API_KEY is not set. Please run the app with --dart-define.",
       );
@@ -21,7 +24,7 @@ class LLMService {
 
     final model = GenerativeModel(
       model: 'gemini-1.5-flash-latest',
-      apiKey: _apiKey,
+      apiKey: settings.geminiApiKey!,
       generationConfig: GenerationConfig(
         temperature: 0.4,
         maxOutputTokens: 100,
@@ -61,17 +64,18 @@ class LLMService {
   }
 
   Future<Map<String, dynamic>?> processReceiptImage(
+    Settings settings,
     File imageFile,
     List<String> existingTagNames,
   ) async {
-    if (_apiKey.isEmpty) {
+    if (settings.geminiApiKey == null) {
       debugPrint("ERROR: GEMINI_API_KEY is not set.");
       return null;
     }
 
     final model = GenerativeModel(
       model: 'gemini-2.5-flash',
-      apiKey: _apiKey,
+      apiKey: settings.geminiApiKey!,
       generationConfig: GenerationConfig(responseMimeType: 'application/json'),
     );
 
@@ -114,20 +118,21 @@ class LLMService {
   }
 
   Future<Map<String, dynamic>?> analyzeBudget({
+    required Settings settings,
     required List<Map<String, dynamic>> transactions,
     required Map<String, dynamic> budgetDetails,
     required String currentDate,
     required String budgetEndDate,
     required String? userContext,
   }) async {
-    if (_apiKey.isEmpty) {
+    if (settings.geminiApiKey == null) {
       debugPrint("ERROR: GEMINI_API_KEY is not set.");
       return null;
     }
 
     final model = GenerativeModel(
       model: 'gemini-2.5-pro',
-      apiKey: _apiKey,
+      apiKey: settings.geminiApiKey!,
       generationConfig: GenerationConfig(responseMimeType: 'application/json'),
     );
 
@@ -178,6 +183,7 @@ class LLMService {
   }
 
   Future<Map<String, dynamic>?> analyzeFinancialReport({
+    required Settings settings,
     required String dateRangeStart,
     required String dateRangeEnd,
     required String? userContext,
@@ -187,14 +193,14 @@ class LLMService {
     required List<Map<String, dynamic>> expenseBreakdown,
     required List<Map<String, dynamic>> transactionList,
   }) async {
-    if (_apiKey.isEmpty) {
+    if (settings.geminiApiKey == null) {
       debugPrint("ERROR: GEMINI_API_KEY is not set.");
       return null;
     }
 
     final model = GenerativeModel(
       model: 'gemini-2.5-pro',
-      apiKey: _apiKey,
+      apiKey: settings.geminiApiKey!,
       generationConfig: GenerationConfig(responseMimeType: 'application/json'),
     );
 

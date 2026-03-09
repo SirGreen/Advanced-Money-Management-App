@@ -13,6 +13,38 @@ import 'settings_view_model.dart';
 class SettingsView extends StatelessWidget {
   const SettingsView({super.key});
 
+  void _showApiKeyDialog(BuildContext context, SettingsViewModel viewModel) {
+    final controller = TextEditingController(text: viewModel.settings.geminiApiKey);
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Enter Gemini API Key'),
+        content: TextField(
+          controller: controller,
+          decoration: const InputDecoration(
+            hintText: 'Paste your key here',
+            helperText: 'Used for AI-powered features',
+          ),
+          obscureText: true,
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              viewModel.updateGeminiApiKey(controller.text.trim());
+              Navigator.pop(context);
+            },
+            child: const Text('Save'),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -139,6 +171,15 @@ class SettingsView extends StatelessWidget {
                     }
                   }
                 },
+              ),
+              ListTile(
+                leading: const Icon(Icons.auto_awesome),
+                title: const Text('Gemini API Key'),
+                subtitle: Text(
+                  viewModel.settings.geminiApiKey != null && viewModel.settings.geminiApiKey!.isNotEmpty ? 'Saved' : 'Unset',
+                ),
+                trailing: const Icon(Icons.edit),
+                onTap: () => _showApiKeyDialog(context, viewModel),
               ),
             ],
           );

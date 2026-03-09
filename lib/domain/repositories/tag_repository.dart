@@ -1,3 +1,4 @@
+import '../entities/settings.dart';
 import '../entities/tag.dart';
 
 abstract class TagRepository {
@@ -6,6 +7,7 @@ abstract class TagRepository {
   Future<void> updateTag(Tag tag);
 
   Future<Map<String, dynamic>?> recommendTags(
+    Settings settings,
     String articleName,
     List<String> existingTagNames,
   );

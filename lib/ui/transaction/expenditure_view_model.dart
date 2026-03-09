@@ -1,9 +1,13 @@
 import 'dart:io';
 
+import 'package:adv_money_mana/domain/repositories/settings_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
+import 'package:collection/collection.dart';
 
 import '../../domain/entities/expenditure.dart';
+import '../../domain/entities/report_data.dart';
+import '../../domain/entities/settings.dart';
 import '../../domain/entities/tag.dart';
 import '../../domain/entities/search_filter.dart';
 import '../../domain/repositories/expenditure_repository.dart';
@@ -13,6 +17,7 @@ import '../../domain/usecases/scan_receipt_usecase.dart';
 class ExpenditureViewModel extends ChangeNotifier {
   final ExpenditureRepository _repository;
   final TagRepository _tagRepository;
+  final SettingsRepository _settingsRepository;
 
   final ScanReceiptUseCase _scanReceiptUseCase;
 
@@ -31,9 +36,12 @@ class ExpenditureViewModel extends ChangeNotifier {
   ExpenditureViewModel({
     required ExpenditureRepository repository,
     required TagRepository tagRepository,
+    required SettingsRepository settingsRepository,
+
     required ScanReceiptUseCase scanReceiptUseCase,
   }) : _repository = repository,
        _tagRepository = tagRepository,
+       _settingsRepository = settingsRepository,
        _scanReceiptUseCase = scanReceiptUseCase {
     _loadTags();
     loadExpenditures();
@@ -101,6 +109,10 @@ class ExpenditureViewModel extends ChangeNotifier {
     for (final tag in defaults) {
       await _tagRepository.addTag(tag);
     }
+  }
+
+  Tag? getTagById(String id) {
+    return tags.firstWhereOrNull((tag) => tag.id == id);
   }
 
   Future<void> addExpenditure(Expenditure expenditure) async {
@@ -176,10 +188,18 @@ class ExpenditureViewModel extends ChangeNotifier {
   }
 
   Future<Map<String, dynamic>?> processReceipt(File imageFile) async {
+    final settings = await _settingsRepository.getSettings();
+    if (settings.geminiApiKey == null) {
+      debugPrint(
+        "Cannot analyze budget: Missing LLM API key.",
+      );
+      return null;
+    }
+
     try {
       final t = await _tagRepository.getAllTags();
       final tagNames = t.map((t) => t.name).toList();
-      return await _scanReceiptUseCase.call(imageFile, tagNames);
+      return await _scanReceiptUseCase.call(settings, imageFile, tagNames);
     } catch (e) {
       errorMessage = e.toString();
       notifyListeners();
@@ -241,12 +261,59 @@ class ExpenditureViewModel extends ChangeNotifier {
     return results;
   }
 
+  // Utils for LLM-related things
+
+  DateTimeRange _getCurrentBudgetPeriod(String interval) {
+    final now = DateTime.now();
+    DateTime startDate;
+    DateTime endDate;
+
+    switch (interval) {
+      case 'Weekly':
+        int daysToSubtract = now.weekday - 1; // Assumes Monday is 1
+        startDate = DateTime(now.year, now.month, now.day - daysToSubtract);
+        endDate = startDate.add(const Duration(days: 6));
+        break;
+      case 'Monthly':
+        startDate = DateTime(now.year, now.month, 1);
+        endDate = (now.month < 12)
+            ? DateTime(now.year, now.month + 1, 0)
+            : DateTime(now.year + 1, 1, 0);
+        break;
+      case 'Yearly':
+        startDate = DateTime(now.year, 1, 1);
+        endDate = DateTime(now.year, 12, 31);
+        break;
+      default:
+        throw ArgumentError(
+          "Budget analysis requires a 'Weekly', 'Monthly', or 'Yearly' interval.",
+        );
+    }
+
+    startDate = DateTime(
+      startDate.year,
+      startDate.month,
+      startDate.day,
+      0,
+      0,
+      0,
+    );
+    startDate.add(const Duration(days: -30));
+    endDate = DateTime(endDate.year, endDate.month, endDate.day, 23, 59, 59);
+
+    return DateTimeRange(start: startDate, end: endDate);
+  }
+
+  // LLM-related functionality
+
   Future<List<Object>> recommendTags(String articleName) async {
-    if (articleName.isEmpty || articleName.length < 3) {
+    final settings = await _settingsRepository.getSettings();
+    if (articleName.isEmpty || articleName.length < 3 || settings.geminiApiKey == null) {
       return [];
     }
     final existingTagNames = tags.map((t) => t.name).toList();
     final recommendationJson = await _tagRepository.recommendTags(
+      settings,
       articleName,
       existingTagNames,
     );
@@ -292,5 +359,109 @@ class ExpenditureViewModel extends ChangeNotifier {
       }
     }
     return recommendations;
+  }
+
+  Future<Map<String, dynamic>?> analyzeBudgetForTag(Tag tag) async {
+    final settings = await _settingsRepository.getSettings();
+    if (settings.geminiApiKey == null) {
+      debugPrint(
+        "Cannot analyze budget: Missing LLM API key.",
+      );
+      return null;
+    }
+
+    if (tag.budgetAmount == null ||
+        tag.budgetAmount! <= 0 ||
+        tag.budgetInterval == 'None') {
+      debugPrint(
+        "Cannot analyze budget: No amount or interval set for tag '${tag.name}'.",
+      );
+      return null;
+    }
+
+    try {
+      final budgetPeriod = _getCurrentBudgetPeriod(tag.budgetInterval);
+      final searchFilter = SearchFilter(tags: [tag], startDate: budgetPeriod.start, endDate: budgetPeriod.end);
+      final transactionsForPeriod = getFilteredExpenditures(searchFilter);
+
+      final serializedTransactions = transactionsForPeriod
+          .map(
+            (exp) => {
+              'name': exp.articleName,
+              'amount': exp.amount,
+              'date': exp.date.toIso8601String().split('T').first,
+              'is_income': exp.isIncome,
+            },
+          )
+          .toList();
+
+      final budgetDetails = {
+        'category_name': tag.name,
+        'amount': tag.budgetAmount,
+        'interval': tag.budgetInterval,
+        'start_date': budgetPeriod.start.toIso8601String().split('T').first,
+      };
+
+      final analysis = await _repository.analyzeBudget(
+        settings: settings,
+        transactions: serializedTransactions,
+        budgetDetails: budgetDetails,
+        currentDate: DateTime.now().toIso8601String().split('T').first,
+        budgetEndDate: budgetPeriod.end.toIso8601String().split('T').first,
+        userContext: settings.userContext,
+      );
+
+      return analysis;
+    } catch (e) {
+      debugPrint("Error during budget analysis for tag '${tag.name}': $e");
+      return null;
+    }
+  }
+
+  Future<Map<String, dynamic>?> analyzeFullReport(
+    ReportData reportData,
+    DateTimeRange dateRange,
+    Settings settings,
+  ) async {
+    List<Map<String, dynamic>> createBreakdownList(
+      Map<Tag, TagReportData> sections,
+    ) {
+      return sections.entries.map((entry) {
+        final Tag tag = entry.key;
+        final TagReportData tagData = entry.value;
+        return {'category': tag.name, 'amount': tagData.totalAmount};
+      }).toList();
+    }
+
+    final incomeBreakdown = createBreakdownList(reportData.incomeByTag);
+    final expenseBreakdown = createBreakdownList(reportData.expenseByTag);
+
+    final SearchFilter filter = SearchFilter(
+      startDate: dateRange.start,
+      endDate: dateRange.end,
+    );
+    final List<Expenditure> transactionsInPeriod = getFilteredExpenditures(filter);
+
+    final serializedTransactions = transactionsInPeriod.map((exp) {
+      final tagName = getTagById(exp.mainTagId)?.name ?? 'Uncategorized';
+      return {
+        'name': exp.articleName,
+        'amount': exp.amount,
+        'date': exp.date.toIso8601String().split('T').first,
+        'is_income': exp.isIncome,
+        'category': tagName,
+      };
+    }).toList();
+    return await _repository.analyzeFinancialReport(
+      settings: settings,
+      dateRangeStart: dateRange.start.toIso8601String().split('T').first,
+      dateRangeEnd: dateRange.end.toIso8601String().split('T').first,
+      userContext: settings.userContext,
+      totalIncome: reportData.totalIncome,
+      totalExpenses: reportData.totalExpense,
+      incomeBreakdown: incomeBreakdown,
+      expenseBreakdown: expenseBreakdown,
+      transactionList: serializedTransactions,
+    );
   }
 }

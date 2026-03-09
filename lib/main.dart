@@ -22,6 +22,7 @@ import 'data/repositories/expenditure_repository_impl.dart';
 import 'data/repositories/scheduled_expenditure_repository_impl.dart';
 import 'data/repositories/settings_repository_impl.dart';
 
+import 'domain/repositories/settings_repository.dart';
 import 'domain/usecases/scan_receipt_usecase.dart';
 import 'domain/services/recurring_transaction_service.dart';
 
@@ -51,17 +52,18 @@ void main() async {
   final notificationService = NotificationService();
   await notificationService.init();
 
+  final llmService = LLMService();
   final secureStorageService = SecureStorageService();
   final settingsRepository = SettingsRepositoryImpl(
     SettingsService(),
     secureStorageService,
   );
-  final tagRepository = TagRepositoryImpl(TagService());
-  final expenditureRepository = ExpenditureRepositoryImpl(ExpenditureService());
+  final tagRepository = TagRepositoryImpl(TagService(), llmService);
+  final expenditureRepository = ExpenditureRepositoryImpl(ExpenditureService(), llmService);
   final scheduledRepository = ScheduledExpenditureRepositoryImpl(
     ScheduledExpenditureService(),
   );
-  final receiptRepository = ReceiptRepositoryImpl(LLMService());
+  final receiptRepository = ReceiptRepositoryImpl(llmService);
 
   final scanReceiptUseCase = ScanReceiptUseCase(receiptRepository);
 
@@ -79,6 +81,7 @@ void main() async {
 
   runApp(
     MyApp(
+      settingsRepository: settingsRepository,
       settingsViewModel: settingsViewModel,
       tagRepository: tagRepository,
       expenditureRepository: expenditureRepository,
@@ -91,6 +94,7 @@ void main() async {
 
 // This widget is the root of your application.
 class MyApp extends StatefulWidget {
+  final SettingsRepository settingsRepository;
   final SettingsViewModel settingsViewModel;
   final TagRepositoryImpl tagRepository;
   final ExpenditureRepositoryImpl expenditureRepository;
@@ -100,6 +104,7 @@ class MyApp extends StatefulWidget {
 
   const MyApp({
     super.key,
+    required this.settingsRepository,
     required this.settingsViewModel,
     required this.tagRepository,
     required this.expenditureRepository,
@@ -174,6 +179,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           create: (_) => ExpenditureViewModel(
             repository: widget.expenditureRepository,
             tagRepository: widget.tagRepository,
+            settingsRepository: widget.settingsRepository,
             scanReceiptUseCase: widget.scanReceiptUseCase,
           ),
         ),

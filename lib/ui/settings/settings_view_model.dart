@@ -50,4 +50,11 @@ class SettingsViewModel extends ChangeNotifier {
     _settings!.privacyModeEnabled = enabled;
     await saveSettings(_settings!);
   }
+
+  Future<void> updateGeminiApiKey(String? key) async {
+    if (_settings == null) return;
+
+    _settings!.geminiApiKey = key;
+    await saveSettings(_settings!);
+  }
 }
