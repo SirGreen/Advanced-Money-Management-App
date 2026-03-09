@@ -1,23 +1,28 @@
+import 'package:adv_money_mana/data/data_sources/llm_service.dart';
+
 import '../../domain/repositories/expenditure_repository.dart';
 import '../../domain/entities/expenditure.dart';
 import '../data_sources/expenditure_service.dart';
 
 class ExpenditureRepositoryImpl implements ExpenditureRepository {
-  final ExpenditureService _service;
+  final ExpenditureService _expenditures;
+  final LLMService _llm;
 
-  ExpenditureRepositoryImpl(this._service);
+  ExpenditureRepositoryImpl(this._expenditures, this._llm);
 
   @override
-  Future<List<Expenditure>> getExpenditures() => _service.getAll();
+  Future<List<Expenditure>> getExpenditures() => _expenditures.getAll();
 
   @override
   Future<void> addExpenditure(Expenditure expenditure) =>
-      _service.add(expenditure);
+      _expenditures.add(expenditure);
 
   @override
   Future<void> updateExpenditure(Expenditure expenditure) =>
-      _service.update(expenditure);
+      _expenditures.update(expenditure);
 
   @override
-  Future<void> deleteExpenditure(String id) => _service.delete(id);
+  Future<void> deleteExpenditure(String id) => _expenditures.delete(id);
+
+  
 }

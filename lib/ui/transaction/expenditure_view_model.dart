@@ -241,8 +241,56 @@ class ExpenditureViewModel extends ChangeNotifier {
     return results;
   }
 
-  // TODO: implement this
   Future<List<Object>> recommendTags(String articleName) async {
-    return [];
+    if (articleName.isEmpty || articleName.length < 3) {
+      return [];
+    }
+    final existingTagNames = tags.map((t) => t.name).toList();
+    final recommendationJson = await _tagRepository.recommendTags(
+      articleName,
+      existingTagNames,
+    );
+    if (recommendationJson == null) {
+      return [];
+    }
+    final List<Object> recommendations = [];
+    if (recommendationJson['existing_tags'] is List) {
+      final List<String> suggestedNames = List<String>.from(
+        recommendationJson['existing_tags'],
+      );
+      for (var name in suggestedNames) {
+        try {
+          final tag = tags.firstWhere(
+            (t) => t.name.toLowerCase() == name.toLowerCase(),
+          );
+
+          if (!recommendations.any(
+            (item) => item is Tag && item.id == tag.id,
+          )) {
+            recommendations.add(tag);
+          }
+        } catch (e) {
+          debugPrint(
+            "Could not find recommended existing tag: $name. Error: $e",
+          );
+        }
+      }
+    }
+    if (recommendationJson['new_tag_suggestion'] is String) {
+      final String newTagName = recommendationJson['new_tag_suggestion'];
+      if (newTagName.isNotEmpty) {
+        final alreadyExists = tags.any(
+          (t) => t.name.toLowerCase() == newTagName.toLowerCase(),
+        );
+        final alreadyRecommended = recommendations.any(
+          (item) =>
+              item is String && item.toLowerCase() == newTagName.toLowerCase(),
+        );
+        if (!alreadyExists && !alreadyRecommended) {
+          recommendations.add(newTagName);
+        }
+      }
+    }
+    return recommendations;
   }
 }

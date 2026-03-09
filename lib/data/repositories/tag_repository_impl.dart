@@ -1,17 +1,19 @@
 import '../../domain/entities/tag.dart';
 import '../../domain/repositories/tag_repository.dart';
+import '../data_sources/llm_service.dart';
 import '../data_sources/tag_service.dart';
 
 class TagRepositoryImpl implements TagRepository {
-  final TagService _service;
+  final TagService _tags;
+  final LLMService _llm;
 
-  TagRepositoryImpl(this._service);
+  TagRepositoryImpl(this._tags, this._llm);
 
   @override
   Future<List<Tag>> getAllTags() async {
-    var models = await _service.getAll();
+    var models = await _tags.getAll();
     if (models.isEmpty) {
-      _service.add(
+      _tags.add(
         Tag(
           id: 'default_eat',
           name: 'Ăn uống',
@@ -20,7 +22,7 @@ class TagRepositoryImpl implements TagRepository {
           isDefault: true,
         ),
       );
-      _service.add(
+      _tags.add(
         Tag(
           id: 'default_entertainment',
           name: 'Giải trí',
@@ -29,7 +31,7 @@ class TagRepositoryImpl implements TagRepository {
           isDefault: true,
         ),
       );
-      _service.add(
+      _tags.add(
         Tag(
           id: 'default_transport',
           name: 'Phương tiện',
@@ -38,18 +40,26 @@ class TagRepositoryImpl implements TagRepository {
           isDefault: true,
         ),
       );
-      models = await _service.getAll();
+      models = await _tags.getAll();
     }
     return models.toList();
   }
 
   @override
   Future<void> addTag(Tag tag) async {
-    await _service.add(tag);
+    await _tags.add(tag);
   }
 
   @override
   Future<void> updateTag(Tag tag) async {
-    await _service.update(tag);
+    await _tags.update(tag);
+  }
+
+  @override
+  Future<Map<String, dynamic>?> recommendTags(
+    String articleName,
+    List<String> existingTagNames,
+  ) async {
+    return await _llm.recommendTags(articleName, existingTagNames);
   }
 }

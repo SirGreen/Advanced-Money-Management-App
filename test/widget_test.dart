@@ -74,15 +74,17 @@ void main() {
     when(() => mockNotificationService.init()).thenAnswer((_) async {});
     await mockNotificationService.init();
 
+    final llmService = LLMService();
+
     final settingsRepository = FakeSettingsRepository();
-    final tagRepository = TagRepositoryImpl(TagService());
+    final tagRepository = TagRepositoryImpl(TagService(), llmService);
     final expenditureRepository = ExpenditureRepositoryImpl(
-      ExpenditureService(),
+      ExpenditureService(), llmService
     );
     final scheduledRepository = ScheduledExpenditureRepositoryImpl(
       ScheduledExpenditureService(),
     );
-    final receiptRepository = ReceiptRepositoryImpl(LLMService());
+    final receiptRepository = ReceiptRepositoryImpl(llmService);
 
     final scanReceiptUseCase = ScanReceiptUseCase(receiptRepository);
 

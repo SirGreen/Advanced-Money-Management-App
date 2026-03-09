@@ -12,7 +12,6 @@ class ReceiptRepositoryImpl implements ReceiptRepository {
     File image,
     List<String> existingTagNames,
   ) async {
-    // Gọi trực tiếp service cũ của bạn
     return await _llmService.processReceiptImage(image, existingTagNames);
   }
 }
