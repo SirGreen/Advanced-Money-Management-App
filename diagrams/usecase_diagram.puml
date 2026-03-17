@@ -1,0 +1,138 @@
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+skinparam usecase {
+  BackgroundColor LightCyan
+  BorderColor DarkCyan
+}
+
+actor "Primary User" as User
+actor "System" as Sys <<Automated>>
+
+rectangle "Personal Finance Management App" {
+
+  package "Transaction Management" {
+    usecase "Add/Edit Transaction" as TM1
+    usecase "View Transactions" as TM2
+    usecase "Delete Transaction" as TM3
+    usecase "Search Transactions" as TM4
+    usecase "Filter Transactions" as TM5
+  }
+
+  package "Category & Tag Management" {
+    usecase "Manage Tags/Categories" as CM1
+    usecase "Assign Tags to Transactions" as CM2
+  }
+
+  package "Budget Management" {
+    usecase "Create/Edit Budget" as BM1
+    usecase "Monitor Budget Status" as BM2
+    usecase "View Budget Reports" as BM3
+  }
+
+  package "Assets & Accounts" {
+    usecase "Manage Assets" as AA1
+    usecase "Manage Savings Accounts" as AA2
+    usecase "Manage Saving Goals" as AA3
+    usecase "Manage Investments" as AA4
+    usecase "Currency Conversion" as AA5
+  }
+
+  package "Reports & Analytics" {
+    usecase "View Financial Reports" as RA1
+    usecase "View Category Reports" as RA2
+    usecase "View Time-based Reports" as RA3
+  }
+
+  package "Receipt Management" {
+    usecase "Capture Receipt" as RM1
+    usecase "OCR Receipt Processing" as RM2
+    usecase "AI Receipt Analysis" as RM3
+  }
+
+  package "Scheduled Transactions" {
+    usecase "Create/Edit Scheduled Tx" as ST1
+    usecase "Manage Scheduled Tx" as ST2
+    usecase "Process Scheduled Tx" as ST3
+  }
+
+  package "Security & Settings" {
+    usecase "Set PIN Lock & Encrypt" as SS1
+    usecase "Backup/Restore Data" as SS2
+    usecase "Manage Settings" as SS3
+    usecase "User Profile Management" as SS4
+  }
+
+  package "Notifications" {
+    usecase "Daily Login Reminders" as N1
+    usecase "Transaction Reminders" as N2
+  }
+
+  package "AI-Powered Features" {
+    usecase "AI Tag Suggestions" as AI1
+    usecase "AI Budget Analysis" as AI2
+  }
+
+  package "System Configuration" {
+    usecase "Language Selection" as SC1
+    usecase "Currency Configuration" as SC2
+    usecase "Theme & Preferences" as SC3
+  }
+}
+
+' --- Primary User Relationships ---
+User --> TM1
+User --> TM2
+User --> TM3
+User --> TM4
+User --> TM5
+
+User --> CM1
+User --> CM2
+
+User --> BM1
+User --> BM2
+User --> BM3
+
+User --> AA1
+User --> AA2
+User --> AA3
+User --> AA4
+User --> AA5
+
+User --> RA1
+User --> RA2
+User --> RA3
+
+User --> RM1
+
+User --> ST1
+User --> ST2
+
+User --> SS1
+User --> SS2
+User --> SS3
+User --> SS4
+
+User --> SC1
+User --> SC2
+User --> SC3
+
+' --- System Relationships ---
+' System handles automated tasks, OCR, and AI
+Sys --> RM2
+Sys --> RM3
+Sys --> ST3
+Sys --> N1
+Sys --> N2
+Sys --> AI1
+Sys --> AI2
+
+' Overlapping interactions (System assists user)
+TM1 <.. AI1 : <<extend>>
+BM2 <.. AI2 : <<extend>>
+AA5 <-- Sys : "Fetches real-time rates"
+RM1 ..> RM2 : <<include>>
+RM2 ..> RM3 : <<include>>
+
+@enduml
