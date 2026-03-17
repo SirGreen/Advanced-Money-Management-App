@@ -206,7 +206,7 @@ class _SearchPageState extends State<SearchPage> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: DropdownButtonFormField<TransactionTypeFilter>(
-              value: _filter.transactionType,
+              initialValue: _filter.transactionType,
               decoration: InputDecoration(
                 filled: true,
                 fillColor: Colors.white.withValues(alpha: 0.5),

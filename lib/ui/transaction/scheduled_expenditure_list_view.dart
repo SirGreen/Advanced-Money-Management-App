@@ -56,7 +56,12 @@ class ScheduledExpenditureListView extends StatelessWidget {
                       title: Text(item.name),
                       subtitle: Consumer<SettingsViewModel>(
                         builder: (context, settingsViewModel, _) {
-                          return Text(_getScheduleDescription(item, settingsViewModel.settings.privacyModeEnabled));
+                          return Text(
+                            _getScheduleDescription(
+                              item,
+                              settingsViewModel.settings.privacyModeEnabled,
+                            ),
+                          );
                         },
                       ),
                       trailing: Switch(
@@ -109,7 +114,8 @@ class ScheduledExpenditureListView extends StatelessWidget {
                             symbol: '₫',
                             decimalDigits: 0,
                           ).format(item.amount);
-                          final displayAmount = settingsViewModel.settings.privacyModeEnabled
+                          final displayAmount =
+                              settingsViewModel.settings.privacyModeEnabled
                               ? PrivacyModeService.maskSymbol
                               : formattedAmount;
 
@@ -119,11 +125,15 @@ class ScheduledExpenditureListView extends StatelessWidget {
                               Text(
                                 displayAmount,
                                 style: TextStyle(
-                                  color: item.isIncome ? Colors.green : Colors.red,
+                                  color: item.isIncome
+                                      ? Colors.green
+                                      : Colors.red,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              if (settingsViewModel.settings.privacyModeEnabled) ...[
+                              if (settingsViewModel
+                                  .settings
+                                  .privacyModeEnabled) ...[
                                 const SizedBox(width: 4),
                                 Icon(
                                   Icons.lock,
@@ -146,7 +156,10 @@ class ScheduledExpenditureListView extends StatelessWidget {
     );
   }
 
-  String _getScheduleDescription(ScheduledExpenditure item, bool privacyModeEnabled) {
+  String _getScheduleDescription(
+    ScheduledExpenditure item,
+    bool privacyModeEnabled,
+  ) {
     String freq = '';
     switch (item.scheduleType) {
       case ScheduleType.dayOfMonth:
@@ -162,8 +175,13 @@ class ScheduledExpenditureListView extends StatelessWidget {
         freq = 'Every ${item.scheduleValue} days';
         break;
     }
-    final formattedAmount = NumberFormat.currency(symbol: '₫', decimalDigits: 0).format(item.amount);
-    final displayAmount = privacyModeEnabled ? PrivacyModeService.maskSymbol : formattedAmount;
+    final formattedAmount = NumberFormat.currency(
+      symbol: '₫',
+      decimalDigits: 0,
+    ).format(item.amount);
+    final displayAmount = privacyModeEnabled
+        ? PrivacyModeService.maskSymbol
+        : formattedAmount;
     return '$displayAmount - $freq';
   }
 }

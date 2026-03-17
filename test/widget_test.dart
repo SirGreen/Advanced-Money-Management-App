@@ -11,10 +11,14 @@ import 'package:adv_money_mana/domain/entities/expenditure.dart';
 import 'package:adv_money_mana/domain/entities/tag.dart';
 import 'package:adv_money_mana/domain/entities/scheduled_expenditure.dart';
 import 'package:adv_money_mana/domain/entities/settings.dart';
+import 'package:adv_money_mana/domain/entities/saving_goal.dart';
+import 'package:adv_money_mana/domain/entities/saving_contribution.dart';
 
 import 'package:adv_money_mana/data/data_sources/tag_service.dart';
 import 'package:adv_money_mana/data/data_sources/expenditure_service.dart';
 import 'package:adv_money_mana/data/data_sources/scheduled_expenditure_service.dart';
+import 'package:adv_money_mana/data/data_sources/saving_goal_service.dart';
+import 'package:adv_money_mana/data/data_sources/saving_contribution_service.dart';
 import 'package:adv_money_mana/data/data_sources/llm_service.dart';
 import 'package:adv_money_mana/data/services/notification_service.dart';
 
@@ -23,6 +27,10 @@ import 'package:adv_money_mana/data/repositories/tag_repository_impl.dart';
 import 'package:adv_money_mana/data/repositories/expenditure_repository_impl.dart';
 import 'package:adv_money_mana/data/repositories/scheduled_expenditure_repository_impl.dart';
 import 'package:adv_money_mana/data/repositories/receipt_repository_impl.dart';
+import 'package:adv_money_mana/data/repositories/saving_goal_repository_impl.dart';
+import 'package:adv_money_mana/data/repositories/export_repository_impl.dart';
+
+import 'package:adv_money_mana/data/services/export_service.dart';
 
 import 'package:adv_money_mana/domain/usecases/scan_receipt_usecase.dart';
 import 'package:adv_money_mana/domain/services/recurring_transaction_service.dart';
@@ -67,6 +75,8 @@ void main() {
     Hive.registerAdapter(ScheduleTypeAdapter());
     Hive.registerAdapter(DividerTypeAdapter());
     Hive.registerAdapter(SettingsAdapter());
+    Hive.registerAdapter(SavingGoalAdapter());
+    Hive.registerAdapter(SavingContributionAdapter());
 
     await initializeDateFormatting('vi_VN', null);
 
@@ -79,11 +89,17 @@ void main() {
     final settingsRepository = FakeSettingsRepository();
     final tagRepository = TagRepositoryImpl(TagService(), llmService);
     final expenditureRepository = ExpenditureRepositoryImpl(
-      ExpenditureService(), llmService
+      ExpenditureService(),
+      llmService,
     );
     final scheduledRepository = ScheduledExpenditureRepositoryImpl(
       ScheduledExpenditureService(),
     );
+    final savingGoalRepository = SavingGoalRepositoryImpl(
+      SavingGoalService(),
+      SavingContributionService(),
+    );
+    final exportRepository = ExportRepositoryImpl(ExportService());
     final receiptRepository = ReceiptRepositoryImpl(llmService);
 
     final scanReceiptUseCase = ScanReceiptUseCase(receiptRepository);
@@ -104,6 +120,8 @@ void main() {
         tagRepository: tagRepository,
         expenditureRepository: expenditureRepository,
         scheduledRepository: scheduledRepository,
+        savingGoalRepository: savingGoalRepository,
+        exportRepository: exportRepository,
         scanReceiptUseCase: scanReceiptUseCase,
         recurringService: recurringService,
       ),

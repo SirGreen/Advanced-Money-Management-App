@@ -15,9 +15,7 @@ class _PrivacyModePageState extends State<PrivacyModePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Privacy Mode Settings'),
-      ),
+      appBar: AppBar(title: const Text('Privacy Mode Settings')),
       body: Consumer<SettingsViewModel>(
         builder: (context, viewModel, _) {
           final privacyModeEnabled = viewModel.settings.privacyModeEnabled;
@@ -256,10 +254,7 @@ class _PrivacyModePageState extends State<PrivacyModePage> {
               const SizedBox(height: 4),
               Text(
                 description,
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.grey[600],
-                ),
+                style: TextStyle(fontSize: 12, color: Colors.grey[600]),
               ),
             ],
           ),
@@ -275,10 +270,7 @@ class _PrivacyModePageState extends State<PrivacyModePage> {
         children: [
           Icon(Icons.check, size: 18, color: Colors.green[600]),
           const SizedBox(width: 8),
-          Text(
-            feature,
-            style: const TextStyle(fontSize: 13),
-          ),
+          Text(feature, style: const TextStyle(fontSize: 13)),
         ],
       ),
     );

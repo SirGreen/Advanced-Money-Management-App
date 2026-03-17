@@ -9,12 +9,15 @@ import '../tags/manage_tags_page.dart';
 import 'backup_restore_page.dart';
 import 'privacy_mode_page.dart';
 import 'settings_view_model.dart';
+import '../export/export_transactions_view.dart';
 
 class SettingsView extends StatelessWidget {
   const SettingsView({super.key});
 
   void _showApiKeyDialog(BuildContext context, SettingsViewModel viewModel) {
-    final controller = TextEditingController(text: viewModel.settings.geminiApiKey);
+    final controller = TextEditingController(
+      text: viewModel.settings.geminiApiKey,
+    );
 
     showDialog(
       context: context,
@@ -50,9 +53,7 @@ class SettingsView extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(l10n.settings),
-      ),
+      appBar: AppBar(title: Text(l10n.settings)),
       body: Consumer<SettingsViewModel>(
         builder: (context, viewModel, _) {
           final privacyMode = viewModel.settings.privacyModeEnabled;
@@ -67,9 +68,7 @@ class SettingsView extends StatelessWidget {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
-                      builder: (_) => const PrivacyModePage(),
-                    ),
+                    MaterialPageRoute(builder: (_) => const PrivacyModePage()),
                   );
                 },
               ),
@@ -80,9 +79,7 @@ class SettingsView extends StatelessWidget {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
-                      builder: (_) => const ManageTagsPage(),
-                    ),
+                    MaterialPageRoute(builder: (_) => const ManageTagsPage()),
                   );
                 },
               ),
@@ -100,7 +97,21 @@ class SettingsView extends StatelessWidget {
                   );
                 },
               ),
-              
+              ListTile(
+                leading: const Icon(Icons.download),
+                title: const Text('Xuất dữ liệu'),
+                subtitle: const Text('Xuất giao dịch ra CSV/Excel'),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const ExportTransactionsView(),
+                    ),
+                  );
+                },
+              ),
+
               const Divider(),
 
               SwitchListTile(
@@ -176,7 +187,10 @@ class SettingsView extends StatelessWidget {
                 leading: const Icon(Icons.auto_awesome),
                 title: const Text('Gemini API Key'),
                 subtitle: Text(
-                  viewModel.settings.geminiApiKey != null && viewModel.settings.geminiApiKey!.isNotEmpty ? 'Saved' : 'Unset',
+                  viewModel.settings.geminiApiKey != null &&
+                          viewModel.settings.geminiApiKey!.isNotEmpty
+                      ? 'Saved'
+                      : 'Unset',
                 ),
                 trailing: const Icon(Icons.edit),
                 onTap: () => _showApiKeyDialog(context, viewModel),

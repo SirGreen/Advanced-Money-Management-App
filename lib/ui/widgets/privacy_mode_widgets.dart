@@ -34,11 +34,7 @@ class PrivacyAwareAmount extends StatelessWidget {
         ),
         if (privacyModeEnabled) ...[
           const SizedBox(width: 4),
-          Icon(
-            Icons.lock,
-            size: 14,
-            color: Colors.grey[600],
-          ),
+          Icon(Icons.lock, size: 14, color: Colors.grey[600]),
         ],
       ],
     );
@@ -177,10 +173,7 @@ class PrivacyModeTile extends StatelessWidget {
                         privacyModeEnabled
                             ? 'Hide sensitive financial data'
                             : 'Show all financial information',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.grey[600],
-                        ),
+                        style: TextStyle(fontSize: 12, color: Colors.grey[600]),
                       ),
                     ],
                   ),
