@@ -61,6 +61,8 @@ dependencies:
   local_auth: ^3.0.1
   flutter_local_notifications: ^20.0.0 
 
+  local_auth_android: any
+  local_auth_darwin: any
 dev_dependencies:
   flutter_test:
     sdk: flutter

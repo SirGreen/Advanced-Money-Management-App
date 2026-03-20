@@ -20,21 +20,23 @@ class BackupRestoreService {
       if (Hive.isBoxOpen(expenditureBoxName)) {
         final box = Hive.box<Expenditure>(expenditureBoxName);
         backupData['expenditures'] = box.values
-            .map((e) => {
-                  'id': e.id,
-                  'articleName': e.articleName,
-                  'amount': e.amount,
-                  'date': e.date.toIso8601String(),
-                  'mainTagId': e.mainTagId,
-                  'subTagIds': e.subTagIds,
-                  'receiptImagePath': e.receiptImagePath,
-                  'scheduledExpenditureId': e.scheduledExpenditureId,
-                  'isIncome': e.isIncome,
-                  'currencyCode': e.currencyCode,
-                  'notes': e.notes,
-                  'createdAt': e.createdAt.toIso8601String(),
-                  'updatedAt': e.updatedAt.toIso8601String(),
-                })
+            .map(
+              (e) => {
+                'id': e.id,
+                'articleName': e.articleName,
+                'amount': e.amount,
+                'date': e.date.toIso8601String(),
+                'mainTagId': e.mainTagId,
+                'subTagIds': e.subTagIds,
+                'receiptImagePath': e.receiptImagePath,
+                'scheduledExpenditureId': e.scheduledExpenditureId,
+                'isIncome': e.isIncome,
+                'currencyCode': e.currencyCode,
+                'notes': e.notes,
+                'createdAt': e.createdAt.toIso8601String(),
+                'updatedAt': e.updatedAt.toIso8601String(),
+              },
+            )
             .toList();
       } else {
         backupData['expenditures'] = [];
@@ -44,14 +46,16 @@ class BackupRestoreService {
       if (Hive.isBoxOpen(tagBoxName)) {
         final box = Hive.box<Tag>(tagBoxName);
         backupData['tags'] = box.values
-            .map((e) => {
-                  'id': e.id,
-                  'name': e.name,
-                  'colorValue': e.colorValue,
-                  'iconName': e.iconName,
-                  'imagePath': e.imagePath,
-                  'isDefault': e.isDefault,
-                })
+            .map(
+              (e) => {
+                'id': e.id,
+                'name': e.name,
+                'colorValue': e.colorValue,
+                'iconName': e.iconName,
+                'imagePath': e.imagePath,
+                'isDefault': e.isDefault,
+              },
+            )
             .toList();
       } else {
         backupData['tags'] = [];
@@ -61,22 +65,24 @@ class BackupRestoreService {
       if (Hive.isBoxOpen(scheduledExpenditureBoxName)) {
         final box = Hive.box<ScheduledExpenditure>(scheduledExpenditureBoxName);
         backupData['scheduled_expenditures'] = box.values
-            .map((e) => {
-                  'id': e.id,
-                  'name': e.name,
-                  'amount': e.amount,
-                  'mainTagId': e.mainTagId,
-                  'subTagIds': e.subTagIds,
-                  'scheduleType': e.scheduleType.toString().split('.').last,
-                  'scheduleValue': e.scheduleValue,
-                  'startDate': e.startDate.toIso8601String(),
-                  'lastCreatedDate': e.lastCreatedDate?.toIso8601String(),
-                  'isActive': e.isActive,
-                  'endDate': e.endDate?.toIso8601String(),
-                  'isIncome': e.isIncome,
-                  'currencyCode': e.currencyCode,
-                  'reminderDaysBefore': e.reminderDaysBefore,
-                })
+            .map(
+              (e) => {
+                'id': e.id,
+                'name': e.name,
+                'amount': e.amount,
+                'mainTagId': e.mainTagId,
+                'subTagIds': e.subTagIds,
+                'scheduleType': e.scheduleType.toString().split('.').last,
+                'scheduleValue': e.scheduleValue,
+                'startDate': e.startDate.toIso8601String(),
+                'lastCreatedDate': e.lastCreatedDate?.toIso8601String(),
+                'isActive': e.isActive,
+                'endDate': e.endDate?.toIso8601String(),
+                'isIncome': e.isIncome,
+                'currencyCode': e.currencyCode,
+                'reminderDaysBefore': e.reminderDaysBefore,
+              },
+            )
             .toList();
       } else {
         backupData['scheduled_expenditures'] = [];
@@ -122,7 +128,9 @@ class BackupRestoreService {
         await box.clear();
 
         for (final item in backupData['expenditures'] as List) {
-          final expenditure = Expenditure.fromJson(item as Map<String, dynamic>);
+          final expenditure = Expenditure.fromJson(
+            item as Map<String, dynamic>,
+          );
           await box.put(expenditure.id, expenditure);
         }
       }
@@ -147,7 +155,9 @@ class BackupRestoreService {
 
       // Import scheduled expenditures
       if (backupData.containsKey('scheduled_expenditures')) {
-        final box = await Hive.openBox<ScheduledExpenditure>(scheduledExpenditureBoxName);
+        final box = await Hive.openBox<ScheduledExpenditure>(
+          scheduledExpenditureBoxName,
+        );
         await box.clear();
 
         for (final item in backupData['scheduled_expenditures'] as List) {
@@ -161,10 +171,16 @@ class BackupRestoreService {
             subTagIds: List<String>.from(item['subTagIds'] as List? ?? []),
             scheduleType: scheduleType,
             scheduleValue: item['scheduleValue'] as int? ?? 0,
-            startDate: DateTime.parse(item['startDate'] ?? DateTime.now().toIso8601String()),
-            lastCreatedDate: item['lastCreatedDate'] != null ? DateTime.parse(item['lastCreatedDate']) : null,
+            startDate: DateTime.parse(
+              item['startDate'] ?? DateTime.now().toIso8601String(),
+            ),
+            lastCreatedDate: item['lastCreatedDate'] != null
+                ? DateTime.parse(item['lastCreatedDate'])
+                : null,
             isActive: item['isActive'] as bool? ?? true,
-            endDate: item['endDate'] != null ? DateTime.parse(item['endDate']) : null,
+            endDate: item['endDate'] != null
+                ? DateTime.parse(item['endDate'])
+                : null,
             isIncome: item['isIncome'] as bool? ?? false,
             currencyCode: item['currencyCode'] ?? 'USD',
             reminderDaysBefore: item['reminderDaysBefore'] as int?,
@@ -190,12 +206,17 @@ class BackupRestoreService {
             languageCode: settingsData['languageCode'],
             paginationLimit: settingsData['paginationLimit'] as int? ?? 50,
             primaryCurrencyCode: settingsData['primaryCurrencyCode'] ?? 'JPY',
-            converterFromCurrency: settingsData['converterFromCurrency'] ?? 'USD',
+            converterFromCurrency:
+                settingsData['converterFromCurrency'] ?? 'USD',
             converterToCurrency: settingsData['converterToCurrency'] ?? 'JPY',
-            remindersEnabled: settingsData['remindersEnabled'] as bool? ?? false,
-            lastBackupDate: settingsData['lastBackupDate'] != null ? DateTime.parse(settingsData['lastBackupDate']) : null,
+            remindersEnabled:
+                settingsData['remindersEnabled'] as bool? ?? false,
+            lastBackupDate: settingsData['lastBackupDate'] != null
+                ? DateTime.parse(settingsData['lastBackupDate'])
+                : null,
             userContext: settingsData['userContext'],
-            privacyModeEnabled: settingsData['privacyModeEnabled'] as bool? ?? false,
+            privacyModeEnabled:
+                settingsData['privacyModeEnabled'] as bool? ?? false,
           );
         }
 
@@ -234,4 +255,3 @@ class BackupRestoreService {
     }
   }
 }
-

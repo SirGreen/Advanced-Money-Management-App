@@ -64,7 +64,9 @@ class PrivacyModeService {
 
     if (hideNames) {
       if (masked.containsKey('articleName')) {
-        masked['articleName'] = createBlurredText(masked['articleName'] as String);
+        masked['articleName'] = createBlurredText(
+          masked['articleName'] as String,
+        );
       }
       if (masked.containsKey('name')) {
         masked['name'] = createBlurredText(masked['name'] as String);

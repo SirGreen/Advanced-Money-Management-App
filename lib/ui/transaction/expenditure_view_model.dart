@@ -190,9 +190,7 @@ class ExpenditureViewModel extends ChangeNotifier {
   Future<Map<String, dynamic>?> processReceipt(File imageFile) async {
     final settings = await _settingsRepository.getSettings();
     if (settings.geminiApiKey == null) {
-      debugPrint(
-        "Cannot analyze budget: Missing LLM API key.",
-      );
+      debugPrint("Cannot analyze budget: Missing LLM API key.");
       return null;
     }
 
@@ -308,7 +306,9 @@ class ExpenditureViewModel extends ChangeNotifier {
 
   Future<List<Object>> recommendTags(String articleName) async {
     final settings = await _settingsRepository.getSettings();
-    if (articleName.isEmpty || articleName.length < 3 || settings.geminiApiKey == null) {
+    if (articleName.isEmpty ||
+        articleName.length < 3 ||
+        settings.geminiApiKey == null) {
       return [];
     }
     final existingTagNames = tags.map((t) => t.name).toList();
@@ -364,9 +364,7 @@ class ExpenditureViewModel extends ChangeNotifier {
   Future<Map<String, dynamic>?> analyzeBudgetForTag(Tag tag) async {
     final settings = await _settingsRepository.getSettings();
     if (settings.geminiApiKey == null) {
-      debugPrint(
-        "Cannot analyze budget: Missing LLM API key.",
-      );
+      debugPrint("Cannot analyze budget: Missing LLM API key.");
       return null;
     }
 
@@ -381,7 +379,11 @@ class ExpenditureViewModel extends ChangeNotifier {
 
     try {
       final budgetPeriod = _getCurrentBudgetPeriod(tag.budgetInterval);
-      final searchFilter = SearchFilter(tags: [tag], startDate: budgetPeriod.start, endDate: budgetPeriod.end);
+      final searchFilter = SearchFilter(
+        tags: [tag],
+        startDate: budgetPeriod.start,
+        endDate: budgetPeriod.end,
+      );
       final transactionsForPeriod = getFilteredExpenditures(searchFilter);
 
       final serializedTransactions = transactionsForPeriod
@@ -440,7 +442,9 @@ class ExpenditureViewModel extends ChangeNotifier {
       startDate: dateRange.start,
       endDate: dateRange.end,
     );
-    final List<Expenditure> transactionsInPeriod = getFilteredExpenditures(filter);
+    final List<Expenditure> transactionsInPeriod = getFilteredExpenditures(
+      filter,
+    );
 
     final serializedTransactions = transactionsInPeriod.map((exp) {
       final tagName = getTagById(exp.mainTagId)?.name ?? 'Uncategorized';

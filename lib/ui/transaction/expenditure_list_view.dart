@@ -95,8 +95,10 @@ class ExpenditureListView extends StatelessWidget {
               ),
               trailing: Consumer<SettingsViewModel>(
                 builder: (context, settingsViewModel, _) {
-                  final formattedAmount = '${expenditure.isIncome ? '+' : '-'}${NumberFormat.currency(locale: 'vi_VN', symbol: '₫', decimalDigits: 0).format(expenditure.amount ?? 0)}';
-                  final displayAmount = settingsViewModel.settings.privacyModeEnabled
+                  final formattedAmount =
+                      '${expenditure.isIncome ? '+' : '-'}${NumberFormat.currency(locale: 'vi_VN', symbol: '₫', decimalDigits: 0).format(expenditure.amount ?? 0)}';
+                  final displayAmount =
+                      settingsViewModel.settings.privacyModeEnabled
                       ? PrivacyModeService.maskSymbol
                       : formattedAmount;
 
@@ -106,18 +108,16 @@ class ExpenditureListView extends StatelessWidget {
                       Text(
                         displayAmount,
                         style: TextStyle(
-                          color: expenditure.isIncome ? Colors.green : Colors.red,
+                          color: expenditure.isIncome
+                              ? Colors.green
+                              : Colors.red,
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
                         ),
                       ),
                       if (settingsViewModel.settings.privacyModeEnabled) ...[
                         const SizedBox(width: 4),
-                        Icon(
-                          Icons.lock,
-                          size: 14,
-                          color: Colors.grey[600],
-                        ),
+                        Icon(Icons.lock, size: 14, color: Colors.grey[600]),
                       ],
                     ],
                   );

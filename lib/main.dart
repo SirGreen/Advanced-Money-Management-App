@@ -8,19 +8,26 @@ import 'domain/entities/expenditure.dart';
 import 'domain/entities/tag.dart';
 import 'domain/entities/settings.dart';
 import 'domain/entities/scheduled_expenditure.dart';
+import 'domain/entities/saving_goal.dart';
+import 'domain/entities/saving_contribution.dart';
 
 import 'data/data_sources/llm_service.dart';
 import 'data/data_sources/expenditure_service.dart';
 import 'data/data_sources/scheduled_expenditure_service.dart';
 import 'data/data_sources/settings_service.dart';
 import 'data/data_sources/tag_service.dart';
+import 'data/data_sources/saving_goal_service.dart';
+import 'data/data_sources/saving_contribution_service.dart';
 import 'data/services/notification_service.dart';
+import 'data/services/export_service.dart';
 
 import 'data/repositories/receipt_repository_impl.dart';
 import 'data/repositories/tag_repository_impl.dart';
 import 'data/repositories/expenditure_repository_impl.dart';
 import 'data/repositories/scheduled_expenditure_repository_impl.dart';
 import 'data/repositories/settings_repository_impl.dart';
+import 'data/repositories/saving_goal_repository_impl.dart';
+import 'data/repositories/export_repository_impl.dart';
 
 import 'domain/repositories/settings_repository.dart';
 import 'domain/usecases/scan_receipt_usecase.dart';
@@ -30,6 +37,8 @@ import 'ui/tags/tag_view_model.dart';
 import 'ui/transaction/expenditure_view_model.dart';
 import 'ui/transaction/scheduled_expenditure_view_model.dart';
 import 'ui/settings/settings_view_model.dart';
+import 'ui/savings/saving_goal_view_model.dart';
+import 'ui/export/export_view_model.dart';
 import 'data/data_sources/secure_storage_service.dart';
 import 'ui/auth/lock_screen_page.dart';
 
@@ -48,6 +57,8 @@ void main() async {
   Hive.registerAdapter(ScheduleTypeAdapter());
   Hive.registerAdapter(DividerTypeAdapter());
   Hive.registerAdapter(SettingsAdapter());
+  Hive.registerAdapter(SavingGoalAdapter());
+  Hive.registerAdapter(SavingContributionAdapter());
 
   final notificationService = NotificationService();
   await notificationService.init();
@@ -59,10 +70,18 @@ void main() async {
     secureStorageService,
   );
   final tagRepository = TagRepositoryImpl(TagService(), llmService);
-  final expenditureRepository = ExpenditureRepositoryImpl(ExpenditureService(), llmService);
+  final expenditureRepository = ExpenditureRepositoryImpl(
+    ExpenditureService(),
+    llmService,
+  );
   final scheduledRepository = ScheduledExpenditureRepositoryImpl(
     ScheduledExpenditureService(),
   );
+  final savingGoalRepository = SavingGoalRepositoryImpl(
+    SavingGoalService(),
+    SavingContributionService(),
+  );
+  final exportRepository = ExportRepositoryImpl(ExportService());
   final receiptRepository = ReceiptRepositoryImpl(llmService);
 
   final scanReceiptUseCase = ScanReceiptUseCase(receiptRepository);
@@ -86,6 +105,8 @@ void main() async {
       tagRepository: tagRepository,
       expenditureRepository: expenditureRepository,
       scheduledRepository: scheduledRepository,
+      savingGoalRepository: savingGoalRepository,
+      exportRepository: exportRepository,
       scanReceiptUseCase: scanReceiptUseCase,
       recurringService: recurringService,
     ),
@@ -99,6 +120,8 @@ class MyApp extends StatefulWidget {
   final TagRepositoryImpl tagRepository;
   final ExpenditureRepositoryImpl expenditureRepository;
   final ScheduledExpenditureRepositoryImpl scheduledRepository;
+  final SavingGoalRepositoryImpl savingGoalRepository;
+  final ExportRepositoryImpl exportRepository;
   final ScanReceiptUseCase scanReceiptUseCase;
   final RecurringTransactionService recurringService;
 
@@ -109,6 +132,8 @@ class MyApp extends StatefulWidget {
     required this.tagRepository,
     required this.expenditureRepository,
     required this.scheduledRepository,
+    required this.savingGoalRepository,
+    required this.exportRepository,
     required this.scanReceiptUseCase,
     required this.recurringService,
   });
@@ -187,6 +212,16 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           create: (_) =>
               ScheduledExpenditureViewModel(widget.scheduledRepository),
         ),
+        ChangeNotifierProvider(
+          create: (_) => SavingGoalViewModel(repository: widget.savingGoalRepository),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => ExportViewModel(
+            exportRepository: widget.exportRepository,
+            expenditureRepository: widget.expenditureRepository,
+            tagRepository: widget.tagRepository,
+          ),
+        ),
       ],
       child: Builder(
         builder: (context) {
@@ -208,7 +243,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
             builder: (context, child) {
               return Stack(
                 children: [
-                  if (child != null) child,
+                  child ?? const SizedBox(),
                   if (_isLocked && _pinIsSet)
                     Positioned.fill(
                       child: MaterialApp(

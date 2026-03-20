@@ -8,6 +8,8 @@ import 'transaction/search_page.dart';
 import 'transaction/add_scheduled_expenditure_view.dart';
 import 'transaction/expenditure_list_view.dart';
 import 'transaction/scheduled_expenditure_list_view.dart';
+import 'savings/saving_goal_list_view.dart';
+import 'savings/add_saving_goal_view.dart';
 
 class MainView extends StatefulWidget {
   const MainView({super.key});
@@ -22,6 +24,7 @@ class _MainViewState extends State<MainView> {
   static const List<Widget> _widgetOptions = <Widget>[
     ExpenditureListView(),
     ScheduledExpenditureListView(),
+    SavingGoalListView(),
     SettingsView(),
   ];
 
@@ -65,6 +68,13 @@ class _MainViewState extends State<MainView> {
                 builder: (context) => const AddScheduledExpenditureView(),
               ),
             );
+          } else if (_selectedIndex == 2) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const AddSavingGoalView(),
+              ),
+            );
           } else {
             Navigator.push(
               context,
@@ -84,12 +94,17 @@ class _MainViewState extends State<MainView> {
           ),
           BottomNavigationBarItem(icon: Icon(Icons.repeat), label: 'Recurring'),
           BottomNavigationBarItem(
+            icon: Icon(Icons.savings),
+            label: 'Savings',
+          ),
+          BottomNavigationBarItem(
             icon: Icon(Icons.settings),
             label: 'Settings',
           ),
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.deepPurple,
+        unselectedItemColor: Colors.grey[700],
         onTap: _onItemTapped,
       ),
     );

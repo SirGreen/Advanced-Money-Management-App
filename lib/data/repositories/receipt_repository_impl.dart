@@ -14,6 +14,10 @@ class ReceiptRepositoryImpl implements ReceiptRepository {
     File image,
     List<String> existingTagNames,
   ) async {
-    return await _llmService.processReceiptImage(settings, image, existingTagNames);
+    return await _llmService.processReceiptImage(
+      settings,
+      image,
+      existingTagNames,
+    );
   }
 }

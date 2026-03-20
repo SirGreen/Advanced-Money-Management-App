@@ -33,7 +33,10 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
       }
 
       // Create backup file with timestamp
-      final timestamp = DateTime.now().toString().replaceAll(':', '-').split('.')[0];
+      final timestamp = DateTime.now()
+          .toString()
+          .replaceAll(':', '-')
+          .split('.')[0];
       final fileName = 'backup_$timestamp.json';
       final filePath = '${downloadsDir.path}/$fileName';
 
@@ -86,7 +89,9 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
           context: context,
           builder: (context) => AlertDialog(
             title: const Text('Restore Data'),
-            content: const Text('Are you sure you want to restore data? Current data will be overwritten.'),
+            content: const Text(
+              'Are you sure you want to restore data? Current data will be overwritten.',
+            ),
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context, false),
@@ -114,7 +119,9 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
-              content: Text('Data restored successfully! Please restart the app to apply changes.'),
+              content: Text(
+                'Data restored successfully! Please restart the app to apply changes.',
+              ),
               backgroundColor: Colors.green,
               duration: Duration(seconds: 3),
             ),
@@ -138,9 +145,7 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Backup & Restore'),
-      ),
+      appBar: AppBar(title: const Text('Backup & Restore')),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -167,7 +172,9 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
                       ElevatedButton.icon(
                         onPressed: _isLoading ? null : _performBackup,
                         icon: const Icon(Icons.backup),
-                        label: Text(_isLoading ? 'Backing up...' : 'Export Data'),
+                        label: Text(
+                          _isLoading ? 'Backing up...' : 'Export Data',
+                        ),
                       ),
                     ],
                   ),
@@ -194,7 +201,9 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
                       ElevatedButton.icon(
                         onPressed: _isLoading ? null : _performRestore,
                         icon: const Icon(Icons.restore),
-                        label: Text(_isLoading ? 'Restoring...' : 'Import Data'),
+                        label: Text(
+                          _isLoading ? 'Restoring...' : 'Import Data',
+                        ),
                       ),
                     ],
                   ),
