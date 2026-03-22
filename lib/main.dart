@@ -200,13 +200,16 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         ChangeNotifierProvider(
           create: (_) => TagViewModel(widget.tagRepository)..load(),
         ),
-        ChangeNotifierProvider(
+        ChangeNotifierProxyProvider<TagViewModel, ExpenditureViewModel>(
           create: (_) => ExpenditureViewModel(
             repository: widget.expenditureRepository,
             tagRepository: widget.tagRepository,
             settingsRepository: widget.settingsRepository,
             scanReceiptUseCase: widget.scanReceiptUseCase,
           ),
+          update: (_, tagViewModel, expenditureViewModel) {
+            return expenditureViewModel!..updateTags(tagViewModel.tags);
+          },
         ),
         ChangeNotifierProvider(
           create: (_) =>

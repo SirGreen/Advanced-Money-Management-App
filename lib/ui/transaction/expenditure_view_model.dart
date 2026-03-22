@@ -43,8 +43,14 @@ class ExpenditureViewModel extends ChangeNotifier {
        _tagRepository = tagRepository,
        _settingsRepository = settingsRepository,
        _scanReceiptUseCase = scanReceiptUseCase {
-    _loadTags();
     loadExpenditures();
+  }
+
+  // will be used by ChangeNotifierProxyProvider<TagViewModel, ExpenditureViewModel> in main.dart
+  // i'd rather use Streams provided by reactive Repositories but whatever...
+  void updateTags(List<Tag> newTags) {
+    tags = newTags;
+    notifyListeners();
   }
 
   Future<void> loadExpenditures() async {
@@ -67,47 +73,6 @@ class ExpenditureViewModel extends ChangeNotifier {
     } finally {
       isLoading = false;
       notifyListeners();
-    }
-  }
-
-  Future<void> _loadTags() async {
-    tags = await _tagRepository.getAllTags();
-    if (tags.isEmpty) {
-      await _seedDefaultTags();
-      tags = await _tagRepository.getAllTags();
-    }
-    notifyListeners();
-  }
-
-  Future<void> _seedDefaultTags() async {
-    final defaults = [
-      Tag(
-        id: 'food',
-        name: 'Food',
-        colorValue: 0xFFFF5722,
-        iconName: 'fastfood',
-      ),
-      Tag(
-        id: 'transport',
-        name: 'Transport',
-        colorValue: 0xFF2196F3,
-        iconName: 'directions_bus',
-      ),
-      Tag(
-        id: 'shopping',
-        name: 'Shopping',
-        colorValue: 0xFFE91E63,
-        iconName: 'shopping_bag',
-      ),
-      Tag(
-        id: 'income',
-        name: 'Income',
-        colorValue: 0xFF4CAF50,
-        iconName: 'attach_money',
-      ),
-    ];
-    for (final tag in defaults) {
-      await _tagRepository.addTag(tag);
     }
   }
 
@@ -195,8 +160,7 @@ class ExpenditureViewModel extends ChangeNotifier {
     }
 
     try {
-      final t = await _tagRepository.getAllTags();
-      final tagNames = t.map((t) => t.name).toList();
+      final tagNames = tags.map((t) => t.name).toList();
       return await _scanReceiptUseCase.call(settings, imageFile, tagNames);
     } catch (e) {
       errorMessage = e.toString();
