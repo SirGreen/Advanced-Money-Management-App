@@ -102,4 +102,36 @@ class Settings extends HiveObject {
     privacyModeEnabled: json['privacyModeEnabled'] ?? false,
     geminiApiKey: json['geminiApiKey'],
   );
+
+  Settings copyWith({
+    DividerType? dividerType,
+    int? paydayStartDay,
+    int? fixedIntervalDays,
+    String? languageCode,
+    int? paginationLimit,
+    String? primaryCurrencyCode,
+    String? converterFromCurrency,
+    String? converterToCurrency,
+    bool? remindersEnabled,
+    DateTime? lastBackupDate,
+    String? userContext,
+    bool? privacyModeEnabled,
+    String? geminiApiKey,
+  }) {
+    return Settings(
+      dividerType: dividerType ?? this.dividerType,
+      paydayStartDay: paydayStartDay ?? this.paydayStartDay,
+      fixedIntervalDays: fixedIntervalDays ?? this.fixedIntervalDays,
+      languageCode: languageCode ?? this.languageCode,
+      paginationLimit: paginationLimit ?? this.paginationLimit,
+      primaryCurrencyCode: primaryCurrencyCode ?? this.primaryCurrencyCode,
+      converterFromCurrency: converterFromCurrency ?? this.converterFromCurrency,
+      converterToCurrency: converterToCurrency ?? this.converterToCurrency,
+      remindersEnabled: remindersEnabled ?? this.remindersEnabled,
+      lastBackupDate: lastBackupDate ?? this.lastBackupDate,
+      userContext: userContext ?? this.userContext,
+      privacyModeEnabled: privacyModeEnabled ?? this.privacyModeEnabled,
+      geminiApiKey: geminiApiKey ?? this.geminiApiKey,
+    );
+  }
 }

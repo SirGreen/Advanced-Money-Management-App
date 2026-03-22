@@ -47,14 +47,16 @@ class SettingsViewModel extends ChangeNotifier {
   Future<void> togglePrivacyMode(bool enabled) async {
     if (_settings == null) return;
 
-    _settings!.privacyModeEnabled = enabled;
-    await saveSettings(_settings!);
+    final updatedSettings = _settings!.copyWith(privacyModeEnabled: enabled);
+    await saveSettings(updatedSettings);
+    _settings = updatedSettings;
   }
 
   Future<void> updateGeminiApiKey(String? key) async {
     if (_settings == null) return;
 
-    _settings!.geminiApiKey = key;
-    await saveSettings(_settings!);
+    final updatedSettings = _settings!.copyWith(geminiApiKey: key);
+    await saveSettings(updatedSettings);
+    _settings = updatedSettings;
   }
 }
