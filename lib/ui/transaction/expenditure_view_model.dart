@@ -243,7 +243,11 @@ class ExpenditureViewModel extends ChangeNotifier {
     if (filter.tags != null && filter.tags!.isNotEmpty) {
       final selectedTagIds = filter.tags!.map((t) => t.id).toSet();
       results = results
-          .where((e) => selectedTagIds.contains(e.mainTagId))
+          .where(
+            (e) =>
+                selectedTagIds.contains(e.mainTagId) ||
+                e.subTagIds.any((subId) => selectedTagIds.contains(subId)),
+          )
           .toList();
     }
 
@@ -257,6 +261,30 @@ class ExpenditureViewModel extends ChangeNotifier {
     // Since sorting is handled in the UI in the legacy app, we can just return the filtered list,
     // or apply the default sort here. The legacy UI does its own sorting.
     return results;
+  }
+
+  double getSpentAmountForTagBudget(Tag tag) {
+    if (tag.budgetAmount == null ||
+        tag.budgetAmount! <= 0 ||
+        tag.budgetInterval == 'None') {
+      return 0.0;
+    }
+    try {
+      final budgetPeriod = _getCurrentBudgetPeriod(tag.budgetInterval);
+      final searchFilter = SearchFilter(
+        tags: [tag],
+        startDate: budgetPeriod.start,
+        endDate: budgetPeriod.end,
+        transactionType: TransactionTypeFilter.expense,
+      );
+      final transactionsForPeriod = getFilteredExpenditures(searchFilter);
+      return transactionsForPeriod.fold(
+        0.0,
+        (sum, exp) => sum + (exp.amount ?? 0),
+      );
+    } catch (_) {
+      return 0.0;
+    }
   }
 
   // Utils for LLM-related things
@@ -296,7 +324,6 @@ class ExpenditureViewModel extends ChangeNotifier {
       0,
       0,
     );
-    startDate.add(const Duration(days: -30));
     endDate = DateTime(endDate.year, endDate.month, endDate.day, 23, 59, 59);
 
     return DateTimeRange(start: startDate, end: endDate);

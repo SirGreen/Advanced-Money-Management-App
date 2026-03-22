@@ -21,6 +21,7 @@ class _AddTransactionViewState extends State<AddTransactionView> {
   bool _isIncome = false;
   String? _selectedTagId;
   DateTime _selectedDate = DateTime.now();
+  bool _isShared = false; // Placeholder for Sprint 3: Shared Expenses
   late bool isEditing;
 
   @override
@@ -58,17 +59,17 @@ class _AddTransactionViewState extends State<AddTransactionView> {
               onPressed: () {
                 showDialog(
                   context: context,
-                  builder: (context) => AlertDialog(
+                  builder: (ctx) => AlertDialog(
                     title: const Text("Delete Transaction?"),
                     content: const Text("This action cannot be undone."),
                     actions: [
                       TextButton(
-                        onPressed: () => Navigator.pop(context),
+                        onPressed: () => Navigator.pop(ctx),
                         child: const Text("CANCEL"),
                       ),
                       TextButton(
                         onPressed: () async {
-                          Navigator.pop(context); // Close dialog
+                          Navigator.pop(ctx); // Close dialog
                           await viewModel.deleteExpenditure(
                             widget.expenditure!.id,
                           );
@@ -220,6 +221,22 @@ class _AddTransactionViewState extends State<AddTransactionView> {
                   ),
                 ),
               ),
+
+            const SizedBox(height: 16),
+            // Placeholder: Shared Expenses (Sprint 3)
+            SwitchListTile(
+              title: const Text("Tính vào Ngân sách chung"),
+              subtitle: const Text(
+                "Đồng bộ giao dịch này với gia đình (Coming soon)",
+              ),
+              value: _isShared,
+              onChanged: (value) {
+                setState(() {
+                  _isShared = value;
+                });
+              },
+              contentPadding: EdgeInsets.zero,
+            ),
 
             const Spacer(),
 
