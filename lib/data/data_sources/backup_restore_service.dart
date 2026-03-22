@@ -4,12 +4,16 @@ import '../../domain/entities/expenditure.dart';
 import '../../domain/entities/tag.dart';
 import '../../domain/entities/scheduled_expenditure.dart';
 import '../../domain/entities/settings.dart';
+import '../../domain/entities/saving_goal.dart';
+import '../../domain/entities/saving_contribution.dart';
 
 class BackupRestoreService {
   static const String expenditureBoxName = 'expenditures';
   static const String tagBoxName = 'tags';
   static const String scheduledExpenditureBoxName = 'scheduled_expenditures';
   static const String settingsBoxName = 'settings';
+  static const String savingGoalBoxName = 'saving_goals';
+  static const String savingContributionBoxName = 'saving_contributions';
 
   /// Export all data to JSON string
   Future<String> exportAllData() async {
@@ -54,6 +58,8 @@ class BackupRestoreService {
                 'iconName': e.iconName,
                 'imagePath': e.imagePath,
                 'isDefault': e.isDefault,
+                'budgetAmount': e.budgetAmount,
+                'budgetInterval': e.budgetInterval,
               },
             )
             .toList();
@@ -72,7 +78,7 @@ class BackupRestoreService {
                 'amount': e.amount,
                 'mainTagId': e.mainTagId,
                 'subTagIds': e.subTagIds,
-                'scheduleType': e.scheduleType.toString().split('.').last,
+                'scheduleType': e.scheduleType.index,
                 'scheduleValue': e.scheduleValue,
                 'startDate': e.startDate.toIso8601String(),
                 'lastCreatedDate': e.lastCreatedDate?.toIso8601String(),
@@ -94,7 +100,7 @@ class BackupRestoreService {
         final settings = box.get(0);
         if (settings != null) {
           backupData['settings'] = {
-            'dividerType': settings.dividerType.toString().split('.').last,
+            'dividerType': settings.dividerType.index,
             'paydayStartDay': settings.paydayStartDay,
             'fixedIntervalDays': settings.fixedIntervalDays,
             'languageCode': settings.languageCode,
@@ -108,6 +114,22 @@ class BackupRestoreService {
             'privacyModeEnabled': settings.privacyModeEnabled,
           };
         }
+      }
+
+      // Export saving goals
+      if (Hive.isBoxOpen(savingGoalBoxName)) {
+        final box = Hive.box<SavingGoal>(savingGoalBoxName);
+        backupData['saving_goals'] = box.values.map((e) => e.toJson()).toList();
+      } else {
+        backupData['saving_goals'] = [];
+      }
+
+      // Export saving contributions
+      if (Hive.isBoxOpen(savingContributionBoxName)) {
+        final box = Hive.box<SavingContribution>(savingContributionBoxName);
+        backupData['saving_contributions'] = box.values.map((e) => e.toJson()).toList();
+      } else {
+        backupData['saving_contributions'] = [];
       }
 
       // Convert to JSON string with pretty printing
@@ -148,6 +170,8 @@ class BackupRestoreService {
             iconName: item['iconName'] ?? 'tag',
             imagePath: item['imagePath'],
             isDefault: item['isDefault'] as bool? ?? false,
+            budgetAmount: (item['budgetAmount'] as num?)?.toDouble(),
+            budgetInterval: item['budgetInterval'] as String? ?? 'None',
           );
           await box.put(tag.id, tag);
         }
@@ -161,7 +185,8 @@ class BackupRestoreService {
         await box.clear();
 
         for (final item in backupData['scheduled_expenditures'] as List) {
-          final scheduleType = _parseScheduleType(item['scheduleType']);
+          final scheduleTypeIndex = item['scheduleType'] as int? ?? 0;
+          final scheduleType = ScheduleType.values[scheduleTypeIndex];
 
           final scheduled = ScheduledExpenditure(
             id: item['id'] ?? '',
@@ -194,33 +219,50 @@ class BackupRestoreService {
         final box = await Hive.openBox<Settings>(settingsBoxName);
         final settingsData = backupData['settings'] as Map<String, dynamic>;
 
-        Settings? settings = box.get(0);
-        if (settings == null) {
-          settings = Settings();
-        } else {
-          // Create a new instance to ensure all fields are updated
-          settings = Settings(
-            dividerType: _parseDividerType(settingsData['dividerType']),
-            paydayStartDay: settingsData['paydayStartDay'] as int? ?? 1,
-            fixedIntervalDays: settingsData['fixedIntervalDays'] as int? ?? 7,
-            languageCode: settingsData['languageCode'],
-            paginationLimit: settingsData['paginationLimit'] as int? ?? 50,
-            primaryCurrencyCode: settingsData['primaryCurrencyCode'] ?? 'JPY',
-            converterFromCurrency:
-                settingsData['converterFromCurrency'] ?? 'USD',
-            converterToCurrency: settingsData['converterToCurrency'] ?? 'JPY',
-            remindersEnabled:
-                settingsData['remindersEnabled'] as bool? ?? false,
-            lastBackupDate: settingsData['lastBackupDate'] != null
-                ? DateTime.parse(settingsData['lastBackupDate'])
-                : null,
-            userContext: settingsData['userContext'],
-            privacyModeEnabled:
-                settingsData['privacyModeEnabled'] as bool? ?? false,
-          );
-        }
+        final settings = Settings(
+          dividerType: _parseDividerType(settingsData['dividerType']),
+          paydayStartDay: settingsData['paydayStartDay'] as int? ?? 1,
+          fixedIntervalDays: settingsData['fixedIntervalDays'] as int? ?? 7,
+          languageCode: settingsData['languageCode'],
+          paginationLimit: settingsData['paginationLimit'] as int? ?? 50,
+          primaryCurrencyCode: settingsData['primaryCurrencyCode'] ?? 'JPY',
+          converterFromCurrency:
+              settingsData['converterFromCurrency'] ?? 'USD',
+          converterToCurrency: settingsData['converterToCurrency'] ?? 'JPY',
+          remindersEnabled:
+              settingsData['remindersEnabled'] as bool? ?? false,
+          lastBackupDate: settingsData['lastBackupDate'] != null
+              ? DateTime.parse(settingsData['lastBackupDate'])
+              : null,
+          userContext: settingsData['userContext'],
+          privacyModeEnabled:
+              settingsData['privacyModeEnabled'] as bool? ?? false,
+          geminiApiKey: settingsData['geminiApiKey'],
+        );
 
         await box.put(0, settings);
+      }
+
+      // Import saving goals
+      if (backupData.containsKey('saving_goals')) {
+        final box = await Hive.openBox<SavingGoal>(savingGoalBoxName);
+        await box.clear();
+
+        for (final item in backupData['saving_goals'] as List) {
+          final goal = SavingGoal.fromJson(item as Map<String, dynamic>);
+          await box.put(goal.id, goal);
+        }
+      }
+
+      // Import saving contributions
+      if (backupData.containsKey('saving_contributions')) {
+        final box = await Hive.openBox<SavingContribution>(savingContributionBoxName);
+        await box.clear();
+
+        for (final item in backupData['saving_contributions'] as List) {
+          final contribution = SavingContribution.fromJson(item as Map<String, dynamic>);
+          await box.put(contribution.id, contribution);
+        }
       }
     } catch (e) {
       throw Exception('Failed to import data: $e');
@@ -242,8 +284,12 @@ class BackupRestoreService {
     }
   }
 
-  static DividerType _parseDividerType(String? value) {
-    switch (value) {
+  static DividerType _parseDividerType(dynamic value) {
+    if (value is int) {
+      return DividerType.values[value];
+    }
+    final strValue = value?.toString();
+    switch (strValue) {
       case 'monthly':
         return DividerType.monthly;
       case 'paydayCycle':
