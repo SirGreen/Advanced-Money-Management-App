@@ -189,13 +189,11 @@ class _AddEditExpenditurePageState extends State<AddEditExpenditurePage> {
       amount: amountInput ?? 0.0,
       date: _selectedDate,
       mainTagId: _selectedMainTagId!,
-      // subTagIds: _selectedSubTagIds, // Add this to your Entity if it supports it
+      subTagIds: _selectedSubTagIds,
       isIncome: _isIncome,
-      // notes: _notesController.text, // Add this to your Entity if it supports it
-      // receiptImagePath: finalReceiptPath, // Add this to your Entity if it supports it
-      currencyCode: settingsViewModel
-          .settings
-          .primaryCurrencyCode, // Or use settingsViewModel.settings.currencyCode
+      notes: _notesController.text,
+      receiptImagePath: finalReceiptPath,
+      currencyCode: settingsViewModel.settings.primaryCurrencyCode,
     );
 
     await expenditureViewModel.addExpenditure(newExpenditure);
