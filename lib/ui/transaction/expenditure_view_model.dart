@@ -76,6 +76,88 @@ class ExpenditureViewModel extends ChangeNotifier {
     }
   }
 
+<<<<<<< Updated upstream
+=======
+  Future<void> _loadTags() async {
+    tags = await _tagRepository.getAllTags();
+
+    // Check if we have the new tags (should be 7 tags with specific names)
+    final expectedTagNames = {'entertainment', 'food', 'income', 'savings', 'shopping', 'transport', 'other'};
+    final currentTagNames = tags.map((t) => t.id).toSet();
+
+    // If tags are missing or outdated, reseed with new ones
+    if (tags.isEmpty || expectedTagNames != currentTagNames) {
+      await _seedDefaultTags();
+      tags = await _tagRepository.getAllTags();
+    }
+    notifyListeners();
+  }
+
+  Future<void> _seedDefaultTags() async {
+    // Delete old Vietnamese tags if they exist
+    final allTags = await _tagRepository.getAllTags();
+    final oldTagNames = {'ăn uống', 'giải trí', 'phương tiện'};
+
+    for (final tag in allTags) {
+      if (oldTagNames.contains(tag.name)) {
+        try {
+          await _tagRepository.deleteTag(tag.id);
+        } catch (e) {
+          debugPrint("Error deleting old tag ${tag.name}: $e");
+        }
+      }
+    }
+
+    final defaults = [
+      Tag(
+        id: 'entertainment',
+        name: 'Entertainment',
+        colorValue: 0xFF9C27B0,
+        iconName: 'entertainment',
+      ),
+      Tag(
+        id: 'food',
+        name: 'Food',
+        colorValue: 0xFFFF5722,
+        iconName: 'food',
+      ),
+      Tag(
+        id: 'income',
+        name: 'Income',
+        colorValue: 0xFF4CAF50,
+        iconName: 'income',
+      ),
+      Tag(
+        id: 'savings',
+        name: 'Savings',
+        colorValue: 0xFF00BCD4,
+        iconName: 'savings',
+      ),
+      Tag(
+        id: 'shopping',
+        name: 'Shopping',
+        colorValue: 0xFFE91E63,
+        iconName: 'shopping',
+      ),
+      Tag(
+        id: 'transport',
+        name: 'Transport',
+        colorValue: 0xFF2196F3,
+        iconName: 'transport',
+      ),
+      Tag(
+        id: 'other',
+        name: 'Other',
+        colorValue: 0xFF607D8B,
+        iconName: 'other',
+      ),
+    ];
+    for (final tag in defaults) {
+      await _tagRepository.addTag(tag);
+    }
+  }
+
+>>>>>>> Stashed changes
   Tag? getTagById(String id) {
     return tags.firstWhereOrNull((tag) => tag.id == id);
   }
@@ -98,6 +180,7 @@ class ExpenditureViewModel extends ChangeNotifier {
     required double amount,
     required bool isIncome,
     required String mainTagId,
+    List<String> subTagIds = const [],
     DateTime? date,
   }) async {
     isLoading = true;
@@ -110,6 +193,7 @@ class ExpenditureViewModel extends ChangeNotifier {
         amount: amount,
         date: date ?? DateTime.now(),
         mainTagId: mainTagId,
+        subTagIds: subTagIds,
         isIncome: isIncome,
         currencyCode: 'VND', // Default
       );

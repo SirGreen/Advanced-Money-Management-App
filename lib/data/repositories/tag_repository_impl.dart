@@ -13,36 +13,7 @@ class TagRepositoryImpl implements TagRepository {
   @override
   Future<List<Tag>> getAllTags() async {
     var models = await _tags.getAll();
-    if (models.isEmpty) {
-      _tags.add(
-        Tag(
-          id: 'default_eat',
-          name: 'Ăn uống',
-          colorValue: 0xFFF48FB1, // pink
-          iconName: 'fastfood',
-          isDefault: true,
-        ),
-      );
-      _tags.add(
-        Tag(
-          id: 'default_entertainment',
-          name: 'Giải trí',
-          colorValue: 0xFF90CAF9, // light blue
-          iconName: 'movie',
-          isDefault: true,
-        ),
-      );
-      _tags.add(
-        Tag(
-          id: 'default_transport',
-          name: 'Phương tiện',
-          colorValue: 0xFF80CBC4, // teal
-          iconName: 'directions_car',
-          isDefault: true,
-        ),
-      );
-      models = await _tags.getAll();
-    }
+    // Tags are now seeded by the ViewModel, so we just return what's in the database
     return models.toList();
   }
 
@@ -54,6 +25,11 @@ class TagRepositoryImpl implements TagRepository {
   @override
   Future<void> updateTag(Tag tag) async {
     await _tags.update(tag);
+  }
+
+  @override
+  Future<void> deleteTag(String tagId) async {
+    await _tags.delete(tagId);
   }
 
   @override

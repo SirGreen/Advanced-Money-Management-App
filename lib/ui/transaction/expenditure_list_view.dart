@@ -6,6 +6,7 @@ import 'add_transaction_view.dart'; // Import AddTransactionView
 import '../../domain/entities/tag.dart';
 import '../settings/settings_view_model.dart';
 import '../../data/services/privacy_mode_service.dart';
+import '../helpers/tag_icon_mapper.dart';
 
 class ExpenditureListView extends StatelessWidget {
   const ExpenditureListView({super.key});
@@ -44,6 +45,7 @@ class ExpenditureListView extends StatelessWidget {
                           builder: (context) =>
                               AddTransactionView(expenditure: expenditure),
                         ),
+<<<<<<< Updated upstream
                       );
                     },
                     // Long Press to Delete
@@ -71,6 +73,44 @@ class ExpenditureListView extends StatelessWidget {
                               ),
                             ),
                           ],
+=======
+                      ),
+                    ],
+                  ),
+                );
+              },
+              leading: CircleAvatar(
+                backgroundColor: Color(tag.colorValue).withValues(alpha: 0.2),
+                child: Icon(
+                  getIconForTag(tag.iconName ?? 'other'),
+                  color: Color(tag.colorValue),
+                ),
+              ),
+              title: Text(tag.name),
+              subtitle: Text(
+                DateFormat.yMMMd('vi_VN').format(expenditure.date),
+              ),
+              trailing: Consumer<SettingsViewModel>(
+                builder: (context, settingsViewModel, _) {
+                  final formattedAmount =
+                      '${expenditure.isIncome ? '+' : '-'}${NumberFormat.currency(locale: 'vi_VN', symbol: '₫', decimalDigits: 0).format(expenditure.amount ?? 0)}';
+                  final displayAmount =
+                      settingsViewModel.settings.privacyModeEnabled
+                      ? PrivacyModeService.maskSymbol
+                      : formattedAmount;
+
+                  return Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        displayAmount,
+                        style: TextStyle(
+                          color: expenditure.isIncome
+                              ? Colors.green
+                              : Colors.red,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+>>>>>>> Stashed changes
                         ),
                       );
                     },

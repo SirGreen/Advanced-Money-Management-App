@@ -5,6 +5,7 @@ import 'expenditure_view_model.dart';
 import '../../domain/entities/expenditure.dart';
 import '../../domain/entities/tag.dart';
 import '../helpers/currency_input_formatter.dart';
+import '../helpers/tag_icon_mapper.dart';
 
 class AddTransactionView extends StatefulWidget {
   final Expenditure?
@@ -19,7 +20,7 @@ class AddTransactionView extends StatefulWidget {
 class _AddTransactionViewState extends State<AddTransactionView> {
   final TextEditingController _amountController = TextEditingController();
   bool _isIncome = false;
-  String? _selectedTagId;
+  Set<String> _selectedTagIds = {};
   DateTime _selectedDate = DateTime.now();
   bool _isShared = false; // Placeholder for Sprint 3: Shared Expenses
   late bool isEditing;
@@ -34,7 +35,7 @@ class _AddTransactionViewState extends State<AddTransactionView> {
         'vi_VN',
       ).format(e.amount);
       _isIncome = e.isIncome;
-      _selectedTagId = e.mainTagId;
+      _selectedTagIds = {e.mainTagId, ...e.subTagIds};
       _selectedDate = e.date;
     }
   }
@@ -45,13 +46,13 @@ class _AddTransactionViewState extends State<AddTransactionView> {
     final tags = viewModel.tags;
 
     // Auto-select first tag only if NOT editing and no selection yet
-    if (_selectedTagId == null && tags.isNotEmpty && !isEditing) {
-      _selectedTagId = tags.first.id;
+    if (_selectedTagIds.isEmpty && tags.isNotEmpty && !isEditing) {
+      _selectedTagIds = {tags.first.id};
     }
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(isEditing ? "Edit Transaction" : "Fast Add Transaction"),
+        title: Text(isEditing ? "Edit Transaction" : "Add Transaction"),
         actions: [
           if (isEditing)
             IconButton(
@@ -177,50 +178,52 @@ class _AddTransactionViewState extends State<AddTransactionView> {
             ),
             const SizedBox(height: 16),
 
-            // 4. Category Selector
+            // 4. Multiple Tag Selector
             if (tags.isEmpty)
               const Center(child: CircularProgressIndicator())
-            else
-              InputDecorator(
-                decoration: const InputDecoration(
-                  labelText: "Category",
-                  border: OutlineInputBorder(),
-                ),
-                child: DropdownButtonHideUnderline(
-                  child: DropdownButton<String>(
-                    value: _selectedTagId,
-                    isDense: true,
-                    onChanged: (String? newValue) {
+            else ...[
+              const Text(
+                "Categories (Select One or More)",
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+              ),
+              const SizedBox(height: 8),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: tags.map((Tag tag) {
+                  final isSelected = _selectedTagIds.contains(tag.id);
+                  return FilterChip(
+                    label: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          getIconForTag(tag.iconName ?? 'other'),
+                          size: 18,
+                          color: isSelected ? Colors.white : Color(tag.colorValue),
+                        ),
+                        const SizedBox(width: 6),
+                        Text(tag.name),
+                      ],
+                    ),
+                    selected: isSelected,
+                    onSelected: (selected) {
                       setState(() {
-                        _selectedTagId = newValue;
+                        if (selected) {
+                          _selectedTagIds.add(tag.id);
+                        } else {
+                          _selectedTagIds.remove(tag.id);
+                        }
                       });
                     },
-                    items: tags.map((Tag tag) {
-                      return DropdownMenuItem<String>(
-                        value: tag.id,
-                        child: Row(
-                          children: [
-                            Icon(
-                              tag.iconName == 'fastfood'
-                                  ? Icons.fastfood
-                                  : tag.iconName == 'directions_bus'
-                                  ? Icons.directions_bus
-                                  : tag.iconName == 'shopping_bag'
-                                  ? Icons.shopping_bag
-                                  : tag.iconName == 'attach_money'
-                                  ? Icons.attach_money
-                                  : Icons.label,
-                              color: Color(tag.colorValue),
-                            ),
-                            const SizedBox(width: 8),
-                            Text(tag.name),
-                          ],
-                        ),
-                      );
-                    }).toList(),
-                  ),
-                ),
+                    backgroundColor: Color(tag.colorValue).withAlpha(30),
+                    selectedColor: Color(tag.colorValue),
+                    labelStyle: TextStyle(
+                      color: isSelected ? Colors.white : Colors.black,
+                    ),
+                  );
+                }).toList(),
               ),
+            ],
 
             const SizedBox(height: 16),
             // Placeholder: Shared Expenses (Sprint 3)
@@ -253,7 +256,11 @@ class _AddTransactionViewState extends State<AddTransactionView> {
                         final amount = double.tryParse(rawAmount);
 
                         if (amount == null || amount <= 0) return;
-                        if (_selectedTagId == null) return;
+                        if (_selectedTagIds.isEmpty) return;
+
+                        final mainTagId = _selectedTagIds.first;
+                        final subTagIds =
+                            _selectedTagIds.where((id) => id != mainTagId).toList();
 
                         if (isEditing) {
                           // Update existing
@@ -262,7 +269,8 @@ class _AddTransactionViewState extends State<AddTransactionView> {
                             articleName: _isIncome ? 'Income' : 'Expense',
                             amount: amount,
                             date: _selectedDate,
-                            mainTagId: _selectedTagId!,
+                            mainTagId: mainTagId,
+                            subTagIds: subTagIds,
                             isIncome: _isIncome,
                             currencyCode: 'VND',
                           );
@@ -272,7 +280,8 @@ class _AddTransactionViewState extends State<AddTransactionView> {
                           await viewModel.addQuickExpenditure(
                             amount: amount,
                             isIncome: _isIncome,
-                            mainTagId: _selectedTagId!,
+                            mainTagId: mainTagId,
+                            subTagIds: subTagIds,
                             date: _selectedDate,
                           );
                         }

@@ -457,9 +457,18 @@ class _AddEditExpenditurePageState extends State<AddEditExpenditurePage> {
                       final isSelected =
                           _selectedMainTagId == tag.id ||
                           _selectedSubTagIds.contains(tag.id);
+                      final tagColor = Color(tag.colorValue);
                       return FilterChip(
-                        label: Text(tag.name),
-                        // avatar: TagIcon(tag: tag, radius: 10),
+                        label: Text(
+                          tag.name,
+                          style: TextStyle(
+                            color: isSelected ? Colors.white : Colors.black87,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        avatar: TagIcon(tag: tag, radius: 10),
+                        backgroundColor: tagColor.withValues(alpha: 0.2),
+                        selectedColor: tagColor.withValues(alpha: 0.7),
                         selected: isSelected,
                         onSelected: (selected) =>
                             _handleTagSelection(tag.id, selected),

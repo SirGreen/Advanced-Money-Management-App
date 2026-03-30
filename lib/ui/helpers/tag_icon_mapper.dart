@@ -1,13 +1,35 @@
 import 'package:flutter/material.dart';
 
 IconData getIconForTag(String iconName) {
-  switch (iconName) {
+  switch (iconName.toLowerCase()) {
+    // Main categories
+    case 'entertainment':
+      return Icons.movie;
+    case 'food':
+      return Icons.restaurant;
+    case 'income':
+      return Icons.trending_up;
+    case 'savings':
+      return Icons.savings;
+    case 'shopping':
+      return Icons.shopping_bag;
+    case 'transport':
+      return Icons.directions_car;
+    case 'other':
+      return Icons.category;
+    // Legacy icons for backward compatibility
+    case 'fastfood':
+      return Icons.restaurant;
+    case 'directions_bus':
+      return Icons.directions_car;
+    case 'shopping_bag':
+      return Icons.shopping_bag;
+    case 'attach_money':
+      return Icons.trending_up;
     case 'restaurant':
       return Icons.restaurant_menu;
     case 'commute':
       return Icons.commute;
-    case 'shopping_bag':
-      return Icons.shopping_bag_outlined;
     case 'sports_esports':
       return Icons.sports_esports_outlined;
     case 'house':
@@ -42,9 +64,7 @@ IconData getIconForTag(String iconName) {
       return Icons.lightbulb_outline;
     case 'construction':
       return Icons.construction;
-    case 'savings':
-      return Icons.savings_outlined;
     default:
-      return Icons.help_outline;
+      return Icons.category;
   }
 }
