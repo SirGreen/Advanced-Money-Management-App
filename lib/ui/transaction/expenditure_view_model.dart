@@ -80,6 +80,17 @@ class ExpenditureViewModel extends ChangeNotifier {
     return tags.firstWhereOrNull((tag) => tag.id == id);
   }
 
+  double getAllTimeMoneyLeft() {
+    double total = 0;
+    for (var exp in _normalExpenditures) {
+      total += (exp.isIncome ? 1 : -1) * (exp.amount ?? 0);
+    }
+    for (var exp in _recurringInstances) {
+      total += (exp.isIncome ? 1 : -1) * (exp.amount ?? 0);
+    }
+    return total;
+  }
+
   Future<void> addExpenditure(Expenditure expenditure) async {
     isLoading = true;
     notifyListeners();
@@ -99,6 +110,7 @@ class ExpenditureViewModel extends ChangeNotifier {
     required bool isIncome,
     required String mainTagId,
     DateTime? date,
+    String? notes,
   }) async {
     isLoading = true;
     notifyListeners();
@@ -112,6 +124,7 @@ class ExpenditureViewModel extends ChangeNotifier {
         mainTagId: mainTagId,
         isIncome: isIncome,
         currencyCode: 'VND', // Default
+        notes: notes,
       );
 
       await _repository.addExpenditure(newExpenditure);
