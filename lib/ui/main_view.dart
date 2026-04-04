@@ -12,7 +12,7 @@ import 'transaction/search_page.dart';
 import 'transaction/add_scheduled_expenditure_view.dart';
 import 'transaction/expenditure_list_view.dart';
 import 'transaction/transaction_list_view.dart';
-import 'transaction/scheduled_expenditure_list_view.dart';
+import 'transaction/reports_page.dart';
 import 'savings/saving_goal_list_view.dart';
 import 'savings/add_saving_goal_view.dart';
 
@@ -29,7 +29,7 @@ class _MainViewState extends State<MainView> {
   static const List<Widget> _widgetOptions = <Widget>[
     ExpenditureListView(),
     TransactionListView(),
-    ScheduledExpenditureListView(),
+    ReportsPage(),
     SavingGoalListView(),
     SettingsView(),
   ];
@@ -153,8 +153,8 @@ class _MainViewState extends State<MainView> {
                 label: l10n.transactionsSingle,
               ),
               BottomNavigationBarItem(
-                icon: const Icon(Icons.repeat),
-                activeIcon: const Icon(Icons.repeat_on),
+                icon: const Icon(Icons.bar_chart_outlined),
+                activeIcon: const Icon(Icons.bar_chart),
                 label: l10n.manageScheduled,
               ),
               BottomNavigationBarItem(

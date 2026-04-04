@@ -59,4 +59,11 @@ class SettingsViewModel extends ChangeNotifier {
     await saveSettings(updatedSettings);
     _settings = updatedSettings;
   }
-}
+
+  Future<void> updatePrimaryCurrency(String currencyCode) async {
+    if (_settings == null) return;
+
+    final updatedSettings = _settings!.copyWith(primaryCurrencyCode: currencyCode);
+    await saveSettings(updatedSettings);
+    _settings = updatedSettings;
+  }}

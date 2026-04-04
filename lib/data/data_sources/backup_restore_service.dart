@@ -225,10 +225,10 @@ class BackupRestoreService {
           fixedIntervalDays: settingsData['fixedIntervalDays'] as int? ?? 7,
           languageCode: settingsData['languageCode'],
           paginationLimit: settingsData['paginationLimit'] as int? ?? 50,
-          primaryCurrencyCode: settingsData['primaryCurrencyCode'] ?? 'JPY',
+          primaryCurrencyCode: settingsData['primaryCurrencyCode'] ?? 'VND',
           converterFromCurrency:
               settingsData['converterFromCurrency'] ?? 'USD',
-          converterToCurrency: settingsData['converterToCurrency'] ?? 'JPY',
+          converterToCurrency: settingsData['converterToCurrency'] ?? 'VND',
           remindersEnabled:
               settingsData['remindersEnabled'] as bool? ?? false,
           lastBackupDate: settingsData['lastBackupDate'] != null
