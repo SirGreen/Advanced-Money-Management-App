@@ -56,11 +56,27 @@ class NotificationService {
         );
 
     await _notificationsPlugin.initialize(
-      settings: initializationSettings, // Fixed: Named parameter 'settings'
+      settings: initializationSettings,
       onDidReceiveNotificationResponse: (NotificationResponse details) {
         // Handle notification tap
       },
     );
+
+    // Create Notification Channel for Android 8.0+
+    if (Platform.isAndroid) {
+      final androidPlugin = _notificationsPlugin
+          .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin
+          >();
+      await androidPlugin?.createNotificationChannel(
+        const AndroidNotificationChannel(
+          'recurring_transaction_channel',
+          'Recurring Transactions',
+          description: 'Reminders for upcoming recurring transactions',
+          importance: Importance.max,
+        ),
+      );
+    }
   }
 
   Future<bool> requestPermissions() async {

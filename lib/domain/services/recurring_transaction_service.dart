@@ -36,6 +36,9 @@ class RecurringTransactionService {
 
       // Schedule only if in future
       if (reminderDate.isAfter(now)) {
+        // Must request permission before scheduling (critical for Android 13+ & iOS)
+        await _notificationService.requestPermissions();
+
         await _notificationService.scheduleReminder(
           id: rule.participantId, // We need an int ID. hashCode?
           title: "Recurring Transaction Reminder",
