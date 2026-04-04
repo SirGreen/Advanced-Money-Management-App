@@ -20,10 +20,18 @@ class BackGround extends StatelessWidget {
 
     return Stack(
       children: [
-        const Placeholder(
-          fallbackHeight: double.infinity,
-          fallbackWidth: double.infinity,
-          color: Colors.blueGrey,
+        Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                const Color.fromARGB(255, 158, 210, 159).withValues(alpha: 0.3),
+                const Color.fromARGB(255, 210, 238, 212).withValues(alpha: 0.3),
+                Colors.lightBlue.shade100.withValues(alpha: 0.2),
+              ],
+            ),
+          ),
         ),
         SafeArea(child: child),
       ],
