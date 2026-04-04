@@ -1,12 +1,17 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
-
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:animations/animations.dart';
+import 'helpers/shared_axis_page_route.dart';
 import 'sections/camera_scanner_page.dart';
 
+import '../l10n/app_localizations.dart';
 import 'settings/settings_view.dart';
 import 'transaction/add_transaction_view.dart';
 import 'transaction/search_page.dart';
 import 'transaction/add_scheduled_expenditure_view.dart';
 import 'transaction/expenditure_list_view.dart';
+import 'transaction/transaction_list_view.dart';
 import 'transaction/scheduled_expenditure_list_view.dart';
 import 'savings/saving_goal_list_view.dart';
 import 'savings/add_saving_goal_view.dart';
@@ -23,6 +28,7 @@ class _MainViewState extends State<MainView> {
 
   static const List<Widget> _widgetOptions = <Widget>[
     ExpenditureListView(),
+    TransactionListView(),
     ScheduledExpenditureListView(),
     SavingGoalListView(),
     SettingsView(),
@@ -34,78 +40,140 @@ class _MainViewState extends State<MainView> {
     });
   }
 
+  Widget _buildFloatingActionButton(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    // SpeedDial FAB for Dashboard (tab 0) and Transactions (tab 1)
+    if (_selectedIndex == 0 || _selectedIndex == 1) {
+      return SpeedDial(
+        icon: Icons.add,
+        activeIcon: Icons.close,
+        spacing: 3,
+        backgroundColor: Colors.teal.shade600,
+        foregroundColor: Colors.white,
+        activeBackgroundColor: Colors.teal.shade800,
+        tooltip: l10n.addTransaction,
+        children: [
+          SpeedDialChild(
+            child: const Icon(Icons.camera_alt_outlined),
+            backgroundColor: Colors.teal.shade500,
+            foregroundColor: Colors.white,
+            label: l10n.scanReceipt,
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => const CameraScannerPage()),
+            ),
+          ),
+          SpeedDialChild(
+            child: const Icon(Icons.edit),
+            backgroundColor: Colors.teal.shade500,
+            foregroundColor: Colors.white,
+            label: l10n.addManually,
+            onTap: () => Navigator.of(context).push(
+              SharedAxisPageRoute(
+                page: const AddTransactionView(),
+                transitionType: SharedAxisTransitionType.scaled,
+              ),
+            ),
+          ),
+        ],
+      );
+    }
+
+    return FloatingActionButton(
+      backgroundColor: Colors.teal.shade600,
+      foregroundColor: Colors.white,
+      onPressed: () {
+        if (_selectedIndex == 2) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const AddScheduledExpenditureView(),
+            ),
+          );
+        } else if (_selectedIndex == 3) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const AddSavingGoalView()),
+          );
+        } else {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const AddTransactionView()),
+          );
+        }
+      },
+      child: const Icon(Icons.add),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Money Manager'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.search),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const SearchPage()),
-              );
-            },
-          ),
-        ],
-      ),
+      appBar: _selectedIndex == 0 || _selectedIndex == 4
+          ? AppBar(
+              title: Text(_selectedIndex == 0 ? 'Dashboard' : 'Settings'),
+              actions: [
+                if (_selectedIndex == 0)
+                  IconButton(
+                    icon: const Icon(Icons.search),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const SearchPage(),
+                        ),
+                      );
+                    },
+                  ),
+              ],
+            )
+          : null,
       body: Center(child: _widgetOptions.elementAt(_selectedIndex)),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          if (_selectedIndex == 0) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const CameraScannerPage(),
+      floatingActionButton: _buildFloatingActionButton(context),
+      bottomNavigationBar: ClipRRect(
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(24.0),
+          topRight: Radius.circular(24.0),
+        ),
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+          child: BottomNavigationBar(
+            type: BottomNavigationBarType.fixed,
+            backgroundColor: Colors.white.withValues(alpha: 0.2),
+            elevation: 0,
+            items: <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                icon: const Icon(Icons.dashboard_outlined),
+                activeIcon: const Icon(Icons.dashboard),
+                label: l10n.dashboard,
               ),
-            );
-          } else if (_selectedIndex == 1) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const AddScheduledExpenditureView(),
+              BottomNavigationBarItem(
+                icon: const Icon(Icons.receipt_long_outlined),
+                activeIcon: const Icon(Icons.receipt_long),
+                label: l10n.transactionsSingle,
               ),
-            );
-          } else if (_selectedIndex == 2) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const AddSavingGoalView(),
+              BottomNavigationBarItem(
+                icon: const Icon(Icons.repeat),
+                activeIcon: const Icon(Icons.repeat_on),
+                label: l10n.manageScheduled,
               ),
-            );
-          } else {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const AddTransactionView(),
+              BottomNavigationBarItem(
+                icon: const Icon(Icons.savings_outlined),
+                activeIcon: const Icon(Icons.savings),
+                label: l10n.savings,
               ),
-            );
-          }
-        },
-        child: Icon(_selectedIndex == 0 ? Icons.camera_alt : Icons.add),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.dashboard),
-            label: 'Dashboard',
+              BottomNavigationBarItem(
+                icon: const Icon(Icons.settings_outlined),
+                activeIcon: const Icon(Icons.settings),
+                label: l10n.settings,
+              ),
+            ],
+            currentIndex: _selectedIndex,
+            selectedItemColor: Colors.teal.shade700,
+            unselectedItemColor: Colors.grey[600],
+            onTap: _onItemTapped,
           ),
-          BottomNavigationBarItem(icon: Icon(Icons.repeat), label: 'Recurring'),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.savings),
-            label: 'Savings',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Settings',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.deepPurple,
-        unselectedItemColor: Colors.grey[700],
-        onTap: _onItemTapped,
+        ),
       ),
     );
   }
