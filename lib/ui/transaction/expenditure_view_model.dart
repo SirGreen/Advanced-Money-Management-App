@@ -37,7 +37,6 @@ class ExpenditureViewModel extends ChangeNotifier {
     required ExpenditureRepository repository,
     required TagRepository tagRepository,
     required SettingsRepository settingsRepository,
-
     required ScanReceiptUseCase scanReceiptUseCase,
   }) : _repository = repository,
        _tagRepository = tagRepository,
@@ -76,8 +75,6 @@ class ExpenditureViewModel extends ChangeNotifier {
     }
   }
 
-<<<<<<< Updated upstream
-=======
   Future<void> _loadTags() async {
     tags = await _tagRepository.getAllTags();
 
@@ -157,7 +154,6 @@ class ExpenditureViewModel extends ChangeNotifier {
     }
   }
 
->>>>>>> Stashed changes
   Tag? getTagById(String id) {
     return tags.firstWhereOrNull((tag) => tag.id == id);
   }

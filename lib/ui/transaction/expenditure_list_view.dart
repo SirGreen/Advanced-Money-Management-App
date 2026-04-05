@@ -45,7 +45,6 @@ class ExpenditureListView extends StatelessWidget {
                           builder: (context) =>
                               AddTransactionView(expenditure: expenditure),
                         ),
-<<<<<<< Updated upstream
                       );
                     },
                     // Long Press to Delete
@@ -73,61 +72,13 @@ class ExpenditureListView extends StatelessWidget {
                               ),
                             ),
                           ],
-=======
-                      ),
-                    ],
-                  ),
-                );
-              },
-              leading: CircleAvatar(
-                backgroundColor: Color(tag.colorValue).withValues(alpha: 0.2),
-                child: Icon(
-                  getIconForTag(tag.iconName ?? 'other'),
-                  color: Color(tag.colorValue),
-                ),
-              ),
-              title: Text(tag.name),
-              subtitle: Text(
-                DateFormat.yMMMd('vi_VN').format(expenditure.date),
-              ),
-              trailing: Consumer<SettingsViewModel>(
-                builder: (context, settingsViewModel, _) {
-                  final formattedAmount =
-                      '${expenditure.isIncome ? '+' : '-'}${NumberFormat.currency(locale: 'vi_VN', symbol: '₫', decimalDigits: 0).format(expenditure.amount ?? 0)}';
-                  final displayAmount =
-                      settingsViewModel.settings.privacyModeEnabled
-                      ? PrivacyModeService.maskSymbol
-                      : formattedAmount;
-
-                  return Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        displayAmount,
-                        style: TextStyle(
-                          color: expenditure.isIncome
-                              ? Colors.green
-                              : Colors.red,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
->>>>>>> Stashed changes
                         ),
                       );
                     },
                     leading: CircleAvatar(
-                      backgroundColor: Color(
-                        tag.colorValue,
-                      ).withValues(alpha: 0.2),
+                      backgroundColor: Color(tag.colorValue).withValues(alpha: 0.2),
                       child: Icon(
-                        tag.iconName == 'fastfood'
-                            ? Icons.fastfood
-                            : tag.iconName == 'directions_bus'
-                            ? Icons.directions_bus
-                            : tag.iconName == 'shopping_bag'
-                            ? Icons.shopping_bag
-                            : tag.iconName == 'attach_money'
-                            ? Icons.attach_money
-                            : Icons.label,
+                        getIconForTag(tag.iconName ?? 'other'),
                         color: Color(tag.colorValue),
                       ),
                     ),
@@ -141,8 +92,8 @@ class ExpenditureListView extends StatelessWidget {
                             '${expenditure.isIncome ? '+' : '-'}${NumberFormat.currency(locale: 'vi_VN', symbol: '₫', decimalDigits: 0).format(expenditure.amount ?? 0)}';
                         final displayAmount =
                             settingsViewModel.settings.privacyModeEnabled
-                            ? PrivacyModeService.maskSymbol
-                            : formattedAmount;
+                                ? PrivacyModeService.maskSymbol
+                                : formattedAmount;
 
                         return Row(
                           mainAxisSize: MainAxisSize.min,
