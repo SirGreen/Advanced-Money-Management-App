@@ -6,6 +6,7 @@ import 'package:local_auth_darwin/local_auth_darwin.dart';
 
 import '../../l10n/app_localizations.dart';
 import '../tags/manage_tags_page.dart';
+import '../helpers/currency_picker_sheet.dart';
 import 'backup_restore_page.dart';
 import 'privacy_mode_page.dart';
 import 'settings_view_model.dart';
@@ -152,6 +153,9 @@ class SettingsView extends StatelessWidget {
       appBar: AppBar(title: Text(l10n.settings)),
       body: Consumer<SettingsViewModel>(
         builder: (context, viewModel, _) {
+          final privacyMode = viewModel.settings.privacyModeEnabled;
+          final currencyCode = viewModel.settings.primaryCurrencyCode;
+
           return ListView(
             padding: const EdgeInsets.all(12),
             children: [
@@ -165,6 +169,28 @@ class SettingsView extends StatelessWidget {
                     _buildSecuritySettings(context, viewModel, l10n),
                   ],
                 ),
+              ),
+              ListTile(
+                leading: const Icon(Icons.money),
+                title: const Text('Primary Currency'),
+                subtitle: Text(currencyCode),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () async {
+                  final selectedCurrency = await showModalBottomSheet<String>(
+                    context: context,
+                    builder: (_) => CurrencyPickerSheet(
+                      supportedCurrencies: const [
+                        'VND', 'USD', 'EUR', 'JPY', 'GBP', 'CNY',
+                        'AUD', 'CAD', 'CHF', 'HKD', 'SGD', 'INR',
+                        'KRW', 'THB', 'PHP', 'MYR', 'BRL', 'ZAR', 'RUB'
+                      ],
+                      title: 'Select Currency',
+                    ),
+                  );
+                  if (selectedCurrency != null) {
+                    viewModel.updatePrimaryCurrency(selectedCurrency);
+                  }
+                },
               ),
               ListTile(
                 leading: const Icon(Icons.category),

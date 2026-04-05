@@ -10,14 +10,16 @@ class BackGround extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage('assets/appBackgroundImg.jpg'),
+    return Stack(
+      children: [
+        Image.asset(
+          'assets/appBackgroundImg.jpg',
           fit: BoxFit.cover,
+          width: double.infinity,
+          height: double.infinity,
         ),
-      ),
-      child: child,
+        child,
+      ],
     );
   }
 }

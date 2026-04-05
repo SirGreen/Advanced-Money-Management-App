@@ -24,7 +24,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings => 'Settings';
 
   @override
-  String get manageScheduled => 'Manage Scheduled';
+  String get manageScheduled => 'Reports';
 
   @override
   String get addTransaction => 'Add Transaction';
@@ -721,7 +721,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get assets => 'Assets';
 
   @override
-  String get savings => 'Savings';
+  String get savings => 'Assets';
 
   @override
   String get investments => 'Investments';

@@ -24,7 +24,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get settings => '設定';
 
   @override
-  String get manageScheduled => '自動支出の管理';
+  String get manageScheduled => 'レポート';
 
   @override
   String get addTransaction => '取引を追加';
@@ -721,7 +721,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get assets => '資産';
 
   @override
-  String get savings => '貯金';
+  String get savings => '資産';
 
   @override
   String get investments => '投資';

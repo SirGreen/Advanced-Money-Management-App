@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:adv_money_mana/domain/repositories/settings_repository.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 import 'package:collection/collection.dart';
@@ -158,6 +159,17 @@ class ExpenditureViewModel extends ChangeNotifier {
     return tags.firstWhereOrNull((tag) => tag.id == id);
   }
 
+  double getAllTimeMoneyLeft() {
+    double total = 0;
+    for (var exp in _normalExpenditures) {
+      total += (exp.isIncome ? 1 : -1) * (exp.amount ?? 0);
+    }
+    for (var exp in _recurringInstances) {
+      total += (exp.isIncome ? 1 : -1) * (exp.amount ?? 0);
+    }
+    return total;
+  }
+
   Future<void> addExpenditure(Expenditure expenditure) async {
     isLoading = true;
     notifyListeners();
@@ -178,6 +190,7 @@ class ExpenditureViewModel extends ChangeNotifier {
     required String mainTagId,
     List<String> subTagIds = const [],
     DateTime? date,
+    String? notes,
   }) async {
     isLoading = true;
     notifyListeners();
@@ -192,6 +205,7 @@ class ExpenditureViewModel extends ChangeNotifier {
         subTagIds: subTagIds,
         isIncome: isIncome,
         currencyCode: 'VND', // Default
+        notes: notes,
       );
 
       await _repository.addExpenditure(newExpenditure);
@@ -489,6 +503,135 @@ class ExpenditureViewModel extends ChangeNotifier {
       debugPrint("Error during budget analysis for tag '${tag.name}': $e");
       return null;
     }
+  }
+
+  Future<ReportData> getReportData(DateTimeRange dateRange) async {
+    // Filter expenditures in date range
+    final transactionsInPeriod = _normalExpenditures
+        .where((exp) {
+          final expDate = exp.date;
+          return expDate.isAfter(dateRange.start.subtract(const Duration(days: 1))) &&
+              expDate.isBefore(dateRange.end.add(const Duration(days: 1)));
+        })
+        .toList();
+
+    // Add recurring instances too
+    transactionsInPeriod.addAll(
+      _recurringInstances.where((exp) {
+        final expDate = exp.date;
+        return expDate.isAfter(dateRange.start.subtract(const Duration(days: 1))) &&
+            expDate.isBefore(dateRange.end.add(const Duration(days: 1)));
+      }),
+    );
+
+    // Group by tag for income and expenses
+    final Map<Tag, TagReportData> incomeByTag = {};
+    final Map<Tag, TagReportData> expenseByTag = {};
+
+    double totalIncome = 0;
+    double totalExpense = 0;
+
+    for (final exp in transactionsInPeriod) {
+      final tag = getTagById(exp.mainTagId);
+      if (tag == null) continue;
+
+      final amount = exp.amount ?? 0;
+
+      if (exp.isIncome) {
+        totalIncome += amount;
+        if (incomeByTag.containsKey(tag)) {
+          incomeByTag[tag]!.totalAmount += amount;
+          incomeByTag[tag]!.transactionCount += 1;
+        } else {
+          incomeByTag[tag] = TagReportData(
+            totalAmount: amount,
+            transactionCount: 1,
+          );
+        }
+      } else {
+        totalExpense += amount;
+        if (expenseByTag.containsKey(tag)) {
+          expenseByTag[tag]!.totalAmount += amount;
+          expenseByTag[tag]!.transactionCount += 1;
+        } else {
+          expenseByTag[tag] = TagReportData(
+            totalAmount: amount,
+            transactionCount: 1,
+          );
+        }
+      }
+    }
+
+    // Calculate line chart data
+    final LineChartReportData? lineChartData = _computeLineChartData(
+      transactionsInPeriod,
+      dateRange,
+    );
+
+    return ReportData(
+      totalIncome: totalIncome,
+      totalExpense: totalExpense,
+      incomeByTag: incomeByTag,
+      expenseByTag: expenseByTag,
+      lineChartData: lineChartData,
+    );
+  }
+
+  LineChartReportData? _computeLineChartData(
+    List<Expenditure> transactions,
+    DateTimeRange dateRange,
+  ) {
+    if (transactions.isEmpty) return null;
+
+    final Map<DateTime, double> incomeByDay = {};
+    final Map<DateTime, double> expenseByDay = {};
+
+    // Initialize all days in range
+    DateTime current = DateTime(dateRange.start.year, dateRange.start.month, dateRange.start.day);
+    final end = DateTime(dateRange.end.year, dateRange.end.month, dateRange.end.day);
+    while (current.isBefore(end.add(const Duration(days: 1)))) {
+      incomeByDay[current] = 0;
+      expenseByDay[current] = 0;
+      current = current.add(const Duration(days: 1));
+    }
+
+    // Aggregate by day
+    for (final exp in transactions) {
+      final dayKey = DateTime(exp.date.year, exp.date.month, exp.date.day);
+      if (exp.isIncome) {
+        incomeByDay[dayKey] = (incomeByDay[dayKey] ?? 0) + (exp.amount ?? 0);
+      } else {
+        expenseByDay[dayKey] = (expenseByDay[dayKey] ?? 0) + (exp.amount ?? 0);
+      }
+    }
+
+    // Convert to sorted lists
+    final sortedDays = incomeByDay.keys.toList()..sort();
+    if (sortedDays.isEmpty) return null;
+
+    // Create FlSpots
+    final incomeSpots = <FlSpot>[];
+    final expenseSpots = <FlSpot>[];
+
+    for (int i = 0; i < sortedDays.length; i++) {
+      final day = sortedDays[i];
+      incomeSpots.add(FlSpot(i.toDouble(), incomeByDay[day] ?? 0));
+      expenseSpots.add(FlSpot(i.toDouble(), expenseByDay[day] ?? 0));
+    }
+
+    double maxY = 0;
+    for (final spot in [...incomeSpots, ...expenseSpots]) {
+      if (spot.y > maxY) maxY = spot.y;
+    }
+    maxY = maxY * 1.1; // Add 10% padding
+
+    return LineChartReportData(
+      incomeSpots: incomeSpots,
+      expenseSpots: expenseSpots,
+      minX: 0,
+      maxX: (sortedDays.length - 1).toDouble(),
+      maxY: maxY,
+    );
   }
 
   Future<Map<String, dynamic>?> analyzeFullReport(

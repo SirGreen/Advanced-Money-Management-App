@@ -24,7 +24,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get settings => 'Cài đặt';
 
   @override
-  String get manageScheduled => 'Quản lý chi tiêu định kỳ';
+  String get manageScheduled => 'Báo cáo';
 
   @override
   String get addTransaction => 'Thêm';
@@ -721,7 +721,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get assets => 'Tài sản';
 
   @override
-  String get savings => 'Tiết kiệm';
+  String get savings => 'Tài sản';
 
   @override
   String get investments => 'Đầu tư';

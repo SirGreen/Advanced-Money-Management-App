@@ -34,8 +34,28 @@ class TagIcon extends StatelessWidget {
           }
 
           if (tag.iconName != null) {
+            IconData iconToDisplay;
+            switch (tag.iconName) {
+              case 'fastfood':
+                iconToDisplay = Icons.fastfood;
+                break;
+              case 'directions_car':
+                iconToDisplay = Icons.directions_car;
+                break;
+              case 'directions_bus':
+                iconToDisplay = Icons.directions_bus;
+                break;
+              case 'shopping_bag':
+                iconToDisplay = Icons.shopping_bag;
+                break;
+              case 'attach_money':
+                iconToDisplay = Icons.attach_money;
+                break;
+              default:
+                iconToDisplay = getIconForTag(tag.iconName!);
+            }
             return Icon(
-              getIconForTag(tag.iconName!),
+              iconToDisplay,
               color: Color(tag.colorValue),
               size: radius,
             );
