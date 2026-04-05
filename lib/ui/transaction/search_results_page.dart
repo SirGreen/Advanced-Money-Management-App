@@ -10,6 +10,7 @@ import '../../domain/entities/tag.dart';
 import 'add_transaction_view.dart';
 import '../helpers/gradient_background.dart';
 import '../helpers/gradient_title.dart';
+import '../helpers/tag_icon_mapper.dart';
 // Note: GlassCardContainer isn't defined explicitly in snippets, so we'll just use a styled Card/Container
 // to match the app's glassy aesthetic if needed, or stick to default Material Card for the list.
 
@@ -238,15 +239,7 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                                 tag.colorValue,
                               ).withValues(alpha: 0.2),
                               child: Icon(
-                                tag.iconName == 'fastfood'
-                                    ? Icons.fastfood
-                                    : tag.iconName == 'directions_bus'
-                                    ? Icons.directions_bus
-                                    : tag.iconName == 'shopping_bag'
-                                    ? Icons.shopping_bag
-                                    : tag.iconName == 'attach_money'
-                                    ? Icons.attach_money
-                                    : Icons.label,
+                                getIconForTag(tag.iconName ?? 'other'),
                                 color: Color(tag.colorValue),
                               ),
                             ),

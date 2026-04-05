@@ -7,6 +7,7 @@ import '../transaction/expenditure_view_model.dart'; // For tags
 import '../../domain/entities/scheduled_expenditure.dart';
 import '../../domain/services/recurring_transaction_service.dart'; // Import this
 import '../helpers/currency_input_formatter.dart';
+import '../helpers/tag_icon_mapper.dart';
 
 class AddScheduledExpenditureView extends StatefulWidget {
   final ScheduledExpenditure? scheduledExpenditure;
@@ -25,7 +26,7 @@ class _AddScheduledExpenditureViewState
   final _scheduleValueController = TextEditingController(text: '1');
 
   bool _isIncome = false;
-  String? _selectedTagId;
+  Set<String> _selectedTagIds = {};
   ScheduleType _scheduleType = ScheduleType.dayOfMonth;
   DateTime _startDate = DateTime.now();
   int? _reminderDaysBefore;
@@ -42,7 +43,7 @@ class _AddScheduledExpenditureViewState
         'vi_VN',
       ).format(e.amount);
       _isIncome = e.isIncome;
-      _selectedTagId = e.mainTagId;
+      _selectedTagIds = {e.mainTagId, ...e.subTagIds};
       _startDate = e.startDate;
       _scheduleType = e.scheduleType;
       _scheduleValueController.text = e.scheduleValue.toString();
@@ -152,49 +153,61 @@ class _AddScheduledExpenditureViewState
             const SizedBox(height: 16),
 
             // Tag
-            DropdownButtonFormField<String>(
-              // value: _selectedTagId, // Remove deprecated
-              initialValue:
-                  _selectedTagId, // Wait, value IS correct for state-controlled.
-              // Actually, the warning says: 'value' is deprecated and shouldn't be used. Use initialValue instead.
-              // IF it's a FormField that maintains its own state.
-              // But here we are using setState to update _selectedTagId.
-              // So 'value' IS correct for a controlled input.
-              // However, the lint says otherwise. Let's try to trust the lint OR
-              // check if we can switch to standard DropdownButton if we manage state manually.
-              // But wait, DropdownButtonFormField is useful for validation.
-
-              // Let's re-read the lint: "'value' is deprecated... This feature was deprecated after v3.33.0-1.0.pre."
-              // In newer Flutter, DropdownButtonFormField STILL has 'value'.
-              // This might be a very new deprecation or a specific package issue.
-              // Let's safe fix: If the user says it's deprecated, let's look at the docs or assume it wants us to use `initialValue` and NOT update it via `value` prop continuously?
-              // But if we use `initialValue`, `setState` won't update the widget if the variable changes externally?
-              // Actually, standard pattern is `value`.
-              // Maybe the issue is we are mixing FormField features?
-
-              // Let's look at the code again.
-              // value: _selectedTagId
-              // onChanged: (v) => setState(...)
-
-              // If I change to initialValue: _selectedTagId, it won't react to changes?
-              // Let's assume the lint is strict. I will try to ignore it or if I MUST fix it.
-
-              // Actually, I'll fix the Compilation Error first. The lint is "Info" severity.
-              // I will IGNORE the lint for now to prioritize the compilation error.
-              // The user specifically pointed it out though.
-
-              // Let's try to just fix the logic error first.
-              decoration: const InputDecoration(
-                labelText: "Category",
-                border: OutlineInputBorder(),
-              ),
-              items: tags
-                  .map(
-                    (t) => DropdownMenuItem(value: t.id, child: Text(t.name)),
-                  )
-                  .toList(),
-              onChanged: (v) => setState(() => _selectedTagId = v),
-              validator: (v) => v == null ? "Required" : null,
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  "Categories (Select One or More)",
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                ),
+                const SizedBox(height: 8),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: tags.map((tag) {
+                    final isSelected = _selectedTagIds.contains(tag.id);
+                    return FilterChip(
+                      label: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            getIconForTag(tag.iconName ?? 'other'),
+                            size: 18,
+                            color: isSelected
+                                ? Colors.white
+                                : Color(tag.colorValue),
+                          ),
+                          const SizedBox(width: 6),
+                          Text(tag.name),
+                        ],
+                      ),
+                      selected: isSelected,
+                      onSelected: (selected) {
+                        setState(() {
+                          if (selected) {
+                            _selectedTagIds.add(tag.id);
+                          } else {
+                            _selectedTagIds.remove(tag.id);
+                          }
+                        });
+                      },
+                      backgroundColor: Color(tag.colorValue).withAlpha(30),
+                      selectedColor: Color(tag.colorValue),
+                      labelStyle: TextStyle(
+                        color: isSelected ? Colors.white : Colors.black,
+                      ),
+                    );
+                  }).toList(),
+                ),
+                if (_selectedTagIds.isEmpty)
+                  const Padding(
+                    padding: EdgeInsets.only(top: 8.0),
+                    child: Text(
+                      "Please select at least one category",
+                      style: TextStyle(color: Colors.red, fontSize: 12),
+                    ),
+                  ),
+              ],
             ),
             const SizedBox(height: 16),
 
@@ -279,6 +292,13 @@ class _AddScheduledExpenditureViewState
   }
 
   void _save(BuildContext context) async {
+    if (_selectedTagIds.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Please select at least one category")),
+      );
+      return;
+    }
+
     final viewModel = Provider.of<ScheduledExpenditureViewModel>(
       context,
       listen: false,
@@ -288,12 +308,16 @@ class _AddScheduledExpenditureViewState
         .replaceAll(',', '');
     final amount = double.parse(rawAmount);
 
+    final mainTagId = _selectedTagIds.first;
+    final subTagIds =
+        _selectedTagIds.where((id) => id != mainTagId).toList();
+
     final item = ScheduledExpenditure(
       id: isEditing ? widget.scheduledExpenditure!.id : const Uuid().v4(),
       name: _nameController.text,
       amount: amount,
-      mainTagId: _selectedTagId!,
-      subTagIds: [],
+      mainTagId: mainTagId,
+      subTagIds: subTagIds,
       scheduleType: _scheduleType,
       scheduleValue: int.parse(_scheduleValueController.text),
       startDate: _startDate,
