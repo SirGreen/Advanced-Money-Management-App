@@ -43,6 +43,7 @@ class _AddTransactionViewState extends State<AddTransactionView> {
   String? _receiptPath;
   String _selectedCurrency = 'VND';
   late bool isEditing;
+  bool _isInitialized = false;
 
   // AI Tag recommendations
   List<Object> _recommendedTags = [];
@@ -63,12 +64,7 @@ class _AddTransactionViewState extends State<AddTransactionView> {
     _selectedCurrency = e?.currencyCode ?? settingsViewModel.settings.primaryCurrencyCode;
 
     if (isEditing) {
-      _amountController.text = NumberFormat.currency(
-        locale: Localizations.localeOf(context).toString(),
-        symbol: NumberFormat.simpleCurrency(name: e!.currencyCode).currencySymbol,
-        decimalDigits: e.currencyCode == 'JPY' || e.currencyCode == 'VND' ? 0 : 2,
-      ).format(e.amount);
-      _notesController.text = e.notes ?? '';
+      _notesController.text = e!.notes ?? '';
       _isIncome = e.isIncome;
       _selectedMainTagId = e.mainTagId;
       _selectedSubTagIds = List.from(e.subTagIds);
@@ -76,6 +72,24 @@ class _AddTransactionViewState extends State<AddTransactionView> {
       _receiptPath = e.receiptImagePath;
     }
     _amountController.addListener(_updateAmountSuggestions);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    if (!_isInitialized) {
+      if (isEditing && widget.expenditure != null) {
+        final e = widget.expenditure!;
+
+        _amountController.text = NumberFormat.currency(
+          locale: Localizations.localeOf(context).toString(),
+          symbol: NumberFormat.simpleCurrency(name: e.currencyCode).currencySymbol,
+          decimalDigits: e.currencyCode == 'JPY' || e.currencyCode == 'VND' ? 0 : 2,
+        ).format(e.amount);
+      }
+      _isInitialized = true;
+    }
   }
 
   void _updateAmountSuggestions() {

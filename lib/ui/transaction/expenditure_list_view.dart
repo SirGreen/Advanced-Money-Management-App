@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'expenditure_view_model.dart';
-import 'add_transaction_view.dart'; // Import AddTransactionView
+import 'add_transaction_view.dart';
 import '../../domain/entities/tag.dart';
 import '../settings/settings_view_model.dart';
 import '../../data/services/privacy_mode_service.dart';
