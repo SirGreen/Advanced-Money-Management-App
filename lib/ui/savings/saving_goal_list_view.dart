@@ -118,7 +118,7 @@ class _SavingGoalListViewState extends State<SavingGoalListView> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => TagDetailPage(tag: tag),
+                      builder: (context) => TagDetailPage(tagId: tag.id),
                     ),
                   );
                 },

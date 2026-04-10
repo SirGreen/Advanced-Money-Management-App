@@ -26,7 +26,7 @@ class ManageTagsPage extends StatelessWidget {
                 ),
                 onTap: () => Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (_) => TagDetailPage(tag: t)),
+                  MaterialPageRoute(builder: (_) => TagDetailPage(tagId: t.id)),
                 ),
               ),
             )
