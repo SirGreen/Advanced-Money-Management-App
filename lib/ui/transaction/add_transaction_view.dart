@@ -8,6 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 
+import '../settings/settings_view_model.dart';
 import 'expenditure_view_model.dart';
 import '../../domain/entities/expenditure.dart';
 import '../../domain/entities/tag.dart';
@@ -57,17 +58,22 @@ class _AddTransactionViewState extends State<AddTransactionView> {
     isEditing = widget.expenditure != null;
     final e = widget.expenditure;
     _nameController = TextEditingController(text: e?.articleName ?? '');
+    
+    final settingsViewModel = Provider.of<SettingsViewModel>(context, listen: false);
+    _selectedCurrency = e?.currencyCode ?? settingsViewModel.settings.primaryCurrencyCode;
+
     if (isEditing) {
-      _amountController.text = NumberFormat.decimalPattern(
-        'vi_VN',
-      ).format(e!.amount);
+      _amountController.text = NumberFormat.currency(
+        locale: Localizations.localeOf(context).toString(),
+        symbol: NumberFormat.simpleCurrency(name: e!.currencyCode).currencySymbol,
+        decimalDigits: e.currencyCode == 'JPY' || e.currencyCode == 'VND' ? 0 : 2,
+      ).format(e.amount);
       _notesController.text = e.notes ?? '';
       _isIncome = e.isIncome;
       _selectedMainTagId = e.mainTagId;
       _selectedSubTagIds = List.from(e.subTagIds);
       _selectedDate = e.date;
       _receiptPath = e.receiptImagePath;
-      _selectedCurrency = e.currencyCode;
     }
     _amountController.addListener(_updateAmountSuggestions);
   }
@@ -97,8 +103,15 @@ class _AddTransactionViewState extends State<AddTransactionView> {
   void _applyAmountSuggestion(String suggestion) {
     final number = double.tryParse(suggestion);
     if (number != null) {
-      final formatted = NumberFormat.decimalPattern('vi_VN').format(number);
-      _amountController.text = formatted;
+      final currencySymbol = NumberFormat.simpleCurrency(
+      name: _selectedCurrency,
+    ).currencySymbol;
+    final formatted = NumberFormat.currency(
+      locale: Localizations.localeOf(context).toString(),
+      symbol: currencySymbol,
+      decimalDigits: _selectedCurrency == 'JPY' || _selectedCurrency == 'VND' ? 0 : 2,
+    ).format(number);
+    _amountController.text = formatted;
       _amountController.selection = TextSelection.fromPosition(
         TextPosition(offset: _amountController.text.length),
       );
@@ -247,7 +260,14 @@ class _AddTransactionViewState extends State<AddTransactionView> {
       return;
     }
 
-    final formatted = NumberFormat.decimalPattern('vi_VN').format(newTotal);
+    final currencySymbol = NumberFormat.simpleCurrency(
+      name: _selectedCurrency,
+    ).currencySymbol;
+    final formatted = NumberFormat.currency(
+      locale: Localizations.localeOf(context).toString(),
+      symbol: currencySymbol,
+      decimalDigits: _selectedCurrency == 'JPY' || _selectedCurrency == 'VND' ? 0 : 2,
+    ).format(newTotal);
     setState(() {
       _amountController.text = formatted;
       _adjustAmountController.clear();
@@ -355,10 +375,15 @@ class _AddTransactionViewState extends State<AddTransactionView> {
             controller: _amountController,
             textAlign: TextAlign.center,
             keyboardType: const TextInputType.numberWithOptions(decimal: true),
-            inputFormatters: [DecimalCurrencyInputFormatter(locale: 'vi_VN')],
+            inputFormatters: [
+              DecimalCurrencyInputFormatter(
+                locale: Localizations.localeOf(context).toString(),
+                currencyCode: _selectedCurrency,
+              ),
+            ],
             decoration: InputDecoration(
               border: InputBorder.none,
-              prefixText: '₫ ',
+              prefixText: '${NumberFormat.simpleCurrency(name: _selectedCurrency).currencySymbol} ',
               hintText: '0',
               prefixStyle: Theme.of(context).textTheme.headlineMedium?.copyWith(
                 fontWeight: FontWeight.normal,

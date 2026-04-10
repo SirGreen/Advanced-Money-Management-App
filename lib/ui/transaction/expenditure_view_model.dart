@@ -196,6 +196,7 @@ class ExpenditureViewModel extends ChangeNotifier {
     notifyListeners();
 
     try {
+      final settings = await _settingsRepository.getSettings();
       final newExpenditure = Expenditure(
         id: const Uuid().v4(),
         articleName: isIncome ? 'Income' : 'Expense',
@@ -204,7 +205,7 @@ class ExpenditureViewModel extends ChangeNotifier {
         mainTagId: mainTagId,
         subTagIds: subTagIds,
         isIncome: isIncome,
-        currencyCode: 'VND', // Default
+        currencyCode: settings.primaryCurrencyCode,
         notes: notes,
       );
 

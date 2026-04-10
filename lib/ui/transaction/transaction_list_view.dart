@@ -193,7 +193,7 @@ class _TransactionListViewState extends State<TransactionListView> {
       isFilterActive: isFilterActive,
       onSelectDateRange: _selectDateRange,
       allTimeBalance: totalBalance,
-      currencyCode: 'VND', // Default for now
+      currencyCode: settingsViewModel.settings.primaryCurrencyCode,
       isPrivacyMode: isPrivacyMode,
     );
 
@@ -263,9 +263,9 @@ class _TransactionListViewState extends State<TransactionListView> {
                           final item = group.divider;
 
                           final formattedTotal = NumberFormat.currency(
-                            locale: 'en_US',
-                            symbol: '₫',
-                            decimalDigits: 2,
+                            locale: Localizations.localeOf(context).toString(),
+                            symbol: NumberFormat.simpleCurrency(name: settingsViewModel.settings.primaryCurrencyCode).currencySymbol,
+                            decimalDigits: 0, // Defaulting to 0 for safety or we can refine this
                           ).format(item.totalAmount.abs());
                           final prefix = item.totalAmount >= 0 ? '+' : '-';
                           final displayTotal = isPrivacyMode
@@ -430,7 +430,7 @@ class _TransactionListViewState extends State<TransactionListView> {
       ).currencySymbol;
 
       final formattedAmount =
-          '${expenditure.isIncome ? '+' : '-'}${NumberFormat.currency(locale: 'en_US', symbol: currencySymbol, decimalDigits: 2).format(expenditure.amount)}';
+          '${expenditure.isIncome ? '+' : '-'}${NumberFormat.currency(locale: Localizations.localeOf(context).toString(), symbol: currencySymbol, decimalDigits: expenditure.currencyCode == 'JPY' ? 0 : 2).format(expenditure.amount)}';
 
       amountWidget = Text(
         isPrivacyMode ? PrivacyModeService.maskSymbol : formattedAmount,
@@ -547,9 +547,9 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
     ).currencySymbol;
 
     final formattedBalance = NumberFormat.currency(
-      locale: 'en_US',
+      locale: Localizations.localeOf(context).toString(),
       symbol: currencySymbol,
-      decimalDigits: 2,
+      decimalDigits: currencyCode == 'JPY' ? 0 : 2,
     ).format(allTimeBalance);
     final displayBalance = isPrivacyMode
         ? PrivacyModeService.maskSymbol
