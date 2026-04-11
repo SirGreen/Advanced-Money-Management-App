@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import '../../domain/entities/tag.dart';
+
 import '../../l10n/app_localizations.dart';
 import '../transaction/expenditure_view_model.dart';
 import 'add_edit_tag_page.dart';
@@ -136,19 +136,16 @@ class TagDetailPage extends StatelessWidget {
                     },
                   ),
                 const SizedBox(height: 24),
-                if (tag.isDefault)
-                  const Text('Danh mục mặc định, không thể chỉnh sửa.')
-                else
-                  ElevatedButton.icon(
-                    onPressed: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => AddEditTagPage(tag: tag),
-                      ),
+                ElevatedButton.icon(
+                  onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => AddEditTagPage(tag: tag),
                     ),
-                    icon: const Icon(Icons.edit),
-                    label: Text(l10n.edit),
                   ),
+                  icon: const Icon(Icons.edit),
+                  label: Text(l10n.edit),
+                ),
               ],
             ),
           ),
