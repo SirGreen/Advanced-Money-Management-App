@@ -19,10 +19,13 @@ class RecurringTransactionService {
   );
 
   Future<void> scheduleReminderFor(ScheduledExpenditure rule) async {
-    if (rule.reminderDaysBefore == null || !rule.isActive) return;
+    if (rule.reminderDaysBefore == null || !rule.isActive) {
+      await _notificationService.cancelReminder(rule.participantId);
+      return;
+    }
 
     // Calculate next due date
-    final now = DateTime.now();
+    // Use rule's lastCreatedDate if available, otherwise startDate
     DateTime checkDate = rule.lastCreatedDate != null
         ? rule.lastCreatedDate!.add(const Duration(days: 1))
         : rule.startDate;
@@ -34,20 +37,28 @@ class RecurringTransactionService {
         Duration(days: rule.reminderDaysBefore!),
       );
 
-      // Schedule only if in future
-      if (reminderDate.isAfter(now)) {
-        // Must request permission before scheduling (critical for Android 13+ & iOS)
-        await _notificationService.requestPermissions();
+      // Schedule only if in future or today (at reasonable time)
+      // scheduleReminder will handle the reasonable time (9 AM)
+      await _notificationService.requestPermissions();
 
-        await _notificationService.scheduleReminder(
-          id: rule.participantId, // We need an int ID. hashCode?
-          title: "Recurring Transaction Reminder",
-          body: "${rule.name} is due on ${_formatDate(nextDueDate)}",
-          scheduledDate: reminderDate,
-        );
-        debugPrint("Scheduled reminder for ${rule.name} at $reminderDate");
+      await _notificationService.scheduleReminder(
+        id: rule.participantId,
+        title: "Upcoming Payment Reminder",
+        body: "${rule.name} is due on ${_formatDate(nextDueDate)}",
+        scheduledDate: reminderDate,
+      );
+      debugPrint("Scheduled reminder for ${rule.name} on $reminderDate");
+    }
+  }
+
+  Future<void> rescheduleAllReminders() async {
+    final allRules = await _scheduledRepo.getAll();
+    for (final rule in allRules) {
+      if (rule.isActive && rule.reminderDaysBefore != null) {
+        await scheduleReminderFor(rule);
       }
     }
+    debugPrint("Rescheduled all reminders.");
   }
 
   Future<void> cancelReminderFor(ScheduledExpenditure rule) async {
@@ -56,9 +67,6 @@ class RecurringTransactionService {
   }
 
   String _formatDate(DateTime d) => "${d.day}/${d.month}";
-
-  // Helper to generate consistent int ID from string ID
-  // ...
 
   /// Checks and creates any due transactions. Returns count of created items.
   Future<int> checkAndCreateTransactions() async {
@@ -76,45 +84,34 @@ class RecurringTransactionService {
         if (rule.endDate != null && rule.endDate!.isBefore(today)) {
           rule.isActive = false;
           await _scheduledRepo.update(rule);
+          await cancelReminderFor(rule);
           continue;
         }
 
+        bool wasUpdated = false;
+
         // Determine where to start checking
-        // If we made one before, start checking from the day AFTER that.
-        // If never made, start from startDate.
         DateTime checkDate = rule.lastCreatedDate != null
             ? rule.lastCreatedDate!.add(const Duration(days: 1))
             : rule.startDate;
 
-        // Prevent infinite loop if checkDate is far in past (limit catch-up to 365 days mostly)
         int loopGuard = 0;
-
-        // "Catch-up" loop
         while (loopGuard < 500) {
-          // Safety break
           loopGuard++;
           DateTime? nextDueDate = _calculateNextDueDate(checkDate, rule);
 
-          // Stop if no due date or future due date
           if (nextDueDate == null) break;
-
           if (nextDueDate.isAfter(now) && !_isSameDate(nextDueDate, now)) {
             break;
           }
-
-          // Stop if passed end date
           if (rule.endDate != null && nextDueDate.isAfter(rule.endDate!)) {
             break;
           }
-
-          // If due date is before checked start date (shouldn't happen with correct logic but safety)
           if (nextDueDate.isBefore(checkDate)) {
-            // Force advance
             checkDate = nextDueDate.add(const Duration(days: 1));
             continue;
           }
 
-          // Create the transaction!
           final newExpenditure = Expenditure(
             id: _uuid.v4(),
             articleName: rule.name,
@@ -129,20 +126,24 @@ class RecurringTransactionService {
 
           await _expenditureRepo.addExpenditure(newExpenditure);
           createdCount++;
+          wasUpdated = true;
 
-          // Update rule's last created date
           rule.lastCreatedDate = nextDueDate;
           await _scheduledRepo.update(rule);
 
-          // Advance checkDate
           checkDate = nextDueDate.add(const Duration(days: 1));
+        }
+
+        // If transactions were created, schedule next reminder
+        if (wasUpdated) {
+          await scheduleReminderFor(rule);
         }
       }
       return createdCount;
     } catch (e, stack) {
       debugPrint("Error in RecurringTransactionService: $e");
       debugPrint(stack.toString());
-      return 0; // Return 0 so UI doesn't freeze
+      return 0;
     }
   }
 

@@ -98,6 +98,9 @@ void main() async {
   final count = await recurringService.checkAndCreateTransactions();
   if (count > 0) debugPrint("Auto-created $count recurring transactions.");
 
+  // Ensure reminders are scheduled for all active rules
+  await recurringService.rescheduleAllReminders();
+
   runApp(
     MyApp(
       settingsRepository: settingsRepository,

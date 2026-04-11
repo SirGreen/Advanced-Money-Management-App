@@ -1,4 +1,5 @@
 import 'package:hive/hive.dart';
+import '../../ui/helpers/hash_utils.dart';
 
 part 'scheduled_expenditure.g.dart';
 
@@ -63,5 +64,5 @@ class ScheduledExpenditure extends HiveObject {
   @HiveField(13)
   int? reminderDaysBefore;
 
-  int get participantId => id.hashCode;
+  int get participantId => fastHash(id);
 }

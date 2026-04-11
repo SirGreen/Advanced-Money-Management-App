@@ -94,8 +94,16 @@ class NotificationService {
                 AndroidFlutterLocalNotificationsPlugin
               >();
 
+      // Request notification permission (Android 13+)
       final bool? granted = await androidImplementation
           ?.requestNotificationsPermission();
+
+      // Also request exact alarm permission (Android 12+)
+      // Note: This might not show a dialog on all versions but is good practice
+      if (granted == true) {
+        await androidImplementation?.requestExactAlarmsPermission();
+      }
+
       return granted ?? false;
     }
     return false;
@@ -107,29 +115,65 @@ class NotificationService {
     required String body,
     required DateTime scheduledDate,
   }) async {
-    if (scheduledDate.isBefore(DateTime.now())) return;
-
-    await _notificationsPlugin.zonedSchedule(
-      id: id,
-      title: title,
-      body: body,
-      scheduledDate: tz.TZDateTime.from(scheduledDate, tz.local),
-      notificationDetails: const NotificationDetails(
-        android: AndroidNotificationDetails(
-          'recurring_transaction_channel',
-          'Recurring Transactions',
-          channelDescription: 'Reminders for upcoming recurring transactions',
-          importance: Importance.max,
-          priority: Priority.high,
-        ),
-        iOS: DarwinNotificationDetails(),
-      ),
-      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-      // Removed uiLocalNotificationDateInterpretation as it was reported undefined
+    // Ensure we schedule at a reasonable time (9 AM) instead of midnight
+    final scheduledDateTime = DateTime(
+      scheduledDate.year,
+      scheduledDate.month,
+      scheduledDate.day,
+      9,
+      0,
     );
+
+    if (scheduledDateTime.isBefore(DateTime.now())) return;
+
+    try {
+      await _notificationsPlugin.zonedSchedule(
+        id: id,
+        title: title,
+        body: body,
+        scheduledDate: tz.TZDateTime.from(scheduledDateTime, tz.local),
+        notificationDetails: const NotificationDetails(
+          android: AndroidNotificationDetails(
+            'recurring_transaction_channel',
+            'Recurring Transactions',
+            channelDescription: 'Reminders for upcoming recurring transactions',
+            importance: Importance.max,
+            priority: Priority.high,
+          ),
+          iOS: DarwinNotificationDetails(),
+        ),
+        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+      );
+      debugPrint("Successfully scheduled notification ID $id at $scheduledDateTime");
+    } catch (e) {
+      debugPrint("Error scheduling notification: $e");
+      // Fallback to inexact if exact fails due to permission
+      try {
+        await _notificationsPlugin.zonedSchedule(
+          id: id,
+          title: title,
+          body: body,
+          scheduledDate: tz.TZDateTime.from(scheduledDateTime, tz.local),
+          notificationDetails: const NotificationDetails(
+            android: AndroidNotificationDetails(
+              'recurring_transaction_channel',
+              'Recurring Transactions',
+              channelDescription: 'Reminders for upcoming recurring transactions',
+              importance: Importance.max,
+              priority: Priority.high,
+            ),
+            iOS: DarwinNotificationDetails(),
+          ),
+          androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
+        );
+        debugPrint("Successfully scheduled inexact notification ID $id at $scheduledDateTime");
+      } catch (e2) {
+        debugPrint("Failed even with inexact schedule: $e2");
+      }
+    }
   }
 
   Future<void> cancelReminder(int id) async {
-    await _notificationsPlugin.cancel(id: id); // Fixed: Named parameter 'id'
+    await _notificationsPlugin.cancel(id: id);
   }
 }
