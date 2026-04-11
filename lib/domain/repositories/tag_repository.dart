@@ -6,6 +6,7 @@ abstract class TagRepository {
   Future<void> addTag(Tag tag);
   Future<void> updateTag(Tag tag);
   Future<void> deleteTag(String tagId);
+  Future<void> seedDefaultTags();
 
   Future<Map<String, dynamic>?> recommendTags(
     Settings settings,
