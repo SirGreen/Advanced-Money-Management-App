@@ -10,6 +10,7 @@ import 'domain/entities/settings.dart';
 import 'domain/entities/scheduled_expenditure.dart';
 import 'domain/entities/saving_goal.dart';
 import 'domain/entities/saving_contribution.dart';
+import 'domain/entities/saving_account.dart';
 
 import 'data/data_sources/llm_service.dart';
 import 'data/data_sources/expenditure_service.dart';
@@ -38,6 +39,7 @@ import 'ui/transaction/expenditure_view_model.dart';
 import 'ui/transaction/scheduled_expenditure_view_model.dart';
 import 'ui/settings/settings_view_model.dart';
 import 'ui/savings/saving_goal_view_model.dart';
+import 'ui/savings/saving_account_view_model.dart';
 import 'ui/export/export_view_model.dart';
 import 'data/data_sources/secure_storage_service.dart';
 import 'ui/auth/lock_screen_page.dart';
@@ -59,6 +61,7 @@ void main() async {
   Hive.registerAdapter(SettingsAdapter());
   Hive.registerAdapter(SavingGoalAdapter());
   Hive.registerAdapter(SavingContributionAdapter());
+  Hive.registerAdapter(SavingAccountAdapter());
 
   final notificationService = NotificationService();
   await notificationService.init();
@@ -222,6 +225,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           create: (_) => SavingGoalViewModel(repository: widget.savingGoalRepository),
         ),
         ChangeNotifierProvider(
+          create: (_) => SavingAccountViewModel()..loadSavingAccounts(),
+        ),
+        ChangeNotifierProvider(
           create: (_) => ExportViewModel(
             exportRepository: widget.exportRepository,
             expenditureRepository: widget.expenditureRepository,
@@ -235,7 +241,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
             debugShowCheckedModeBanner: false,
             title: 'Finance App',
             theme: ThemeData(
-              colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
+              colorScheme: ColorScheme.fromSeed(seedColor: Colors.teal),
               useMaterial3: true,
             ),
             localizationsDelegates: const [
@@ -256,7 +262,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                         debugShowCheckedModeBanner: false,
                         theme: ThemeData(
                           colorScheme: ColorScheme.fromSeed(
-                            seedColor: Colors.green,
+                            seedColor: Colors.teal,
                           ),
                           useMaterial3: true,
                         ),
