@@ -82,11 +82,15 @@ class _AddTransactionViewState extends State<AddTransactionView> {
       if (isEditing && widget.expenditure != null) {
         final e = widget.expenditure!;
 
-        _amountController.text = NumberFormat.currency(
-          locale: Localizations.localeOf(context).toString(),
-          symbol: NumberFormat.simpleCurrency(name: e.currencyCode).currencySymbol,
-          decimalDigits: e.currencyCode == 'JPY' || e.currencyCode == 'VND' ? 0 : 2,
-        ).format(e.amount);
+        if (e.amount == null) {
+          _amountController.text = "0";
+        } else {
+          _amountController.text = NumberFormat.currency(
+            locale: Localizations.localeOf(context).toString(),
+            symbol: NumberFormat.simpleCurrency(name: e.currencyCode).currencySymbol,
+            decimalDigits: e.currencyCode == 'JPY' || e.currencyCode == 'VND' ? 0 : 2,
+          ).format(e.amount);
+        }
       }
       _isInitialized = true;
     }
