@@ -677,6 +677,8 @@ class _AddTransactionViewState extends State<AddTransactionView> {
     return GlassCard(
       padding: EdgeInsets.zero,
       child: ExpansionTile(
+        shape: const Border(),
+        collapsedShape: const Border(),
         leading: const Icon(Icons.add_shopping_cart_outlined),
         title: Text(l10n.adjustTotal),
         subtitle: Text(l10n.forgotToAddItem),
@@ -806,6 +808,8 @@ class _AddTransactionViewState extends State<AddTransactionView> {
     return GlassCard(
       padding: EdgeInsets.zero,
       child: ExpansionTile(
+        shape: const Border(),
+        collapsedShape: const Border(),
         title: Text(l10n.optionalDetails),
         leading: const Icon(Icons.notes_outlined),
         initiallyExpanded: _notesController.text.isNotEmpty,
