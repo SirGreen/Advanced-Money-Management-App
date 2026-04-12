@@ -65,7 +65,7 @@ class _ExportTransactionsViewState extends State<ExportTransactionsView> {
                                 fontSize: 11,
                               ),
                               overflow: TextOverflow.ellipsis,
-                              maxLines: 2,
+                              maxLines: 10,
                             ),
                           ],
                         ),

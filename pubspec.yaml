@@ -63,6 +63,7 @@ dependencies:
 
   local_auth_android: any
   local_auth_darwin: any
+  excel: ^4.0.6
 dev_dependencies:
   flutter_test:
     sdk: flutter

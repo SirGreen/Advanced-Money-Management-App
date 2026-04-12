@@ -18,24 +18,30 @@ class ExportRepositoryImpl implements ExportRepository {
     // Filter transactions
     final filtered = filterTransactions(expenditures, config);
 
-    // Generate content based on format
-    String content;
-    if (config.exportFormat == 'excel') {
-      content = _exportService.generateExcel(filtered, config, tagMap);
-    } else {
-      content = _exportService.generateCSV(filtered, config, tagMap);
-    }
-
     // Generate filename
     final dateStr = DateTime.now().toString().split(' ').first;
-    final filename = 'transactions_$dateStr.${config.exportFormat}';
+    final extension = config.exportFormat == 'excel' ? 'xlsx' : 'csv';
+    final filename = 'transactions_$dateStr.$extension';
 
-    // Save to file
-    return await _exportService.exportToFile(
-      content,
-      filename,
-      config.exportFormat,
-    );
+    // Generate content and save based on format
+    if (config.exportFormat == 'excel') {
+      final bytes = _exportService.generateExcel(filtered, config, tagMap);
+      if (bytes == null) {
+        throw Exception('Failed to generate Excel content');
+      }
+      return await _exportService.exportToFileBytes(
+        bytes,
+        filename,
+        extension,
+      );
+    } else {
+      final content = _exportService.generateCSV(filtered, config, tagMap);
+      return await _exportService.exportToFile(
+        content,
+        filename,
+        extension,
+      );
+    }
   }
 
   @override

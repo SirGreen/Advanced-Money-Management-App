@@ -1,6 +1,9 @@
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:excel/excel.dart' as excel_pkg;
+import 'package:file_picker/file_picker.dart';
 import '../../domain/entities/expenditure.dart';
 import '../../domain/entities/tag.dart';
 import '../../domain/entities/export_config.dart';
@@ -18,19 +21,19 @@ class ExportService {
     final headers = config.selectedFields.map((field) {
       switch (field) {
         case 'date':
-          return 'Ngày';
+          return 'Date';
         case 'amount':
-          return 'Số tiền (₫)';
+          return 'Amount (₫)';
         case 'category':
-          return 'Danh mục';
+          return 'Category';
         case 'notes':
-          return 'Ghi chú';
+          return 'Notes';
         case 'type':
-          return 'Loại';
+          return 'Type';
         case 'currency':
-          return 'Tiền tệ';
+          return 'Currency';
         case 'article':
-          return 'Mô tả';
+          return 'Description';
         default:
           return field;
       }
@@ -56,7 +59,7 @@ class ExportService {
           case 'notes':
             row.add(expenditure.notes ?? '');
           case 'type':
-            row.add(expenditure.isIncome ? 'Thu nhập' : 'Chi tiêu');
+            row.add(expenditure.isIncome ? 'Income' : 'Expense');
           case 'currency':
             row.add(expenditure.currencyCode);
           case 'article':
@@ -78,16 +81,72 @@ class ExportService {
     return buffer.toString();
   }
 
-  // Generate Excel-like content (using CSV with proper formatting)
-  // Note: For true Excel files, you would use a proper Excel library
-  String generateExcel(
+  // Generate real Excel content
+  List<int>? generateExcel(
     List<Expenditure> expenditures,
     ExportConfig config,
     Map<String, Tag> tagMap,
   ) {
-    // For now, we'll use CSV format which can be opened in Excel
-    // In production, consider using 'excel' package
-    return generateCSV(expenditures, config, tagMap);
+    final excel = excel_pkg.Excel.createExcel();
+    final sheet = excel['Transactions'];
+    excel.setDefaultSheet('Transactions');
+    
+    // Header
+    final headers = config.selectedFields.map((field) {
+      switch (field) {
+        case 'date':
+          return 'Date';
+        case 'amount':
+          return 'Amount (₫)';
+        case 'category':
+          return 'Category';
+        case 'notes':
+          return 'Notes';
+        case 'type':
+          return 'Type';
+        case 'currency':
+          return 'Currency';
+        case 'article':
+          return 'Description';
+        default:
+          return field;
+      }
+    }).toList();
+
+    sheet.appendRow(headers.map((h) => excel_pkg.TextCellValue(h)).toList());
+
+    // Data rows
+    final currencyFormat = NumberFormat.currency(locale: 'vi_VN', symbol: '₫');
+
+    for (final expenditure in expenditures) {
+      final row = <excel_pkg.CellValue>[];
+
+      for (final field in config.selectedFields) {
+        switch (field) {
+          case 'date':
+            row.add(excel_pkg.TextCellValue(DateFormat('dd/MM/yyyy').format(expenditure.date)));
+          case 'amount':
+            row.add(excel_pkg.TextCellValue(currencyFormat.format(expenditure.amount ?? 0)));
+          case 'category':
+            final category = _getCategoryName(expenditure, tagMap);
+            row.add(excel_pkg.TextCellValue(category));
+          case 'notes':
+            row.add(excel_pkg.TextCellValue(expenditure.notes ?? ''));
+          case 'type':
+            row.add(excel_pkg.TextCellValue(expenditure.isIncome ? 'Income' : 'Expense'));
+          case 'currency':
+            row.add(excel_pkg.TextCellValue(expenditure.currencyCode));
+          case 'article':
+            row.add(excel_pkg.TextCellValue(expenditure.articleName));
+          default:
+            row.add(excel_pkg.TextCellValue(''));
+        }
+      }
+
+      sheet.appendRow(row);
+    }
+
+    return excel.encode();
   }
 
   // Filter expenditures based on config
@@ -118,38 +177,46 @@ class ExportService {
     }).toList();
   }
 
-  // Save to file and return file path
+  // Save string content to file using FilePicker
   Future<String> exportToFile(
     String content,
     String filename,
     String format,
   ) async {
     try {
-      // Get Downloads directory from device
-      final directory = await getDownloadsDirectory();
-      if (directory == null) {
-        throw Exception('Không thể truy cập thư mục Downloads');
-      }
-
-      final exportPath = '${directory.path}${Platform.pathSeparator}Transactions_Export';
-
-      // Create directory if not exists
-      final exportDir = Directory(exportPath);
-      if (!await exportDir.exists()) {
-        await exportDir.create(recursive: true);
-      }
-
-      // Generate filename with timestamp if not provided
-      final finalFilename = filename.isEmpty
-          ? 'transactions_${DateTime.now().millisecondsSinceEpoch}.$format'
-          : filename;
-
-      final file = File('$exportPath${Platform.pathSeparator}$finalFilename');
-      await file.writeAsString(content);
-
-      return file.path;
+      final bytes = Uint8List.fromList(content.codeUnits);
+      return await exportToFileBytes(bytes, filename, format);
     } catch (e) {
-      throw Exception('Lỗi khi xuất tệp: $e');
+      throw Exception('Error exporting file: $e');
+    }
+  }
+
+  // Save binary content to file using FilePicker
+  Future<String> exportToFileBytes(
+    List<int> bytes,
+    String filename,
+    String format,
+  ) async {
+    try {
+      final extension = format.toLowerCase();
+      final result = await FilePicker.platform.saveFile(
+        dialogTitle: 'Save Exported File',
+        fileName: filename,
+        type: FileType.custom,
+        allowedExtensions: [extension],
+        bytes: Uint8List.fromList(bytes),
+      );
+
+      if (result == null) {
+        throw Exception('Export cancelled by user');
+      }
+
+      return result;
+    } catch (e) {
+      if (e.toString().contains('cancelled')) {
+        throw Exception('Export cancelled by user');
+      }
+      throw Exception('Error exporting file: $e');
     }
   }
 
@@ -158,11 +225,11 @@ class ExportService {
     try {
       final directory = await getDownloadsDirectory();
       if (directory == null) {
-        return 'Không xác định';
+        return 'System Downloads';
       }
-      return '${directory.path}${Platform.pathSeparator}Transactions_Export';
+      return directory.path;
     } catch (e) {
-      return 'Lỗi: $e';
+      return 'System Downloads';
     }
   }
 
