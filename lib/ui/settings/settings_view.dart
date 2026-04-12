@@ -238,8 +238,8 @@ class SettingsView extends StatelessWidget {
             ),
             ListTile(
               leading: const Icon(Icons.backup),
-              title: const Text('Backup & Restore'),
-              subtitle: const Text('Backup and restore your data'),
+              title: Text(l10n.backup),
+              subtitle: Text(l10n.backupDescription),
               trailing: const Icon(Icons.chevron_right),
               onTap: () {
                 Navigator.push(
@@ -252,8 +252,8 @@ class SettingsView extends StatelessWidget {
             ),
             ListTile(
               leading: const Icon(Icons.download),
-              title: const Text('Xuất dữ liệu'),
-              subtitle: const Text('Xuất giao dịch ra CSV/Excel'),
+              title: Text(l10n.exportData),
+              subtitle: Text(l10n.exportDataSubtitle),
               trailing: const Icon(Icons.chevron_right),
               onTap: () {
                 Navigator.push(
