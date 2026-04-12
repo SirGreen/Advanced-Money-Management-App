@@ -31,22 +31,16 @@ class AddEditExpenditureAppBar extends StatelessWidget
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
-        child: AppBar(
-          title: GradientTitle(
-            text:
-                l10n.addTransaction, // Luôn là Thêm mới vì từ màn hình Scan qua
+      child: AppBar(
+        title: GradientTitle(text: l10n.addTransaction),
+        centerTitle: true,
+        elevation: 0,
+        backgroundColor: Colors.white.withValues(alpha: 0.2),
+        shape: RoundedRectangleBorder(
+          borderRadius: const BorderRadius.vertical(
+            bottom: Radius.circular(32),
           ),
-          centerTitle: true,
-          elevation: 0,
-          backgroundColor: Colors.white.withValues(alpha: 0.2),
-          shape: RoundedRectangleBorder(
-            borderRadius: const BorderRadius.vertical(
-              bottom: Radius.circular(32),
-            ),
-            side: BorderSide(color: Colors.white.withValues(alpha: 0.3)),
-          ),
+          side: BorderSide(color: Colors.white.withValues(alpha: 0.3)),
         ),
       ),
     );

@@ -22,16 +22,13 @@ class CameraScannerAppBar extends StatelessWidget
   @override
   Widget build(BuildContext context) {
     return ClipRect(
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
-        child: AppBar(
-          title: GradientTitle(text: l10n.scanReceipt),
-          centerTitle: true,
-          elevation: 0,
-          backgroundColor: Colors.white.withValues(alpha: 0.2),
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(bottom: Radius.circular(32)),
-          ),
+      child: AppBar(
+        title: GradientTitle(text: l10n.scanReceipt),
+        centerTitle: true,
+        elevation: 0,
+        backgroundColor: Colors.white.withValues(alpha: 0.2),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(bottom: Radius.circular(32)),
         ),
       ),
     );
@@ -172,21 +169,18 @@ class _CameraScannerPageState extends State<CameraScannerPage> {
             ),
             if (_isProcessing)
               Positioned.fill(
-                child: BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-                  child: Container(
-                    color: Colors.black26,
-                    child: Center(
-                      child: GlassCard(
-                        padding: const EdgeInsets.all(32),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const CircularProgressIndicator(),
-                            const SizedBox(height: 16),
-                            Text(l10n.analyzingYourReceipt),
-                          ],
-                        ),
+                child: Container(
+                  color: Colors.black26,
+                  child: Center(
+                    child: GlassCard(
+                      padding: const EdgeInsets.all(32),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const CircularProgressIndicator(),
+                          const SizedBox(height: 16),
+                          Text(l10n.analyzingYourReceipt),
+                        ],
                       ),
                     ),
                   ),

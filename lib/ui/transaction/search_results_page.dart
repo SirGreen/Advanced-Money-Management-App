@@ -11,8 +11,6 @@ import 'add_transaction_view.dart';
 import '../helpers/gradient_background.dart';
 import '../helpers/gradient_title.dart';
 import '../helpers/tag_icon_mapper.dart';
-// Note: GlassCardContainer isn't defined explicitly in snippets, so we'll just use a styled Card/Container
-// to match the app's glassy aesthetic if needed, or stick to default Material Card for the list.
 
 class SearchResultsAppBar extends StatelessWidget
     implements PreferredSizeWidget {
@@ -22,55 +20,50 @@ class SearchResultsAppBar extends StatelessWidget
 
   @override
   Widget build(BuildContext context) {
-    return ClipRect(
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
-        child: AppBar(
-          title: const GradientTitle(text: 'Search Results'),
-          centerTitle: true,
-          elevation: 0,
-          backgroundColor: Colors.white.withValues(alpha: 0.2),
-          shape: RoundedRectangleBorder(
-            borderRadius: const BorderRadius.vertical(
-              bottom: Radius.circular(32),
+    return AppBar(
+      title: const GradientTitle(text: 'Search Results'),
+      centerTitle: true,
+      elevation: 0,
+      backgroundColor: Colors.white.withValues(alpha: 0.7),
+      shape: RoundedRectangleBorder(
+        borderRadius: const BorderRadius.vertical(
+          bottom: Radius.circular(32),
+        ),
+        side: BorderSide(color: Colors.white.withValues(alpha: 0.7)),
+      ),
+      actions: [
+        PopupMenuButton<SortOption>(
+          icon: const Icon(Icons.sort),
+          tooltip: 'Sort By',
+          onSelected: onSortSelected,
+          itemBuilder: (context) => const [
+            PopupMenuItem(
+              value: SortOption.dateDesc,
+              child: Text('Date (Newest First)'),
             ),
-            side: BorderSide(color: Colors.white.withValues(alpha: 0.3)),
-          ),
-          actions: [
-            PopupMenuButton<SortOption>(
-              icon: const Icon(Icons.sort),
-              tooltip: 'Sort By',
-              onSelected: onSortSelected,
-              itemBuilder: (context) => const [
-                PopupMenuItem(
-                  value: SortOption.dateDesc,
-                  child: Text('Date (Newest First)'),
-                ),
-                PopupMenuItem(
-                  value: SortOption.dateAsc,
-                  child: Text('Date (Oldest First)'),
-                ),
-                PopupMenuItem(
-                  value: SortOption.amountDesc,
-                  child: Text('Amount (Highest First)'),
-                ),
-                PopupMenuItem(
-                  value: SortOption.amountAsc,
-                  child: Text('Amount (Lowest First)'),
-                ),
-                PopupMenuItem(
-                  value: SortOption.nameAsc,
-                  child: Text('Name (A-Z)'),
-                ),
-                PopupMenuItem(
-                  value: SortOption.nameDesc,
-                  child: Text('Name (Z-A)'),
-                ),
-              ],
+            PopupMenuItem(
+              value: SortOption.dateAsc,
+              child: Text('Date (Oldest First)'),
+            ),
+            PopupMenuItem(
+              value: SortOption.amountDesc,
+              child: Text('Amount (Highest First)'),
+            ),
+            PopupMenuItem(
+              value: SortOption.amountAsc,
+              child: Text('Amount (Lowest First)'),
+            ),
+            PopupMenuItem(
+              value: SortOption.nameAsc,
+              child: Text('Name (A-Z)'),
+            ),
+            PopupMenuItem(
+              value: SortOption.nameDesc,
+              child: Text('Name (Z-A)'),
             ),
           ],
         ),
-      ),
+      ],
     );
   }
 
