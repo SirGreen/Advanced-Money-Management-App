@@ -62,10 +62,15 @@ class _AddEditTagPageState extends State<AddEditTagPage> {
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            TextField(controller: nameCtrl),
+            TextField(
+              controller: nameCtrl,
+              enabled: widget.tag?.isDefault != true,
+            ),
             const SizedBox(height: 12),
-            Row(
-              children: [
+            IgnorePointer(
+              ignoring: widget.tag?.isDefault == true,
+              child: Row(
+                children: [
                 Text("${l10n.icon}: "),
                 const SizedBox(width: 8),
                 ...[null, 'fastfood', 'movie', 'directions_car'].map((n) {
@@ -77,12 +82,15 @@ class _AddEditTagPageState extends State<AddEditTagPage> {
                     },
                     icon: Icon(ic, color: selected ? Colors.blue : null),
                   );
-                }),
-              ],
+                  }),
+                ],
+              ),
             ),
             const SizedBox(height: 12),
-            Row(
-              children: [
+            IgnorePointer(
+              ignoring: widget.tag?.isDefault == true,
+              child: Row(
+                children: [
                 Text("${l10n.color}: "),
                 const SizedBox(width: 8),
                 ...[
@@ -110,8 +118,9 @@ class _AddEditTagPageState extends State<AddEditTagPage> {
                       ),
                     ),
                   ),
-                ),
-              ],
+                  ),
+                ],
+              ),
             ),
             const SizedBox(height: 16),
             SwitchListTile(
@@ -155,24 +164,23 @@ class _AddEditTagPageState extends State<AddEditTagPage> {
               ),
             ],
             const SizedBox(height: 16),
-            if (widget.tag?.isDefault == true)
-              const Text('Danh mục mặc định, không thể chỉnh sửa.')
-            else
-              ElevatedButton(
-                onPressed: () async {
-                  final parsedBudget = isBudgetEnabled
-                      ? double.tryParse(
-                          budgetAmountCtrl.text.replaceAll(',', ''),
-                        )
-                      : null;
-                  final tag = Tag(
-                    id: widget.tag?.id ?? const Uuid().v4(),
-                    name: nameCtrl.text,
-                    colorValue: color.toARGB32(),
-                    iconName: iconName,
-                    budgetAmount: parsedBudget,
-                    budgetInterval: isBudgetEnabled ? budgetInterval : 'None',
-                  );
+            ElevatedButton(
+              onPressed: () async {
+                final parsedBudget = isBudgetEnabled
+                    ? double.tryParse(
+                        budgetAmountCtrl.text.replaceAll('.', '').replaceAll(',', ''),
+                      )
+                    : null;
+                final tag = Tag(
+                  id: widget.tag?.id ?? const Uuid().v4(),
+                  name: nameCtrl.text,
+                  colorValue: color.toARGB32(),
+                  iconName: iconName,
+                  budgetAmount: parsedBudget,
+                  budgetInterval: isBudgetEnabled ? budgetInterval : 'None',
+                  isDefault: widget.tag?.isDefault ?? false,
+                  imagePath: widget.tag?.imagePath,
+                );
                   widget.tag == null
                       ? await vm.create(tag)
                       : await vm.edit(tag);
