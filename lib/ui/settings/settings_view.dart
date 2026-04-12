@@ -41,10 +41,45 @@ class SettingsView extends StatelessWidget {
           ),
           ElevatedButton(
             onPressed: () {
-              viewModel.updateGeminiApiKey(controller.text.trim());
+              viewModel.updateGeminiApiKey(controller.text);
               Navigator.pop(context);
             },
             child: const Text('Save'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showUserContextDialog(BuildContext context, SettingsViewModel viewModel) {
+    final l10n = AppLocalizations.of(context)!;
+
+    final controller = TextEditingController(
+      text: viewModel.settings.userContext,
+    );
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l10n.financialContextTitle),
+        content: TextField(
+          controller: controller,
+          maxLines: 5,
+          decoration: InputDecoration(
+            hintText: l10n.financialContextSubTitle,
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(l10n.cancel),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              viewModel.updateUserContext(controller.text);
+              Navigator.pop(context);
+            },
+            child: Text(l10n.save),
           ),
         ],
       ),
@@ -241,6 +276,18 @@ class SettingsView extends StatelessWidget {
               ),
               trailing: const Icon(Icons.edit),
               onTap: () => _showApiKeyDialog(context, viewModel),
+            ),
+            ListTile(
+              leading: const Icon(Icons.person),
+              title: Text(l10n.yourContext),
+              subtitle: Text(
+                viewModel.settings.userContext != null &&
+                        viewModel.settings.userContext!.isNotEmpty
+                    ? 'Configured'
+                    : 'Unset',
+              ),
+              trailing: const Icon(Icons.edit),
+              onTap: () => _showUserContextDialog(context, viewModel),
             ),
           ],
         );

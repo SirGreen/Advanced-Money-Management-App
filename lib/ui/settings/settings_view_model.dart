@@ -55,7 +55,12 @@ class SettingsViewModel extends ChangeNotifier {
   Future<void> updateGeminiApiKey(String? key) async {
     if (_settings == null) return;
 
-    final updatedSettings = _settings!.copyWith(geminiApiKey: key);
+    final trimmedKey = key?.trim();
+    final isClear = trimmedKey == null || trimmedKey.isEmpty;
+    final updatedSettings = _settings!.copyWith(
+      geminiApiKey: isClear ? null : trimmedKey,
+      clearGeminiApiKey: isClear,
+    );
     await saveSettings(updatedSettings);
     _settings = updatedSettings;
   }
@@ -66,4 +71,18 @@ class SettingsViewModel extends ChangeNotifier {
     final updatedSettings = _settings!.copyWith(primaryCurrencyCode: currencyCode);
     await saveSettings(updatedSettings);
     _settings = updatedSettings;
-  }}
+  }
+
+  Future<void> updateUserContext(String? context) async {
+    if (_settings == null) return;
+
+    final trimmedContext = context?.trim();
+    final isClear = trimmedContext == null || trimmedContext.isEmpty;
+    final updatedSettings = _settings!.copyWith(
+      userContext: isClear ? null : trimmedContext,
+      clearUserContext: isClear,
+    );
+    await saveSettings(updatedSettings);
+    _settings = updatedSettings;
+  }
+}
