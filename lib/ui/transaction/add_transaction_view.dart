@@ -97,9 +97,15 @@ class _AddTransactionViewState extends State<AddTransactionView> {
   }
 
   void _updateAmountSuggestions() {
-    final text = _amountController.text.replaceAll('.', '').replaceAll(',', '');
+    if (_selectedCurrency != 'VND' && _selectedCurrency != 'JPY') {
+      if (_amountSuggestions.isNotEmpty) {
+        setState(() => _amountSuggestions = []);
+      }
+      return;
+    }
+    final text = _amountController.text.replaceAll(RegExp(r'[^0-9]'), '');
     final amount = double.tryParse(text);
-    if (amount == null || amount == 0 || text.contains('.')) {
+    if (amount == null || amount == 0) {
       if (_amountSuggestions.isNotEmpty) {
         setState(() => _amountSuggestions = []);
       }
@@ -115,6 +121,18 @@ class _AddTransactionViewState extends State<AddTransactionView> {
     final newSuggestions = ['${integerText}000', '${integerText}0000'];
     if (newSuggestions.join(',') != _amountSuggestions.join(',')) {
       setState(() => _amountSuggestions = newSuggestions);
+    }
+  }
+
+  double? _parseAmount(String text) {
+    final digitsOnly = text.replaceAll(RegExp(r'[^0-9]'), '');
+    if (digitsOnly.isEmpty) return null;
+
+    final rawValue = double.tryParse(digitsOnly) ?? 0;
+    if (_selectedCurrency == 'JPY' || _selectedCurrency == 'VND') {
+      return rawValue;
+    } else {
+      return rawValue / 100;
     }
   }
 
@@ -256,14 +274,8 @@ class _AddTransactionViewState extends State<AddTransactionView> {
   // ---- Adjust Total ----
   void _adjustTotalAmount() {
     final l10n = AppLocalizations.of(context)!;
-    final currentText = _amountController.text
-        .replaceAll('.', '')
-        .replaceAll(',', '');
-    final currentAmount = double.tryParse(currentText) ?? 0.0;
-    final adjustText = _adjustAmountController.text
-        .replaceAll('.', '')
-        .replaceAll(',', '');
-    final adjustAmount = double.tryParse(adjustText) ?? 0.0;
+    final currentAmount = _parseAmount(_amountController.text) ?? 0.0;
+    final adjustAmount = _parseAmount(_adjustAmountController.text) ?? 0.0;
 
     if (adjustAmount <= 0) return;
 
@@ -690,7 +702,10 @@ class _AddTransactionViewState extends State<AddTransactionView> {
                           decimal: true,
                         ),
                         inputFormatters: [
-                          DecimalCurrencyInputFormatter(locale: 'vi_VN'),
+                          DecimalCurrencyInputFormatter(
+                            locale: Localizations.localeOf(context).toString(),
+                            currencyCode: _selectedCurrency,
+                          ),
                         ],
                       ),
                     ),
@@ -952,10 +967,8 @@ class _AddTransactionViewState extends State<AddTransactionView> {
   }
 
   void _saveForm(ExpenditureViewModel viewModel) async {
-    final rawAmount = _amountController.text
-        .replaceAll('.', '')
-        .replaceAll(',', '');
-    final amount = double.tryParse(rawAmount);
+    FocusScope.of(context).unfocus();
+    final amount = _parseAmount(_amountController.text);
 
     final String finalArticleName = _nameController.text.isNotEmpty
         ? _nameController.text
