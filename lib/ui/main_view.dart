@@ -4,19 +4,14 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:animations/animations.dart';
 import 'helpers/shared_axis_page_route.dart';
 import 'sections/camera_scanner_page.dart';
-import 'sections/add_edit_expenditure_page.dart';
 
 import '../l10n/app_localizations.dart';
 import 'settings/settings_view.dart';
-import 'transaction/add_scheduled_expenditure_view.dart';
 import 'transaction/add_transaction_view.dart';
-import 'transaction/search_page.dart';
-import 'transaction/expenditure_list_view.dart';
 import 'transaction/transaction_list_view.dart';
+import 'transaction/dashboard_page.dart';
 import 'transaction/reports_page.dart';
-import 'savings/saving_goal_list_view.dart';
-import 'savings/add_saving_goal_view.dart';
-import 'reports_view.dart';
+import 'savings/assets_page.dart';
 
 class MainView extends StatefulWidget {
   const MainView({super.key});
@@ -25,16 +20,40 @@ class MainView extends StatefulWidget {
   State<MainView> createState() => _MainViewState();
 }
 
-class _MainViewState extends State<MainView> {
+class _MainViewState extends State<MainView> with TickerProviderStateMixin {
   int _selectedIndex = 0;
+  late final TabController _assetsTabController;
+  late final List<Widget> _widgetOptions;
 
-  static const List<Widget> _widgetOptions = <Widget>[
-    ExpenditureListView(),
-    TransactionListView(),
-    ReportsPage(),
-    SavingGoalListView(),
-    SettingsView(),
-  ];
+  @override
+  void initState() {
+    super.initState();
+
+    _assetsTabController = TabController(length: 3, vsync: this);
+    _assetsTabController.addListener(() {
+      if (_selectedIndex == 3) {
+        setState(() {});
+      }
+    });
+
+    _widgetOptions = <Widget>[
+      DashboardPage(
+        onViewAllTransactions: () => _onItemTapped(1),
+        onViewBudgets: () => _onItemTapped(3),
+        onNavigateToSettings: () => _onItemTapped(4),
+      ),
+      const TransactionListView(),
+      const ReportsPage(),
+      AssetsPage(tabController: _assetsTabController),
+      const SettingsView(),
+    ];
+  }
+
+  @override
+  void dispose() {
+    _assetsTabController.dispose();
+    super.dispose();
+  }
 
   void _onItemTapped(int index) {
     setState(() {
@@ -44,8 +63,21 @@ class _MainViewState extends State<MainView> {
 
   Widget _buildFloatingActionButton(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    // SpeedDial FAB for Dashboard (tab 0) and Transactions (tab 1)
-    if (_selectedIndex == 0 || _selectedIndex == 1) {
+    final currentPageWidget = _widgetOptions[_selectedIndex];
+
+    if (currentPageWidget is DashboardPage) {
+      return currentPageWidget.buildFab(context);
+    }
+
+    if (currentPageWidget is AssetsPage) {
+      return currentPageWidget.buildFab(context, _assetsTabController.index);
+    }
+
+    if (_selectedIndex == 2) {
+      return const SizedBox.shrink();
+    }
+
+    if (_selectedIndex == 1) {
       return SpeedDial(
         icon: Icons.add,
         activeIcon: Icons.close,
@@ -84,19 +116,7 @@ class _MainViewState extends State<MainView> {
       backgroundColor: Colors.teal.shade600,
       foregroundColor: Colors.white,
       onPressed: () {
-        if (_selectedIndex == 2) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const AddScheduledExpenditureView(),
-            ),
-          );
-        } else if (_selectedIndex == 3) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const AddSavingGoalView()),
-          );
-        } else {
+        if (_selectedIndex != 2) {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const AddTransactionView()),
@@ -110,28 +130,13 @@ class _MainViewState extends State<MainView> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
-      appBar: _selectedIndex == 0 || _selectedIndex == 4
-          ? AppBar(
-              title: Text(_selectedIndex == 0 ? 'Dashboard' : 'Settings'),
-              actions: [
-                if (_selectedIndex == 0)
-                  IconButton(
-                    icon: const Icon(Icons.search),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const SearchPage(),
-                        ),
-                      );
-                    },
-                  ),
-              ],
-            )
-          : null,
-      body: Center(child: _widgetOptions.elementAt(_selectedIndex)),
+      extendBody: true,
+      appBar: null,
+      body: IndexedStack(index: _selectedIndex, children: _widgetOptions),
       floatingActionButton: _buildFloatingActionButton(context),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       bottomNavigationBar: ClipRRect(
         borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(24.0),
@@ -139,7 +144,7 @@ class _MainViewState extends State<MainView> {
         ),
         child: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
-          backgroundColor: Colors.white.withValues(alpha: 0.7),
+          backgroundColor: Colors.white.withValues(alpha: 0.2),
           elevation: 0,
           items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
@@ -155,12 +160,12 @@ class _MainViewState extends State<MainView> {
             BottomNavigationBarItem(
               icon: const Icon(Icons.bar_chart_outlined),
               activeIcon: const Icon(Icons.bar_chart),
-              label: l10n.manageScheduled,
+              label: l10n.reports,
             ),
             BottomNavigationBarItem(
-              icon: const Icon(Icons.savings_outlined),
-              activeIcon: const Icon(Icons.savings),
-              label: l10n.savings,
+              icon: const Icon(Icons.account_balance_wallet_outlined),
+              activeIcon: const Icon(Icons.account_balance_wallet),
+              label: l10n.assets,
             ),
             BottomNavigationBarItem(
               icon: const Icon(Icons.settings_outlined),
@@ -169,8 +174,10 @@ class _MainViewState extends State<MainView> {
             ),
           ],
           currentIndex: _selectedIndex,
-          selectedItemColor: Colors.teal.shade700,
-          unselectedItemColor: Colors.grey[600],
+          selectedItemColor: Theme.of(context).colorScheme.primary,
+          unselectedItemColor: Theme.of(
+            context,
+          ).colorScheme.onSurface.withValues(alpha: 0.6),
           onTap: _onItemTapped,
         ),
       ),

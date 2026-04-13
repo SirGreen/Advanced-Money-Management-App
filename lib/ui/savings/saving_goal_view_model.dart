@@ -44,6 +44,7 @@ class SavingGoalViewModel extends ChangeNotifier {
   Future<void> createSavingGoal({
     required String name,
     required double targetAmount,
+    double currentAmount = 0,
     DateTime? endDate,
     String? notes,
   }) async {
@@ -53,7 +54,7 @@ class SavingGoalViewModel extends ChangeNotifier {
         id: uuid.v4(),
         name: name,
         targetAmount: targetAmount,
-        currentAmount: 0,
+        currentAmount: currentAmount,
         startDate: DateTime.now(),
         endDate: endDate,
         notes: notes,
