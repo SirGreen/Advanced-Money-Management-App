@@ -28,19 +28,18 @@ class ReportsAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRect(
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+    return RepaintBoundary(
+      child: ClipRect(
         child: AppBar(
           title: Text(l10n.manageScheduled),
           centerTitle: true,
           elevation: 0,
-          backgroundColor: Colors.white.withValues(alpha: 0.2),
+          backgroundColor: Colors.white.withValues(alpha: 0.7),
           shape: RoundedRectangleBorder(
             borderRadius: const BorderRadius.vertical(
               bottom: Radius.circular(32),
             ),
-            side: BorderSide(color: Colors.white.withValues(alpha: 0.3)),
+            side: BorderSide(color: Colors.white.withValues(alpha: 0.7)),
           ),
           actions: [
             IconButton(
@@ -61,7 +60,10 @@ class ReportsAppBar extends StatelessWidget implements PreferredSizeWidget {
               child: Text(
                 '${DateFormat.yMMMd(l10n.localeName).format(dateRange.start)} - ${DateFormat.yMMMd(l10n.localeName).format(dateRange.end)}',
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
+                      color: Theme.of(context)
+                          .colorScheme
+                          .onSurface
+                          .withValues(alpha: 0.7),
                     ),
               ),
             ),
@@ -870,67 +872,72 @@ class _FilteredTransactionsPageState extends State<FilteredTransactionsPage> {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         extendBodyBehindAppBar: true,
-        appBar: AppBar(
-          title: Text(widget.tag.name),
-          centerTitle: true,
-          elevation: 0,
-          backgroundColor: Colors.white.withValues(alpha: 0.2),
-          shape: RoundedRectangleBorder(
-            borderRadius: const BorderRadius.vertical(
-              bottom: Radius.circular(32),
-            ),
-            side: BorderSide(color: Colors.white.withValues(alpha: 0.3)),
-          ),
-          actions: [
-            PopupMenuButton<SortOption>(
-              icon: const Icon(Icons.sort),
-              tooltip: l10n.sortBy,
-              onSelected: (SortOption result) {
-                setState(() {
-                  _currentSortOption = result;
-                  _sortResults();
-                });
-              },
-              itemBuilder: (BuildContext context) => <PopupMenuEntry<SortOption>>[
-                PopupMenuItem<SortOption>(
-                  value: SortOption.dateDesc,
-                  child: Text(l10n.dateNewestFirst),
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(kToolbarHeight + 24.0),
+          child: RepaintBoundary(
+            child: AppBar(
+              title: Text(widget.tag.name),
+              centerTitle: true,
+              elevation: 0,
+              backgroundColor: Colors.white.withValues(alpha: 0.7),
+              shape: RoundedRectangleBorder(
+                borderRadius: const BorderRadius.vertical(
+                  bottom: Radius.circular(32),
                 ),
-                PopupMenuItem<SortOption>(
-                  value: SortOption.dateAsc,
-                  child: const Text('Date (Oldest first)'),
-                ),
-                PopupMenuItem<SortOption>(
-                  value: SortOption.amountDesc,
-                  child: const Text('Amount (Highest first)'),
-                ),
-                PopupMenuItem<SortOption>(
-                  value: SortOption.amountAsc,
-                  child: const Text('Amount (Lowest first)'),
-                ),
-                PopupMenuItem<SortOption>(
-                  value: SortOption.nameAsc,
-                  child: const Text('Name (A-Z)'),
-                ),
-                PopupMenuItem<SortOption>(
-                  value: SortOption.nameDesc,
-                  child: const Text('Name (Z-A)'),
+                side: BorderSide(color: Colors.white.withValues(alpha: 0.7)),
+              ),
+              actions: [
+                PopupMenuButton<SortOption>(
+                  icon: const Icon(Icons.sort),
+                  tooltip: l10n.sortBy,
+                  onSelected: (SortOption result) {
+                    setState(() {
+                      _currentSortOption = result;
+                      _sortResults();
+                    });
+                  },
+                  itemBuilder: (BuildContext context) =>
+                      <PopupMenuEntry<SortOption>>[
+                        PopupMenuItem<SortOption>(
+                          value: SortOption.dateDesc,
+                          child: Text(l10n.dateNewestFirst),
+                        ),
+                        PopupMenuItem<SortOption>(
+                          value: SortOption.dateAsc,
+                          child: const Text('Date (Oldest first)'),
+                        ),
+                        PopupMenuItem<SortOption>(
+                          value: SortOption.amountDesc,
+                          child: const Text('Amount (Highest first)'),
+                        ),
+                        PopupMenuItem<SortOption>(
+                          value: SortOption.amountAsc,
+                          child: const Text('Amount (Lowest first)'),
+                        ),
+                        PopupMenuItem<SortOption>(
+                          value: SortOption.nameAsc,
+                          child: const Text('Name (A-Z)'),
+                        ),
+                        PopupMenuItem<SortOption>(
+                          value: SortOption.nameDesc,
+                          child: const Text('Name (Z-A)'),
+                        ),
+                      ],
                 ),
               ],
-            ),
-          ],
-          bottom: PreferredSize(
-            preferredSize: const Size.fromHeight(24.0),
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 12.0),
-              child: Text(
-                '${DateFormat.yMMMd(l10n.localeName).format(widget.dateRange.start)} - ${DateFormat.yMMMd(l10n.localeName).format(widget.dateRange.end)}',
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: Theme.of(context)
-                          .colorScheme
-                          .onSurface
-                          .withValues(alpha: 0.7),
+              bottom: PreferredSize(
+                preferredSize: const Size.fromHeight(24.0),
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 12.0),
+                  child: Text(
+                    '${DateFormat.yMMMd(l10n.localeName).format(widget.dateRange.start)} - ${DateFormat.yMMMd(l10n.localeName).format(widget.dateRange.end)}',
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.onSurface.withValues(alpha: 0.7),
                     ),
+                  ),
+                ),
               ),
             ),
           ),

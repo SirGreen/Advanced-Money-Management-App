@@ -97,9 +97,15 @@ class _AddTransactionViewState extends State<AddTransactionView> {
   }
 
   void _updateAmountSuggestions() {
-    final text = _amountController.text.replaceAll('.', '').replaceAll(',', '');
+    if (_selectedCurrency != 'VND' && _selectedCurrency != 'JPY') {
+      if (_amountSuggestions.isNotEmpty) {
+        setState(() => _amountSuggestions = []);
+      }
+      return;
+    }
+    final text = _amountController.text.replaceAll(RegExp(r'[^0-9]'), '');
     final amount = double.tryParse(text);
-    if (amount == null || amount == 0 || text.contains('.')) {
+    if (amount == null || amount == 0) {
       if (_amountSuggestions.isNotEmpty) {
         setState(() => _amountSuggestions = []);
       }
@@ -115,6 +121,18 @@ class _AddTransactionViewState extends State<AddTransactionView> {
     final newSuggestions = ['${integerText}000', '${integerText}0000'];
     if (newSuggestions.join(',') != _amountSuggestions.join(',')) {
       setState(() => _amountSuggestions = newSuggestions);
+    }
+  }
+
+  double? _parseAmount(String text) {
+    final digitsOnly = text.replaceAll(RegExp(r'[^0-9]'), '');
+    if (digitsOnly.isEmpty) return null;
+
+    final rawValue = double.tryParse(digitsOnly) ?? 0;
+    if (_selectedCurrency == 'JPY' || _selectedCurrency == 'VND') {
+      return rawValue;
+    } else {
+      return rawValue / 100;
     }
   }
 
@@ -256,14 +274,8 @@ class _AddTransactionViewState extends State<AddTransactionView> {
   // ---- Adjust Total ----
   void _adjustTotalAmount() {
     final l10n = AppLocalizations.of(context)!;
-    final currentText = _amountController.text
-        .replaceAll('.', '')
-        .replaceAll(',', '');
-    final currentAmount = double.tryParse(currentText) ?? 0.0;
-    final adjustText = _adjustAmountController.text
-        .replaceAll('.', '')
-        .replaceAll(',', '');
-    final adjustAmount = double.tryParse(adjustText) ?? 0.0;
+    final currentAmount = _parseAmount(_amountController.text) ?? 0.0;
+    final adjustAmount = _parseAmount(_adjustAmountController.text) ?? 0.0;
 
     if (adjustAmount <= 0) return;
 
@@ -354,29 +366,26 @@ class _AddTransactionViewState extends State<AddTransactionView> {
     return PreferredSize(
       preferredSize: const Size.fromHeight(kToolbarHeight),
       child: ClipRRect(
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
-          child: AppBar(
-            title: GradientTitle(
-              text: isEditing ? l10n.editTransaction : l10n.addTransaction,
-            ),
-            centerTitle: true,
-            elevation: 0,
-            backgroundColor: Colors.white.withValues(alpha: 0.2),
-            shape: RoundedRectangleBorder(
-              borderRadius: const BorderRadius.vertical(
-                bottom: Radius.circular(32),
-              ),
-              side: BorderSide(color: Colors.white.withValues(alpha: 0.3)),
-            ),
-            actions: [
-              if (isEditing)
-                IconButton(
-                  icon: const Icon(Icons.delete_outline),
-                  onPressed: _deleteTransaction,
-                ),
-            ],
+        child: AppBar(
+          title: GradientTitle(
+            text: isEditing ? l10n.editTransaction : l10n.addTransaction,
           ),
+          centerTitle: true,
+          elevation: 0,
+          backgroundColor: Colors.white.withValues(alpha: 0.7),
+          shape: RoundedRectangleBorder(
+            borderRadius: const BorderRadius.vertical(
+              bottom: Radius.circular(32),
+            ),
+            side: BorderSide(color: Colors.white.withValues(alpha: 0.7)),
+          ),
+          actions: [
+            if (isEditing)
+              IconButton(
+                icon: const Icon(Icons.delete_outline),
+                onPressed: _deleteTransaction,
+              ),
+          ],
         ),
       ),
     );
@@ -668,6 +677,8 @@ class _AddTransactionViewState extends State<AddTransactionView> {
     return GlassCard(
       padding: EdgeInsets.zero,
       child: ExpansionTile(
+        shape: const Border(),
+        collapsedShape: const Border(),
         leading: const Icon(Icons.add_shopping_cart_outlined),
         title: Text(l10n.adjustTotal),
         subtitle: Text(l10n.forgotToAddItem),
@@ -693,7 +704,10 @@ class _AddTransactionViewState extends State<AddTransactionView> {
                           decimal: true,
                         ),
                         inputFormatters: [
-                          DecimalCurrencyInputFormatter(locale: 'vi_VN'),
+                          DecimalCurrencyInputFormatter(
+                            locale: Localizations.localeOf(context).toString(),
+                            currencyCode: _selectedCurrency,
+                          ),
                         ],
                       ),
                     ),
@@ -794,6 +808,8 @@ class _AddTransactionViewState extends State<AddTransactionView> {
     return GlassCard(
       padding: EdgeInsets.zero,
       child: ExpansionTile(
+        shape: const Border(),
+        collapsedShape: const Border(),
         title: Text(l10n.optionalDetails),
         leading: const Icon(Icons.notes_outlined),
         initiallyExpanded: _notesController.text.isNotEmpty,
@@ -955,10 +971,8 @@ class _AddTransactionViewState extends State<AddTransactionView> {
   }
 
   void _saveForm(ExpenditureViewModel viewModel) async {
-    final rawAmount = _amountController.text
-        .replaceAll('.', '')
-        .replaceAll(',', '');
-    final amount = double.tryParse(rawAmount);
+    FocusScope.of(context).unfocus();
+    final amount = _parseAmount(_amountController.text);
 
     final String finalArticleName = _nameController.text.isNotEmpty
         ? _nameController.text

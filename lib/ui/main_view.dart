@@ -142,46 +142,43 @@ class _MainViewState extends State<MainView> with TickerProviderStateMixin {
           topLeft: Radius.circular(24.0),
           topRight: Radius.circular(24.0),
         ),
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
-          child: BottomNavigationBar(
-            type: BottomNavigationBarType.fixed,
-            backgroundColor: Colors.white.withValues(alpha: 0.2),
-            elevation: 0,
-            items: <BottomNavigationBarItem>[
-              BottomNavigationBarItem(
-                icon: const Icon(Icons.dashboard_outlined),
-                activeIcon: const Icon(Icons.dashboard),
-                label: l10n.dashboard,
-              ),
-              BottomNavigationBarItem(
-                icon: const Icon(Icons.receipt_long_outlined),
-                activeIcon: const Icon(Icons.receipt_long),
-                label: l10n.transactionsSingle,
-              ),
-              BottomNavigationBarItem(
-                icon: const Icon(Icons.bar_chart_outlined),
-                activeIcon: const Icon(Icons.bar_chart),
-                label: l10n.reports,
-              ),
-              BottomNavigationBarItem(
-                icon: const Icon(Icons.account_balance_wallet_outlined),
-                activeIcon: const Icon(Icons.account_balance_wallet),
-                label: l10n.assets,
-              ),
-              BottomNavigationBarItem(
-                icon: const Icon(Icons.settings_outlined),
-                activeIcon: const Icon(Icons.settings),
-                label: l10n.settings,
-              ),
-            ],
-            currentIndex: _selectedIndex,
-            selectedItemColor: Theme.of(context).colorScheme.primary,
-            unselectedItemColor: Theme.of(
-              context,
-            ).colorScheme.onSurface.withValues(alpha: 0.6),
-            onTap: _onItemTapped,
-          ),
+        child: BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
+          backgroundColor: Colors.white.withValues(alpha: 0.2),
+          elevation: 0,
+          items: <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: const Icon(Icons.dashboard_outlined),
+              activeIcon: const Icon(Icons.dashboard),
+              label: l10n.dashboard,
+            ),
+            BottomNavigationBarItem(
+              icon: const Icon(Icons.receipt_long_outlined),
+              activeIcon: const Icon(Icons.receipt_long),
+              label: l10n.transactionsSingle,
+            ),
+            BottomNavigationBarItem(
+              icon: const Icon(Icons.bar_chart_outlined),
+              activeIcon: const Icon(Icons.bar_chart),
+              label: l10n.reports,
+            ),
+            BottomNavigationBarItem(
+              icon: const Icon(Icons.account_balance_wallet_outlined),
+              activeIcon: const Icon(Icons.account_balance_wallet),
+              label: l10n.assets,
+            ),
+            BottomNavigationBarItem(
+              icon: const Icon(Icons.settings_outlined),
+              activeIcon: const Icon(Icons.settings),
+              label: l10n.settings,
+            ),
+          ],
+          currentIndex: _selectedIndex,
+          selectedItemColor: Theme.of(context).colorScheme.primary,
+          unselectedItemColor: Theme.of(
+            context,
+          ).colorScheme.onSurface.withValues(alpha: 0.6),
+          onTap: _onItemTapped,
         ),
       ),
     );

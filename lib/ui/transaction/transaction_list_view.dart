@@ -330,13 +330,16 @@ class _TransactionListViewState extends State<TransactionListView> {
                               child: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  GlassCard(
-                                    color: const Color.fromARGB(
-                                      255,
-                                      109,
-                                      250,
-                                      96,
-                                    ).withValues(alpha: 0.15),
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      color: const Color.fromARGB(
+                                        255,
+                                        109,
+                                        250,
+                                        96,
+                                      ).withValues(alpha: 0.15),
+                                      borderRadius: BorderRadius.circular(16),
+                                    ),
                                     padding: const EdgeInsets.symmetric(
                                       horizontal: 16.0,
                                       vertical: 12.0,
@@ -555,116 +558,113 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
         ? PrivacyModeService.maskSymbol
         : formattedBalance;
 
-    return ClipRRect(
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
-        child: AppBar(
-          centerTitle: true,
-          title: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                l10n.allTimeMoneyLeft.toUpperCase(),
-                style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                  color: Colors.black.withValues(alpha: 0.5),
-                ),
-              ),
-              Text(
-                displayBalance,
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: balanceColor,
-                ),
-              ),
-            ],
-          ),
-          elevation: 0,
-          backgroundColor: Colors.white.withValues(alpha: 0.2),
-          shape: RoundedRectangleBorder(
-            borderRadius: const BorderRadius.vertical(
-              bottom: Radius.circular(32),
+    return RepaintBoundary(
+      child: AppBar(
+        centerTitle: true,
+        title: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              l10n.allTimeMoneyLeft.toUpperCase(),
+              style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                    color: Colors.black.withValues(alpha: 0.5),
+                  ),
             ),
-            side: BorderSide(color: Colors.white.withValues(alpha: 0.3)),
-          ),
-          bottom: PreferredSize(
-            preferredSize: const Size.fromHeight(kToolbarHeight),
-            child: Container(
-              decoration: BoxDecoration(
-                border: Border(
-                  top: BorderSide(
-                    color: Colors.white.withValues(alpha: 0.4),
-                    width: 0.5,
+            Text(
+              displayBalance,
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: balanceColor,
                   ),
+            ),
+          ],
+        ),
+        elevation: 0,
+        backgroundColor: Colors.white.withValues(alpha: 0.7),
+        shape: RoundedRectangleBorder(
+          borderRadius: const BorderRadius.vertical(
+            bottom: Radius.circular(32),
+          ),
+          side: BorderSide(color: Colors.white.withValues(alpha: 0.7)),
+        ),
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(kToolbarHeight),
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border(
+                top: BorderSide(
+                  color: Colors.white.withValues(alpha: 0.4),
+                  width: 0.5,
                 ),
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  IconButton(
-                    icon: Icon(
-                      isFilterActive
-                          ? Icons.filter_list
-                          : Icons.filter_list_off_outlined,
-                    ),
-                    onPressed: onSelectDateRange,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                IconButton(
+                  icon: Icon(
+                    isFilterActive
+                        ? Icons.filter_list
+                        : Icons.filter_list_off_outlined,
                   ),
-                  IconButton(
-                    icon: const Icon(Icons.search),
-                    onPressed: () => Navigator.of(context).push(
-                      MaterialPageRoute(builder: (_) => const SearchPage()),
-                    ),
+                  onPressed: onSelectDateRange,
+                ),
+                IconButton(
+                  icon: const Icon(Icons.search),
+                  onPressed: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => const SearchPage()),
                   ),
-                  PopupMenuButton<int>(
-                    icon: const Icon(Icons.more_horiz),
-                    onSelected: (value) {
-                      if (value == 1) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                const ScheduledExpenditureListView(),
-                          ),
-                        );
-                      } else if (value == 2) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const ManageTagsPage(),
-                          ),
-                        );
-                      }
-                    },
-                    itemBuilder: (ctx) => [
-                      PopupMenuItem(
-                        value: 1,
-                        child: Row(
-                          children: [
-                            const Icon(
-                              Icons.event_repeat,
-                              color: Colors.black54,
-                            ),
-                            const SizedBox(width: 12),
-                            Text(l10n.manageScheduled),
-                          ],
+                ),
+                PopupMenuButton<int>(
+                  icon: const Icon(Icons.more_horiz),
+                  onSelected: (value) {
+                    if (value == 1) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              const ScheduledExpenditureListView(),
                         ),
-                      ),
-                      PopupMenuItem(
-                        value: 2,
-                        child: Row(
-                          children: [
-                            const Icon(
-                              Icons.label_outline,
-                              color: Colors.black54,
-                            ),
-                            const SizedBox(width: 12),
-                            Text(l10n.manageTags),
-                          ],
+                      );
+                    } else if (value == 2) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const ManageTagsPage(),
                         ),
+                      );
+                    }
+                  },
+                  itemBuilder: (ctx) => [
+                    PopupMenuItem(
+                      value: 1,
+                      child: Row(
+                        children: [
+                          const Icon(
+                            Icons.event_repeat,
+                            color: Colors.black54,
+                          ),
+                          const SizedBox(width: 12),
+                          Text(l10n.manageScheduled),
+                        ],
                       ),
-                    ],
-                  ),
-                ],
-              ),
+                    ),
+                    PopupMenuItem(
+                      value: 2,
+                      child: Row(
+                        children: [
+                          const Icon(
+                            Icons.label_outline,
+                            color: Colors.black54,
+                          ),
+                          const SizedBox(width: 12),
+                          Text(l10n.manageTags),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
         ),

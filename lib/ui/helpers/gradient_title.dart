@@ -27,13 +27,6 @@ class GradientTitle extends StatelessWidget {
           color: Colors.white,
           fontWeight: FontWeight.w800,
           letterSpacing: 1.5,
-          shadows: [
-            Shadow(
-              color: Colors.black.withValues(alpha: 0.3),
-              blurRadius: 4.0,
-              offset: Offset(2, 2),
-            ),
-          ],
         ),
       ),
     );
