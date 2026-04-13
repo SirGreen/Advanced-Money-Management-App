@@ -32,21 +32,16 @@ class AddEditBudgetAppBar extends StatelessWidget implements PreferredSizeWidget
 
   @override
   Widget build(BuildContext context) {
-    return ClipRect(
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
-        child: AppBar(
-          title: GradientTitle(text: isEditing ? l10n.editBudget : l10n.addBudget),
-          centerTitle: true,
-          elevation: 0,
-          backgroundColor: Colors.white.withValues(alpha: 0.2),
-          shape: RoundedRectangleBorder(
-            borderRadius: const BorderRadius.vertical(bottom: Radius.circular(32)),
-            side: BorderSide(color: Colors.white.withValues(alpha: 0.3)),
-          ),
-          bottom: tabBar,
-        ),
+    return AppBar(
+      title: GradientTitle(text: isEditing ? l10n.editBudget : l10n.addBudget),
+      centerTitle: true,
+      elevation: 0,
+      backgroundColor: Colors.white.withValues(alpha: 0.7),
+      shape: RoundedRectangleBorder(
+        borderRadius: const BorderRadius.vertical(bottom: Radius.circular(32)),
+        side: BorderSide(color: Colors.white.withValues(alpha: 0.7)),
       ),
+      bottom: tabBar,
     );
   }
 

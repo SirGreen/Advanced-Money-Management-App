@@ -30,29 +30,24 @@ class AddEditSavingAccountAppBar extends StatelessWidget
 
   @override
   Widget build(BuildContext context) {
-    return ClipRect(
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
-        child: AppBar(
-          title: GradientTitle(
-            text: isEditing ? l10n.editSavingAccount : l10n.addSavingAccount,
-          ),
-          centerTitle: true,
-          elevation: 0,
-          backgroundColor: Colors.white.withValues(alpha: 0.2),
-          shape: RoundedRectangleBorder(
-            borderRadius: const BorderRadius.vertical(bottom: Radius.circular(32)),
-            side: BorderSide(color: Colors.white.withValues(alpha: 0.3)),
-          ),
-          actions: [
-            if (isEditing)
-              IconButton(
-                icon: const Icon(Icons.delete_outline),
-                onPressed: onDeletePressed,
-              ),
-          ],
-        ),
+    return AppBar(
+      title: GradientTitle(
+        text: isEditing ? l10n.editSavingAccount : l10n.addSavingAccount,
       ),
+      centerTitle: true,
+      elevation: 0,
+      backgroundColor: Colors.white.withValues(alpha: 0.7),
+      shape: RoundedRectangleBorder(
+        borderRadius: const BorderRadius.vertical(bottom: Radius.circular(32)),
+        side: BorderSide(color: Colors.white.withValues(alpha: 0.7)),
+      ),
+      actions: [
+        if (isEditing)
+          IconButton(
+            icon: const Icon(Icons.delete_outline),
+            onPressed: onDeletePressed,
+          ),
+      ],
     );
   }
 

@@ -395,7 +395,7 @@ class _AddTransactionViewState extends State<AddTransactionView> {
     final l10n = AppLocalizations.of(context)!;
     return GlassCard(
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
-      color: _isIncome ? Colors.green.withValues(alpha: 0.2) : null,
+      color: _isIncome ? Colors.green.withValues(alpha: 0.7) : null,
       child: Column(
         children: [
           TextField(
@@ -498,10 +498,10 @@ class _AddTransactionViewState extends State<AddTransactionView> {
                   return ActionChip(
                     label: Text(formatted),
                     onPressed: () => _applyAmountSuggestion(suggestion),
-                    backgroundColor: Colors.white.withValues(alpha: 0.3),
+                    backgroundColor: Colors.white.withValues(alpha: 0.7),
                     shape: StadiumBorder(
                       side: BorderSide(
-                        color: Colors.white.withValues(alpha: 0.2),
+                        color: Colors.white.withValues(alpha: 0.7),
                       ),
                     ),
                   );
@@ -533,7 +533,7 @@ class _AddTransactionViewState extends State<AddTransactionView> {
         setState(() => _isIncome = newSelection.first);
       },
       style: SegmentedButton.styleFrom(
-        backgroundColor: Colors.white.withValues(alpha: 0.2),
+        backgroundColor: Colors.white.withValues(alpha: 0.7),
         foregroundColor: Theme.of(context).colorScheme.onSurfaceVariant,
         selectedBackgroundColor: _isIncome
             ? Colors.green.withValues(alpha: 0.4)
@@ -589,7 +589,7 @@ class _AddTransactionViewState extends State<AddTransactionView> {
                   selected: isSelected,
                   onSelected: (selected) =>
                       _handleTagSelection(tag.id, selected),
-                  selectedColor: Color(tag.colorValue).withValues(alpha: 0.25),
+                  selectedColor: Color(tag.colorValue).withValues(alpha: 0.7),
                   shape: StadiumBorder(
                     side: BorderSide(
                       color: isSelected

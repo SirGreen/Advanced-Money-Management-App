@@ -35,12 +35,12 @@ class AddEditExpenditureAppBar extends StatelessWidget
         title: GradientTitle(text: l10n.addTransaction),
         centerTitle: true,
         elevation: 0,
-        backgroundColor: Colors.white.withValues(alpha: 0.2),
+        backgroundColor: Colors.white.withValues(alpha: 0.7),
         shape: RoundedRectangleBorder(
           borderRadius: const BorderRadius.vertical(
             bottom: Radius.circular(32),
           ),
-          side: BorderSide(color: Colors.white.withValues(alpha: 0.3)),
+          side: BorderSide(color: Colors.white.withValues(alpha: 0.7)),
         ),
       ),
     );
@@ -409,7 +409,7 @@ class _AddEditExpenditurePageState extends State<AddEditExpenditurePage> {
       onSelectionChanged: (newSelection) =>
           setState(() => _isIncome = newSelection.first),
       style: SegmentedButton.styleFrom(
-        backgroundColor: Colors.white.withValues(alpha: 0.2),
+        backgroundColor: Colors.white.withValues(alpha: 0.7),
         selectedBackgroundColor: _isIncome
             ? Colors.green.withValues(alpha: 0.4)
             : Colors.white.withValues(alpha: 0.5),
@@ -461,7 +461,7 @@ class _AddEditExpenditurePageState extends State<AddEditExpenditurePage> {
                           ),
                         ),
                         avatar: TagIcon(tag: tag, radius: 10),
-                        backgroundColor: tagColor.withValues(alpha: 0.2),
+                        backgroundColor: tagColor.withValues(alpha: 0.7),
                         selectedColor: tagColor.withValues(alpha: 0.7),
                         selected: isSelected,
                         onSelected: (selected) =>

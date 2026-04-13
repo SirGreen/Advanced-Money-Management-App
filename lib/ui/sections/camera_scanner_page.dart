@@ -26,7 +26,7 @@ class CameraScannerAppBar extends StatelessWidget
         title: GradientTitle(text: l10n.scanReceipt),
         centerTitle: true,
         elevation: 0,
-        backgroundColor: Colors.white.withValues(alpha: 0.2),
+        backgroundColor: Colors.white.withValues(alpha: 0.7),
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(bottom: Radius.circular(32)),
         ),

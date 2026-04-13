@@ -31,21 +31,16 @@ class DashboardAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRect(
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
-        child: AppBar(
-          title: GradientTitle(text: l10n.dashboard),
-          centerTitle: true,
-          elevation: 0,
-          backgroundColor: Colors.white.withValues(alpha: 0.2),
-          shape: RoundedRectangleBorder(
-            borderRadius: const BorderRadius.vertical(
-              bottom: Radius.circular(32),
-            ),
-            side: BorderSide(color: Colors.white.withValues(alpha: 0.3)),
-          ),
+    return AppBar(
+      title: GradientTitle(text: l10n.dashboard),
+      centerTitle: true,
+      elevation: 0,
+      backgroundColor: Colors.white.withValues(alpha: 0.7),
+      shape: RoundedRectangleBorder(
+        borderRadius: const BorderRadius.vertical(
+          bottom: Radius.circular(32),
         ),
+        side: BorderSide(color: Colors.white.withValues(alpha: 0.7)),
       ),
     );
   }
@@ -325,7 +320,7 @@ class _BackupReminderCard extends StatelessWidget {
       child: GlassCard(
         padding: const EdgeInsets.all(8),
         onTap: onTap,
-        color: Colors.blue.withValues(alpha: 0.2),
+        color: Colors.blue.withValues(alpha: 0.4),
         child: ListTile(
           contentPadding: const EdgeInsets.symmetric(horizontal: 8),
           leading: Icon(

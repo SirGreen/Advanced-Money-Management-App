@@ -144,7 +144,7 @@ class _MainViewState extends State<MainView> with TickerProviderStateMixin {
         ),
         child: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
-          backgroundColor: Colors.white.withValues(alpha: 0.2),
+          backgroundColor: Colors.white.withValues(alpha: 0.9),
           elevation: 0,
           items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(

@@ -44,36 +44,31 @@ class AssetsAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRect(
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
-        child: AppBar(
-          title: GradientTitle(text: l10n.assets),
-          centerTitle: true,
-          elevation: 0,
-          backgroundColor: Colors.white.withValues(alpha: 0.2),
-          shape: RoundedRectangleBorder(
-            borderRadius: const BorderRadius.vertical(
-              bottom: Radius.circular(32),
-            ),
-            side: BorderSide(color: Colors.white.withValues(alpha: 0.3)),
-          ),
-          actions: [
-            if (showSortButton)
-              IconButton(
-                icon: const Icon(Icons.sort),
-                onPressed: onSortPressed,
-                tooltip: l10n.sortBy,
-              ),
-            IconButton(
-              icon: const Icon(Icons.refresh),
-              onPressed: onRefresh,
-              tooltip: l10n.refresh,
-            ),
-          ],
-          bottom: tabBar,
+    return AppBar(
+      title: GradientTitle(text: l10n.assets),
+      centerTitle: true,
+      elevation: 0,
+      backgroundColor: Colors.white.withValues(alpha: 0.7),
+      shape: RoundedRectangleBorder(
+        borderRadius: const BorderRadius.vertical(
+          bottom: Radius.circular(32),
         ),
+        side: BorderSide(color: Colors.white.withValues(alpha: 0.7)),
       ),
+      actions: [
+        if (showSortButton)
+          IconButton(
+            icon: const Icon(Icons.sort),
+            onPressed: onSortPressed,
+            tooltip: l10n.sortBy,
+          ),
+        IconButton(
+          icon: const Icon(Icons.refresh),
+          onPressed: onRefresh,
+          tooltip: l10n.refresh,
+        ),
+      ],
+      bottom: tabBar,
     );
   }
 
@@ -621,7 +616,7 @@ class _SavingGoalCard extends StatelessWidget {
                   Chip(
                     avatar: const Icon(Icons.check, size: 16),
                     label: Text(l10n.completed),
-                    backgroundColor: Colors.green.withValues(alpha: 0.2),
+                    backgroundColor: Colors.green.withValues(alpha: 0.7),
                     labelStyle: const TextStyle(color: Colors.green),
                     side: BorderSide.none,
                   ),
@@ -642,7 +637,7 @@ class _SavingGoalCard extends StatelessWidget {
               value: goal.progress,
               minHeight: 10,
               borderRadius: BorderRadius.circular(5),
-              backgroundColor: Theme.of(context).colorScheme.primary.withValues(alpha: 0.2),
+              backgroundColor: Theme.of(context).colorScheme.primary.withValues(alpha: 0.7),
               valueColor: AlwaysStoppedAnimation<Color>(
                 isCompleted ? Colors.green : Theme.of(context).colorScheme.primary,
               ),
@@ -799,7 +794,7 @@ class _BudgetCard extends StatelessWidget {
               minHeight: 12,
               borderRadius: BorderRadius.circular(6),
               valueColor: AlwaysStoppedAnimation<Color>(progressColor),
-              backgroundColor: progressColor.withValues(alpha: 0.2),
+              backgroundColor: progressColor.withValues(alpha: 0.7),
             ),
             const SizedBox(height: 8),
             Row(
