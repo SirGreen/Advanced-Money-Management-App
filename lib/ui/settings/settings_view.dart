@@ -214,6 +214,171 @@ class SettingsView extends StatelessWidget {
     await viewModel.saveSettings(settings.copyWith(remindersEnabled: value));
   }
 
+  Future<void> _onCurrencyChanged(
+    BuildContext context,
+    SettingsViewModel viewModel,
+    AppLocalizations l10n,
+    String newCode,
+  ) async {
+    final oldCode = viewModel.settings.primaryCurrencyCode;
+    if (oldCode == newCode) return;
+
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l10n.changeCurrency),
+        content: Text(l10n.confirmCurrencyConversion(oldCode, newCode)),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text(l10n.cancel),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: Text(l10n.proceed),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed == true) {
+      if (context.mounted) {
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) => const Center(child: CircularProgressIndicator()),
+        );
+      }
+
+      final rate = await viewModel.getExchangeRate(oldCode, newCode);
+
+      if (context.mounted) Navigator.pop(context); // Pop loading
+
+      if (rate != null) {
+        await viewModel.convertAllData(rate, newCode);
+      } else {
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(l10n.exchangeRateError)),
+          );
+        }
+      }
+    }
+  }
+
+  void _showAddCustomRateDialog(
+    BuildContext context,
+    SettingsViewModel viewModel,
+    AppLocalizations l10n,
+  ) {
+    String fromCurrency = 'USD';
+    String toCurrency = 'VND';
+    final rateController = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setDialogState) => AlertDialog(
+          title: Text(l10n.addCustomRate),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: DropdownButton<String>(
+                      value: fromCurrency,
+                      isExpanded: true,
+                      items: _supportedCurrencies
+                          .map(
+                            (code) => DropdownMenuItem(
+                              value: code,
+                              child: Text(code),
+                            ),
+                          )
+                          .toList(),
+                      onChanged: (val) {
+                        if (val != null) setDialogState(() => fromCurrency = val);
+                      },
+                    ),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8),
+                    child: Icon(Icons.arrow_forward),
+                  ),
+                  Expanded(
+                    child: DropdownButton<String>(
+                      value: toCurrency,
+                      isExpanded: true,
+                      items: _supportedCurrencies
+                          .map(
+                            (code) => DropdownMenuItem(
+                              value: code,
+                              child: Text(code),
+                            ),
+                          )
+                          .toList(),
+                      onChanged: (val) {
+                        if (val != null) setDialogState(() => toCurrency = val);
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              TextField(
+                controller: rateController,
+                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                decoration: InputDecoration(
+                  labelText: l10n.exchangeRate,
+                  hintText: 'e.g. 25000',
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text(l10n.cancel),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                final rate = double.tryParse(rateController.text);
+                if (rate != null && fromCurrency != toCurrency) {
+                  viewModel.addOrUpdateCustomRate(fromCurrency, toCurrency, rate);
+                  Navigator.pop(context);
+                }
+              },
+              child: Text(l10n.add),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  static const List<String> _supportedCurrencies = [
+    'VND',
+    'USD',
+    'EUR',
+    'JPY',
+    'GBP',
+    'CNY',
+    'AUD',
+    'CAD',
+    'CHF',
+    'HKD',
+    'SGD',
+    'INR',
+    'KRW',
+    'THB',
+    'PHP',
+    'MYR',
+    'BRL',
+    'ZAR',
+    'RUB',
+  ];
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -304,37 +469,58 @@ class SettingsView extends StatelessWidget {
                               ),
                               trailing: const Icon(Icons.chevron_right),
                               onTap: () async {
-                                final selectedCurrency = await showModalBottomSheet<String>(
+                                final selectedCurrency =
+                                    await showModalBottomSheet<String>(
                                   context: context,
-                                  builder: (_) => const CurrencyPickerSheet(
-                                    supportedCurrencies: [
-                                      'VND',
-                                      'USD',
-                                      'EUR',
-                                      'JPY',
-                                      'GBP',
-                                      'CNY',
-                                      'AUD',
-                                      'CAD',
-                                      'CHF',
-                                      'HKD',
-                                      'SGD',
-                                      'INR',
-                                      'KRW',
-                                      'THB',
-                                      'PHP',
-                                      'MYR',
-                                      'BRL',
-                                      'ZAR',
-                                      'RUB',
-                                    ],
-                                    title: 'Select Currency',
+                                  builder: (_) => CurrencyPickerSheet(
+                                    supportedCurrencies: _supportedCurrencies,
+                                    title: l10n.selectCurrency,
                                   ),
                                 );
-                                if (selectedCurrency != null) {
-                                  await viewModel.updatePrimaryCurrency(selectedCurrency);
+                                if (selectedCurrency != null && context.mounted) {
+                                  await _onCurrencyChanged(
+                                    context,
+                                    viewModel,
+                                    l10n,
+                                    selectedCurrency,
+                                  );
                                 }
                               },
+                            ),
+                            ListTile(
+                              leading: const Icon(Icons.swap_horiz),
+                              title: Text(l10n.customExchangeRates),
+                              trailing: const Icon(Icons.add),
+                              onTap: () => _showAddCustomRateDialog(
+                                context,
+                                viewModel,
+                                l10n,
+                              ),
+                            ),
+                            ...viewModel.customRates.map(
+                              (rate) => ListTile(
+                                dense: true,
+                                title: Text(
+                                  rate.conversionPair.replaceAll('_', ' → '),
+                                ),
+                                trailing: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      rate.rate.toString(),
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    IconButton(
+                                      icon: const Icon(Icons.delete_outline, size: 20),
+                                      onPressed: () => viewModel.deleteCustomRate(
+                                        rate.conversionPair,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
                           ],
                         ),

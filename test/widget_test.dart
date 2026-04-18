@@ -36,8 +36,29 @@ import 'package:adv_money_mana/domain/usecases/scan_receipt_usecase.dart';
 import 'package:adv_money_mana/domain/services/recurring_transaction_service.dart';
 
 import 'package:adv_money_mana/ui/settings/settings_view_model.dart';
+import 'package:adv_money_mana/domain/repositories/currency_repository.dart';
+import 'package:adv_money_mana/domain/usecases/convert_all_data_usecase.dart';
+import 'package:adv_money_mana/domain/entities/custom_exchange_rate.dart';
 
 class MockNotificationService extends Mock implements NotificationService {}
+
+class FakeCurrencyRepository implements CurrencyRepository {
+  @override
+  Future<double?> getExchangeRate(String from, String to) async => 1.0;
+  @override
+  Future<List<CustomExchangeRate>> getAllCustomRates() async => [];
+  @override
+  Future<void> saveCustomRate(CustomExchangeRate customRate) async {}
+  @override
+  Future<void> deleteCustomRate(String conversionPair) async {}
+  @override
+  Future<void> refreshRates() async {}
+}
+
+class FakeConvertAllDataUseCase extends Mock implements ConvertAllDataUseCase {
+  @override
+  Future<void> execute(double rate, String newCurrencyCode) async {}
+}
 
 class FakeSettingsRepository implements SettingsRepository {
   @override
@@ -103,6 +124,8 @@ void main() {
     final receiptRepository = ReceiptRepositoryImpl(llmService);
 
     final scanReceiptUseCase = ScanReceiptUseCase(receiptRepository);
+    final currencyRepository = FakeCurrencyRepository();
+    final convertAllDataUseCase = FakeConvertAllDataUseCase();
 
     final recurringService = RecurringTransactionService(
       scheduledRepository,
@@ -110,7 +133,11 @@ void main() {
       mockNotificationService,
     );
 
-    final settingsViewModel = SettingsViewModel(repository: settingsRepository);
+    final settingsViewModel = SettingsViewModel(
+      repository: settingsRepository,
+      currencyRepository: currencyRepository,
+      convertAllDataUseCase: convertAllDataUseCase,
+    );
     await settingsViewModel.initialize();
 
     await tester.pumpWidget(
@@ -122,6 +149,7 @@ void main() {
         scheduledRepository: scheduledRepository,
         savingGoalRepository: savingGoalRepository,
         exportRepository: exportRepository,
+        currencyRepository: currencyRepository,
         scanReceiptUseCase: scanReceiptUseCase,
         recurringService: recurringService,
       ),

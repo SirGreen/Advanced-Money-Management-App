@@ -13,12 +13,14 @@ import '../../domain/entities/tag.dart';
 import '../../domain/entities/search_filter.dart';
 import '../../domain/repositories/expenditure_repository.dart';
 import '../../domain/repositories/tag_repository.dart';
+import '../../domain/repositories/currency_repository.dart';
 import '../../domain/usecases/scan_receipt_usecase.dart';
 
 class ExpenditureViewModel extends ChangeNotifier {
   final ExpenditureRepository _repository;
   final TagRepository _tagRepository;
   final SettingsRepository _settingsRepository;
+  final CurrencyRepository _currencyRepository;
 
   final ScanReceiptUseCase _scanReceiptUseCase;
 
@@ -38,12 +40,23 @@ class ExpenditureViewModel extends ChangeNotifier {
     required ExpenditureRepository repository,
     required TagRepository tagRepository,
     required SettingsRepository settingsRepository,
+    required CurrencyRepository currencyRepository,
     required ScanReceiptUseCase scanReceiptUseCase,
   }) : _repository = repository,
        _tagRepository = tagRepository,
        _settingsRepository = settingsRepository,
+       _currencyRepository = currencyRepository,
        _scanReceiptUseCase = scanReceiptUseCase {
     loadExpenditures();
+  }
+
+  // Currency conversion methods
+  Future<double?> getExchangeRate(String from, String to) async {
+    return await _currencyRepository.getExchangeRate(from, to);
+  }
+
+  double? convertAmount(double amount, double rate) {
+    return amount * rate;
   }
 
   // will be used by ChangeNotifierProxyProvider<TagViewModel, ExpenditureViewModel> in main.dart

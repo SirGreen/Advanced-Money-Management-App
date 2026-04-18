@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'dart:ui';
 import 'package:flutter/material.dart';
@@ -45,6 +46,12 @@ class _AddTransactionViewState extends State<AddTransactionView> {
   late bool isEditing;
   bool _isInitialized = false;
 
+  // Conversion
+  double? _conversionRate;
+  String _convertedAmountString = '';
+  bool _isConverting = false;
+  Timer? _debounce;
+
   // AI Tag recommendations
   List<Object> _recommendedTags = [];
   bool _isFetchingRecommendations = false;
@@ -71,7 +78,58 @@ class _AddTransactionViewState extends State<AddTransactionView> {
       _selectedDate = e.date;
       _receiptPath = e.receiptImagePath;
     }
-    _amountController.addListener(_updateAmountSuggestions);
+    _amountController.addListener(_onAmountOrCurrencyChanged);
+  }
+
+  void _onAmountOrCurrencyChanged() {
+    _updateAmountSuggestions();
+    if (_debounce?.isActive ?? false) _debounce!.cancel();
+    _debounce = Timer(const Duration(milliseconds: 500), _convertAmount);
+  }
+
+  Future<void> _convertAmount() async {
+    final settingsViewModel =
+        Provider.of<SettingsViewModel>(context, listen: false);
+    final primaryCurrency = settingsViewModel.settings.primaryCurrencyCode;
+
+    final amount = _parseAmount(_amountController.text);
+
+    if (_selectedCurrency == primaryCurrency || amount == null || amount == 0) {
+      if (mounted) {
+        setState(() {
+          _convertedAmountString = '';
+          _isConverting = false;
+          _conversionRate = null;
+        });
+      }
+      return;
+    }
+
+    if (mounted) setState(() => _isConverting = true);
+
+    final viewModel = Provider.of<ExpenditureViewModel>(context, listen: false);
+    final rate = await viewModel.getExchangeRate(_selectedCurrency, primaryCurrency);
+
+    if (mounted) {
+      setState(() {
+        _conversionRate = rate;
+        if (rate != null) {
+          final converted = amount * rate;
+          final currencySymbol =
+              NumberFormat.simpleCurrency(name: primaryCurrency).currencySymbol;
+          final formatted = NumberFormat.currency(
+            locale: Localizations.localeOf(context).toString(),
+            symbol: currencySymbol,
+            decimalDigits:
+                primaryCurrency == 'JPY' || primaryCurrency == 'VND' ? 0 : 2,
+          ).format(converted);
+          _convertedAmountString = '≈ $formatted';
+        } else {
+          _convertedAmountString = 'Rate not found';
+        }
+        _isConverting = false;
+      });
+    }
   }
 
   @override
@@ -439,9 +497,10 @@ class _AddTransactionViewState extends State<AddTransactionView> {
                       title: l10n.selectCurrency,
                     ),
                   );
-                  if (selected != null) {
+                  if (selected != null && selected != _selectedCurrency) {
                     setState(() {
                       _selectedCurrency = selected;
+                      _onAmountOrCurrencyChanged();
                     });
                   }
                 },
@@ -467,6 +526,21 @@ class _AddTransactionViewState extends State<AddTransactionView> {
                   ),
                 ),
               ),
+              const Spacer(),
+              if (_isConverting)
+                const SizedBox(
+                  width: 20,
+                  height: 20,
+                  child: CircularProgressIndicator(strokeWidth: 2),
+                )
+              else if (_convertedAmountString.isNotEmpty)
+                Text(
+                  _convertedAmountString,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: Colors.grey.shade700,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
             ],
           ),
           const Divider(height: 24),
@@ -972,7 +1046,37 @@ class _AddTransactionViewState extends State<AddTransactionView> {
 
   void _saveForm(ExpenditureViewModel viewModel) async {
     FocusScope.of(context).unfocus();
-    final amount = _parseAmount(_amountController.text);
+    final settingsViewModel = Provider.of<SettingsViewModel>(context, listen: false);
+    final primaryCurrency = settingsViewModel.settings.primaryCurrencyCode;
+    
+    double? amount = _parseAmount(_amountController.text);
+    String finalCurrency = _selectedCurrency;
+
+    // Normalize to primary currency if different
+    if (amount != null && _selectedCurrency != primaryCurrency) {
+      if (_conversionRate != null) {
+        amount = amount * _conversionRate!;
+        finalCurrency = primaryCurrency;
+      } else {
+        // Fallback: fetch rate one last time if not available
+        final rate = await viewModel.getExchangeRate(_selectedCurrency, primaryCurrency);
+        if (rate != null) {
+          amount = amount * rate;
+          finalCurrency = primaryCurrency;
+        } else {
+          // If still no rate, we keep original currency (but balance will be weird as user noted)
+          // Old app logic: if rate is null, it used amountInput as is but still set primary currency
+          // which effectively treated 16 EUR as 16 VND.
+          // To match old app exactly:
+          finalCurrency = primaryCurrency;
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Warning: Exchange rate not found. Saving as primary currency value.')),
+            );
+          }
+        }
+      }
+    }
 
     final String finalArticleName = _nameController.text.isNotEmpty
         ? _nameController.text
@@ -997,7 +1101,7 @@ class _AddTransactionViewState extends State<AddTransactionView> {
       mainTagId: fallbackTagId,
       subTagIds: _selectedSubTagIds,
       isIncome: _isIncome,
-      currencyCode: _selectedCurrency,
+      currencyCode: finalCurrency,
       notes: _notesController.text,
       scheduledExpenditureId: isEditing
           ? widget.expenditure!.scheduledExpenditureId

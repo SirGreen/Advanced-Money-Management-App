@@ -11,6 +11,8 @@ import 'domain/entities/scheduled_expenditure.dart';
 import 'domain/entities/saving_goal.dart';
 import 'domain/entities/saving_contribution.dart';
 import 'domain/entities/saving_account.dart';
+import 'domain/entities/cached_rate.dart';
+import 'domain/entities/custom_exchange_rate.dart';
 
 import 'data/data_sources/llm_service.dart';
 import 'data/data_sources/expenditure_service.dart';
@@ -19,6 +21,8 @@ import 'data/data_sources/settings_service.dart';
 import 'data/data_sources/tag_service.dart';
 import 'data/data_sources/saving_goal_service.dart';
 import 'data/data_sources/saving_contribution_service.dart';
+import 'data/data_sources/currency_api_service.dart';
+import 'data/data_sources/currency_local_service.dart';
 import 'data/services/notification_service.dart';
 import 'data/services/export_service.dart';
 
@@ -29,9 +33,12 @@ import 'data/repositories/scheduled_expenditure_repository_impl.dart';
 import 'data/repositories/settings_repository_impl.dart';
 import 'data/repositories/saving_goal_repository_impl.dart';
 import 'data/repositories/export_repository_impl.dart';
+import 'data/repositories/currency_repository_impl.dart';
 
 import 'domain/repositories/settings_repository.dart';
+import 'domain/repositories/currency_repository.dart';
 import 'domain/usecases/scan_receipt_usecase.dart';
+import 'domain/usecases/convert_all_data_usecase.dart';
 import 'domain/services/recurring_transaction_service.dart';
 
 import 'ui/tags/tag_view_model.dart';
@@ -62,6 +69,8 @@ void main() async {
   Hive.registerAdapter(SavingGoalAdapter());
   Hive.registerAdapter(SavingContributionAdapter());
   Hive.registerAdapter(SavingAccountAdapter());
+  Hive.registerAdapter(CachedRateAdapter());
+  Hive.registerAdapter(CustomExchangeRateAdapter());
 
   final notificationService = NotificationService();
   await notificationService.init();
@@ -87,9 +96,25 @@ void main() async {
   final exportRepository = ExportRepositoryImpl(ExportService());
   final receiptRepository = ReceiptRepositoryImpl(llmService);
 
+  final currencyApiService = CurrencyApiService();
+  final currencyLocalService = CurrencyLocalService();
+  final currencyRepository = CurrencyRepositoryImpl(
+    currencyApiService,
+    currencyLocalService,
+  );
+  final convertAllDataUseCase = ConvertAllDataUseCase(
+    expenditureRepository: expenditureRepository,
+    scheduledRepository: scheduledRepository,
+    tagRepository: tagRepository,
+  );
+
   final scanReceiptUseCase = ScanReceiptUseCase(receiptRepository);
 
-  final settingsViewModel = SettingsViewModel(repository: settingsRepository);
+  final settingsViewModel = SettingsViewModel(
+    repository: settingsRepository,
+    currencyRepository: currencyRepository,
+    convertAllDataUseCase: convertAllDataUseCase,
+  );
   await settingsViewModel.initialize();
 
   final recurringService = RecurringTransactionService(
@@ -113,6 +138,7 @@ void main() async {
       scheduledRepository: scheduledRepository,
       savingGoalRepository: savingGoalRepository,
       exportRepository: exportRepository,
+      currencyRepository: currencyRepository,
       scanReceiptUseCase: scanReceiptUseCase,
       recurringService: recurringService,
     ),
@@ -128,6 +154,7 @@ class MyApp extends StatefulWidget {
   final ScheduledExpenditureRepositoryImpl scheduledRepository;
   final SavingGoalRepositoryImpl savingGoalRepository;
   final ExportRepositoryImpl exportRepository;
+  final CurrencyRepository currencyRepository;
   final ScanReceiptUseCase scanReceiptUseCase;
   final RecurringTransactionService recurringService;
 
@@ -140,6 +167,7 @@ class MyApp extends StatefulWidget {
     required this.scheduledRepository,
     required this.savingGoalRepository,
     required this.exportRepository,
+    required this.currencyRepository,
     required this.scanReceiptUseCase,
     required this.recurringService,
   });
@@ -211,6 +239,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
             repository: widget.expenditureRepository,
             tagRepository: widget.tagRepository,
             settingsRepository: widget.settingsRepository,
+            currencyRepository: widget.currencyRepository,
             scanReceiptUseCase: widget.scanReceiptUseCase,
           ),
           update: (_, tagViewModel, expenditureViewModel) {
