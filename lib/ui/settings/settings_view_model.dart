@@ -78,6 +78,19 @@ class SettingsViewModel extends ChangeNotifier {
     _settings = updatedSettings;
   }
 
+  Future<void> updateExchangeRateApiKey(String? key) async {
+    if (_settings == null) return;
+
+    final trimmedKey = key?.trim();
+    final isClear = trimmedKey == null || trimmedKey.isEmpty;
+    final updatedSettings = _settings!.copyWith(
+      exchangeRateApiKey: isClear ? null : trimmedKey,
+      clearExchangeRateApiKey: isClear,
+    );
+    await saveSettings(updatedSettings);
+    _settings = updatedSettings;
+  }
+
   Future<void> updatePrimaryCurrency(String currencyCode) async {
     if (_settings == null) return;
 

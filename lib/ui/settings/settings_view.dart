@@ -79,6 +79,38 @@ class SettingsView extends StatelessWidget {
     );
   }
 
+  void _showExchangeRateApiKeyDialog(BuildContext context, SettingsViewModel viewModel) {
+    final controller = TextEditingController(text: viewModel.settings.exchangeRateApiKey);
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Exchange Rate API Key'),
+        content: TextField(
+          controller: controller,
+          obscureText: true,
+          decoration: const InputDecoration(
+            hintText: 'Paste your key here',
+            helperText: 'Used for real-time currency conversion',
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(AppLocalizations.of(context)!.cancel),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              viewModel.updateExchangeRateApiKey(controller.text);
+              Navigator.pop(context);
+            },
+            child: Text(AppLocalizations.of(context)!.save),
+          ),
+        ],
+      ),
+    );
+  }
+
   void _showUserContextDialog(BuildContext context, SettingsViewModel viewModel) {
     final l10n = AppLocalizations.of(context)!;
     final controller = TextEditingController(text: viewModel.settings.userContext);
@@ -570,6 +602,18 @@ class SettingsView extends StatelessWidget {
                               ),
                               trailing: const Icon(Icons.edit),
                               onTap: () => _showApiKeyDialog(context, viewModel),
+                            ),
+                            ListTile(
+                              leading: const Icon(Icons.currency_exchange),
+                              title: const Text('Exchange Rate API Key'),
+                              subtitle: Text(
+                                settings.exchangeRateApiKey != null &&
+                                        settings.exchangeRateApiKey!.isNotEmpty
+                                    ? 'Saved'
+                                    : 'Unset',
+                              ),
+                              trailing: const Icon(Icons.edit),
+                              onTap: () => _showExchangeRateApiKeyDialog(context, viewModel),
                             ),
                           ],
                         ),

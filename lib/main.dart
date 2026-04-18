@@ -101,6 +101,7 @@ void main() async {
   final currencyRepository = CurrencyRepositoryImpl(
     currencyApiService,
     currencyLocalService,
+    settingsRepository,
   );
   final convertAllDataUseCase = ConvertAllDataUseCase(
     expenditureRepository: expenditureRepository,

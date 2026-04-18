@@ -1,14 +1,16 @@
 import '../../domain/entities/cached_rate.dart';
 import '../../domain/entities/custom_exchange_rate.dart';
 import '../../domain/repositories/currency_repository.dart';
+import '../../domain/repositories/settings_repository.dart';
 import '../data_sources/currency_api_service.dart';
 import '../data_sources/currency_local_service.dart';
 
 class CurrencyRepositoryImpl implements CurrencyRepository {
   final CurrencyApiService _apiService;
   final CurrencyLocalService _localService;
+  final SettingsRepository _settingsRepository;
 
-  CurrencyRepositoryImpl(this._apiService, this._localService);
+  CurrencyRepositoryImpl(this._apiService, this._localService, this._settingsRepository);
 
   @override
   Future<double?> getExchangeRate(String from, String to) async {
@@ -26,11 +28,14 @@ class CurrencyRepositoryImpl implements CurrencyRepository {
 
     // 2. Check cached rates
     CachedRate? cached = await _localService.getCachedRates();
+    final settings = await _settingsRepository.getSettings();
+    final apiKey = settings.exchangeRateApiKey;
+
     if (cached != null) {
       final difference = DateTime.now().difference(cached.lastFetched);
       if (difference.inHours >= 24) {
         // Refresh if older than 24h
-        final newRates = await _apiService.fetchLatestRates();
+        final newRates = await _apiService.fetchLatestRates(apiKey: apiKey);
         if (newRates != null) {
           await _localService.saveCachedRates(newRates);
           cached = newRates;
@@ -38,7 +43,7 @@ class CurrencyRepositoryImpl implements CurrencyRepository {
       }
     } else {
       // No cache at all
-      cached = await _apiService.fetchLatestRates();
+      cached = await _apiService.fetchLatestRates(apiKey: apiKey);
       if (cached != null) {
         await _localService.saveCachedRates(cached);
       }
@@ -72,7 +77,8 @@ class CurrencyRepositoryImpl implements CurrencyRepository {
 
   @override
   Future<void> refreshRates() async {
-    final newRates = await _apiService.fetchLatestRates();
+    final settings = await _settingsRepository.getSettings();
+    final newRates = await _apiService.fetchLatestRates(apiKey: settings.exchangeRateApiKey);
     if (newRates != null) {
       await _localService.saveCachedRates(newRates);
     }

@@ -4,15 +4,17 @@ import 'package:http/http.dart' as http;
 import '../../domain/entities/cached_rate.dart';
 
 class CurrencyApiService {
-  static const String _apiKey = String.fromEnvironment('EXCHANGE_API_KEY');
+  static const String _defaultApiKey = String.fromEnvironment('EXCHANGE_API_KEY');
 
-  Future<CachedRate?> fetchLatestRates() async {
-    if (_apiKey.isEmpty) {
-      debugPrint("ERROR: EXCHANGE_API_KEY is not set. Please run the app with --dart-define.");
+  Future<CachedRate?> fetchLatestRates({String? apiKey}) async {
+    final effectiveApiKey = (apiKey != null && apiKey.isNotEmpty) ? apiKey : _defaultApiKey;
+
+    if (effectiveApiKey.isEmpty) {
+      debugPrint("ERROR: Exchange Rate API Key is not set. Please set it in Settings or via --dart-define.");
       return null;
     }
 
-    final url = Uri.parse('https://v6.exchangerate-api.com/v6/$_apiKey/latest/USD');
+    final url = Uri.parse('https://v6.exchangerate-api.com/v6/$effectiveApiKey/latest/USD');
     try {
       final response = await http.get(url);
       if (response.statusCode == 200) {

@@ -53,6 +53,9 @@ class Settings extends HiveObject {
   @HiveField(12)
   String? geminiApiKey;
 
+  @HiveField(13)
+  String? exchangeRateApiKey;
+
   Settings({
     this.dividerType = DividerType.monthly,
     this.paydayStartDay = 1,
@@ -67,6 +70,7 @@ class Settings extends HiveObject {
     this.userContext,
     this.privacyModeEnabled = false,
     this.geminiApiKey,
+    this.exchangeRateApiKey,
   });
 
   Map<String, dynamic> toJson() => {
@@ -83,6 +87,7 @@ class Settings extends HiveObject {
     'userContext': userContext,
     'privacyModeEnabled': privacyModeEnabled,
     'geminiApiKey': geminiApiKey,
+    'exchangeRateApiKey': exchangeRateApiKey,
   };
 
   factory Settings.fromJson(Map<String, dynamic> json) => Settings(
@@ -101,6 +106,7 @@ class Settings extends HiveObject {
     userContext: json['userContext'],
     privacyModeEnabled: json['privacyModeEnabled'] ?? false,
     geminiApiKey: json['geminiApiKey'],
+    exchangeRateApiKey: json['exchangeRateApiKey'],
   );
 
   Settings copyWith({
@@ -121,6 +127,8 @@ class Settings extends HiveObject {
     bool? privacyModeEnabled,
     String? geminiApiKey,
     bool clearGeminiApiKey = false,
+    String? exchangeRateApiKey,
+    bool clearExchangeRateApiKey = false,
   }) {
     return Settings(
       dividerType: dividerType ?? this.dividerType,
@@ -136,6 +144,7 @@ class Settings extends HiveObject {
       userContext: clearUserContext ? null : (userContext ?? this.userContext),
       privacyModeEnabled: privacyModeEnabled ?? this.privacyModeEnabled,
       geminiApiKey: clearGeminiApiKey ? null : (geminiApiKey ?? this.geminiApiKey),
+      exchangeRateApiKey: clearExchangeRateApiKey ? null : (exchangeRateApiKey ?? this.exchangeRateApiKey),
     );
   }
 }
