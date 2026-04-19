@@ -87,6 +87,7 @@ class _AddEditBudgetPageState extends State<AddEditBudgetPage> {
   }
 
   Future<void> _saveBudget() async {
+    FocusScope.of(context).unfocus();
     if (!_formKey.currentState!.validate() || _selectedTag == null) {
       if (_selectedTag == null && mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -96,9 +97,11 @@ class _AddEditBudgetPageState extends State<AddEditBudgetPage> {
       return;
     }
 
-    final sanitized = _budgetAmountController.text.replaceAll(RegExp(r'[^0-9.]'), '');
-    final amount = double.tryParse(sanitized);
-    if (amount == null) return;
+    final currencyCode = context.read<SettingsViewModel>().settings.primaryCurrencyCode;
+    final amount = DecimalCurrencyInputFormatter.parse(
+      _budgetAmountController.text,
+      currencyCode: currencyCode,
+    );
 
     final tag = _selectedTag!;
     tag.budgetAmount = amount;
@@ -255,13 +258,18 @@ class _AddEditBudgetPageState extends State<AddEditBudgetPage> {
                   ),
                   keyboardType: const TextInputType.numberWithOptions(decimal: true),
                   inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly,
-                    DecimalCurrencyInputFormatter(locale: l10n.localeName),
+                    DecimalCurrencyInputFormatter(
+                      locale: l10n.localeName,
+                      currencyCode: settings.primaryCurrencyCode,
+                    ),
                   ],
                   validator: (value) {
                     if (value == null || value.isEmpty) return l10n.validNumber;
-                    final parsed = double.tryParse(value.replaceAll(RegExp(r'[^0-9.]'), ''));
-                    return parsed == null ? l10n.validNumber : null;
+                    final parsed = DecimalCurrencyInputFormatter.parse(
+                      value,
+                      currencyCode: settings.primaryCurrencyCode,
+                    );
+                    return parsed <= 0 ? l10n.validNumber : null;
                   },
                 ),
                 const SizedBox(height: 16),

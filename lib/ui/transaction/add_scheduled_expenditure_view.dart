@@ -292,6 +292,7 @@ class _AddScheduledExpenditureViewState
   }
 
   void _save(BuildContext context) async {
+    FocusScope.of(context).unfocus();
     if (_selectedTagIds.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Please select at least one category")),
@@ -303,10 +304,11 @@ class _AddScheduledExpenditureViewState
       context,
       listen: false,
     );
-    final rawAmount = _amountController.text
-        .replaceAll('.', '')
-        .replaceAll(',', '');
-    final amount = double.parse(rawAmount);
+    
+    final amount = DecimalCurrencyInputFormatter.parse(
+      _amountController.text,
+      currencyCode: 'VND', // Hardcoded to VND in this view's original logic
+    );
 
     final mainTagId = _selectedTagIds.first;
     final subTagIds =

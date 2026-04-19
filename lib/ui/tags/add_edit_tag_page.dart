@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../helpers/currency_input_formatter.dart';
+import '../settings/settings_view_model.dart';
 import '../../domain/entities/tag.dart';
 import '../../l10n/app_localizations.dart';
 import 'tag_view_model.dart';
@@ -166,9 +167,12 @@ class _AddEditTagPageState extends State<AddEditTagPage> {
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: () async {
+                FocusScope.of(context).unfocus();
+                final currencyCode = context.read<SettingsViewModel>().settings.primaryCurrencyCode;
                 final parsedBudget = isBudgetEnabled
-                    ? double.tryParse(
-                        budgetAmountCtrl.text.replaceAll('.', '').replaceAll(',', ''),
+                    ? DecimalCurrencyInputFormatter.parse(
+                        budgetAmountCtrl.text,
+                        currencyCode: currencyCode,
                       )
                     : null;
                 final tag = Tag(

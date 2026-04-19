@@ -137,11 +137,15 @@ class _AddEditSavingGoalPageState extends State<AddEditSavingGoalPage> {
 
   Future<void> _addContribution() async {
     final l10n = AppLocalizations.of(context)!;
-    final amount = double.tryParse(
-      _contributionAmountController.text.replaceAll(',', ''),
+    final settingsVm = context.read<SettingsViewModel>();
+    final currencyCode = settingsVm.settings.primaryCurrencyCode;
+    
+    final amount = DecimalCurrencyInputFormatter.parse(
+      _contributionAmountController.text,
+      currencyCode: currencyCode,
     );
 
-    if (amount == null || amount <= 0 || widget.goal == null) {
+    if (amount <= 0 || widget.goal == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(l10n.validNumber)),
       );
@@ -150,7 +154,6 @@ class _AddEditSavingGoalPageState extends State<AddEditSavingGoalPage> {
 
     final savingGoalVm = context.read<SavingGoalViewModel>();
     final expenditureVm = context.read<ExpenditureViewModel>();
-    final settingsVm = context.read<SettingsViewModel>();
 
     await savingGoalVm.addContribution(
       goalId: widget.goal!.id,
@@ -204,14 +207,20 @@ class _AddEditSavingGoalPageState extends State<AddEditSavingGoalPage> {
   }
 
   Future<void> _saveForm() async {
+    FocusScope.of(context).unfocus();
     if (!_formKey.currentState!.validate()) return;
 
     final vm = context.read<SavingGoalViewModel>();
+    final currencyCode = context.read<SettingsViewModel>().settings.primaryCurrencyCode;
 
-    final targetAmount =
-        double.tryParse(_targetAmountController.text.replaceAll(',', '')) ?? 0;
-    final currentAmount =
-        double.tryParse(_currentAmountController.text.replaceAll(',', '')) ?? 0;
+    final targetAmount = DecimalCurrencyInputFormatter.parse(
+      _targetAmountController.text,
+      currencyCode: currencyCode,
+    );
+    final currentAmount = DecimalCurrencyInputFormatter.parse(
+      _currentAmountController.text,
+      currencyCode: currencyCode,
+    );
 
     if (isEditing) {
       final goal = widget.goal!;
@@ -322,11 +331,18 @@ class _AddEditSavingGoalPageState extends State<AddEditSavingGoalPage> {
             ),
             keyboardType: TextInputType.number,
             inputFormatters: [
-              DecimalCurrencyInputFormatter(locale: l10n.localeName),
+              DecimalCurrencyInputFormatter(
+                locale: l10n.localeName,
+                currencyCode: currencyCode,
+              ),
             ],
             validator: (v) {
               if (v == null || v.isEmpty) return l10n.validNumber;
-              if (double.tryParse(v.replaceAll(',', '')) == null) {
+              final parsed = DecimalCurrencyInputFormatter.parse(
+                v,
+                currencyCode: currencyCode,
+              );
+              if (parsed <= 0) {
                 return l10n.validNumber;
               }
               return null;
@@ -347,7 +363,10 @@ class _AddEditSavingGoalPageState extends State<AddEditSavingGoalPage> {
             ),
             keyboardType: TextInputType.number,
             inputFormatters: [
-              DecimalCurrencyInputFormatter(locale: l10n.localeName),
+              DecimalCurrencyInputFormatter(
+                locale: l10n.localeName,
+                currencyCode: currencyCode,
+              ),
             ],
           ),
         ],
@@ -382,7 +401,10 @@ class _AddEditSavingGoalPageState extends State<AddEditSavingGoalPage> {
                   ),
                   keyboardType: TextInputType.number,
                   inputFormatters: [
-                    DecimalCurrencyInputFormatter(locale: l10n.localeName),
+                    DecimalCurrencyInputFormatter(
+                      locale: l10n.localeName,
+                      currencyCode: currencyCode,
+                    ),
                   ],
                 ),
                 const SizedBox(height: 16),

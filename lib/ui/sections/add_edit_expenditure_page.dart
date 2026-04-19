@@ -12,6 +12,7 @@ import 'package:uuid/uuid.dart';
 import '../transaction/expenditure_view_model.dart';
 import '../tags/tag_view_model.dart';
 import '../settings/settings_view_model.dart';
+import '../helpers/currency_input_formatter.dart';
 
 import '../../domain/entities/tag.dart';
 import '../../domain/entities/expenditure.dart';
@@ -131,10 +132,12 @@ class _AddEditExpenditurePageState extends State<AddEditExpenditurePage> {
 
   // --- LOGIC LƯU DỮ LIỆU ---
   Future<void> _saveForm() async {
+    FocusScope.of(context).unfocus();
     final l10n = AppLocalizations.of(context)!;
 
     final expenditureViewModel = context.read<ExpenditureViewModel>();
     final settingsViewModel = context.read<SettingsViewModel>();
+    final currencyCode = settingsViewModel.settings.primaryCurrencyCode;
 
     if (_nameController.text.isEmpty) {
       final date = DateFormat.Hms(l10n.localeName).format(_selectedDate);
@@ -172,22 +175,23 @@ class _AddEditExpenditurePageState extends State<AddEditExpenditurePage> {
       debugPrint("Error saving image: $e");
     }
 
-    final amountInput = double.tryParse(
-      _amountController.text.replaceAll(',', ''),
+    final amountInput = DecimalCurrencyInputFormatter.parse(
+      _amountController.text,
+      currencyCode: currencyCode,
     );
 
     // Lưu
     final newExpenditure = Expenditure(
       id: const Uuid().v4(),
       articleName: _nameController.text,
-      amount: amountInput ?? 0.0,
+      amount: amountInput,
       date: _selectedDate,
       mainTagId: _selectedMainTagId!,
       subTagIds: _selectedSubTagIds,
       isIncome: _isIncome,
       notes: _notesController.text,
       receiptImagePath: finalReceiptPath,
-      currencyCode: settingsViewModel.settings.primaryCurrencyCode,
+      currencyCode: currencyCode,
     );
 
     await expenditureViewModel.addExpenditure(newExpenditure);
@@ -341,6 +345,11 @@ class _AddEditExpenditurePageState extends State<AddEditExpenditurePage> {
   }
 
   Widget _buildPrimaryInfoCard(BuildContext context, AppLocalizations l10n) {
+    final settings = context.read<SettingsViewModel>().settings;
+    final currencySymbol = NumberFormat.simpleCurrency(
+      name: settings.primaryCurrencyCode,
+    ).currencySymbol;
+
     return GlassCard(
       padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
       child: Column(
@@ -355,19 +364,28 @@ class _AddEditExpenditurePageState extends State<AddEditExpenditurePage> {
             decoration: InputDecoration(
               border: InputBorder.none,
               hintText: '0',
-              prefixText: '¥ ',
+              prefixText: '$currencySymbol ',
               prefixStyle: Theme.of(context).textTheme.headlineMedium?.copyWith(
                 fontWeight: FontWeight.normal,
                 color: Colors.grey.shade600,
               ),
             ),
             keyboardType: const TextInputType.numberWithOptions(decimal: true),
-            validator: (v) =>
-                (v != null &&
-                    v.isNotEmpty &&
-                    double.tryParse(v.replaceAll(',', '')) == null)
-                ? l10n.validNumber
-                : null,
+            inputFormatters: [
+              DecimalCurrencyInputFormatter(
+                locale: l10n.localeName,
+                currencyCode: settings.primaryCurrencyCode,
+              ),
+            ],
+            validator: (v) {
+              if (v == null || v.isEmpty) return null;
+              final parsed = DecimalCurrencyInputFormatter.parse(
+                v,
+                currencyCode: settings.primaryCurrencyCode,
+              );
+              if (parsed < 0) return l10n.validNumber;
+              return null;
+            },
           ),
           const Divider(height: 24),
           TextFormField(

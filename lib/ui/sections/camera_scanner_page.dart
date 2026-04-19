@@ -6,6 +6,8 @@ import 'package:provider/provider.dart';
 
 // ViewModels (Clean Architecture)
 import '../transaction/expenditure_view_model.dart';
+import '../settings/settings_view_model.dart';
+import '../helpers/currency_input_formatter.dart';
 
 import '../../../domain/entities/tag.dart';
 import 'add_edit_expenditure_page.dart';
@@ -82,7 +84,11 @@ class _CameraScannerPageState extends State<CameraScannerPage> {
       if (amountValue is num) {
         prefilledAmount = amountValue.toDouble();
       } else if (amountValue is String) {
-        prefilledAmount = double.tryParse(amountValue.replaceAll(',', ''));
+        final settingsViewModel = context.read<SettingsViewModel>();
+        prefilledAmount = DecimalCurrencyInputFormatter.parse(
+          amountValue,
+          currencyCode: settingsViewModel.settings.primaryCurrencyCode,
+        );
       }
 
       if (parsedData['recommended_tags'] is List) {

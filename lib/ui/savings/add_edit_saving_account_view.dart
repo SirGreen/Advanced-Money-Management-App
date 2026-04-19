@@ -129,12 +129,16 @@ class _AddEditSavingAccountViewState extends State<AddEditSavingAccountView> {
   }
 
   Future<void> _saveForm() async {
+    FocusScope.of(context).unfocus();
     if (!_formKey.currentState!.validate()) return;
 
     final vm = context.read<SavingAccountViewModel>();
+    final currencyCode = context.read<SettingsViewModel>().settings.primaryCurrencyCode;
 
-    final balance =
-        double.tryParse(_balanceController.text.replaceAll(',', '')) ?? 0.0;
+    final balance = DecimalCurrencyInputFormatter.parse(
+      _balanceController.text,
+      currencyCode: currencyCode,
+    );
     final interestRate = double.tryParse(_interestController.text);
 
     if (isEditing) {
@@ -245,11 +249,18 @@ class _AddEditSavingAccountViewState extends State<AddEditSavingAccountView> {
             ),
             keyboardType: const TextInputType.numberWithOptions(decimal: true),
             inputFormatters: [
-              DecimalCurrencyInputFormatter(locale: l10n.localeName),
+              DecimalCurrencyInputFormatter(
+                locale: l10n.localeName,
+                currencyCode: settings.primaryCurrencyCode,
+              ),
             ],
             validator: (v) {
               if (v == null || v.isEmpty) return l10n.validNumber;
-              if (double.tryParse(v.replaceAll(',', '')) == null) {
+              final parsed = DecimalCurrencyInputFormatter.parse(
+                v,
+                currencyCode: settings.primaryCurrencyCode,
+              );
+              if (parsed < 0) {
                 return l10n.validNumber;
               }
               return null;

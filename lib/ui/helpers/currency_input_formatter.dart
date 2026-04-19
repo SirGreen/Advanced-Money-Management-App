@@ -6,7 +6,23 @@ class DecimalCurrencyInputFormatter extends TextInputFormatter {
   final String currencyCode;
   final int maxLength;
 
-  DecimalCurrencyInputFormatter({this.locale, this.currencyCode = 'VND', this.maxLength = 15});
+  DecimalCurrencyInputFormatter({
+    this.locale,
+    this.currencyCode = 'VND',
+    this.maxLength = 15,
+  });
+
+  static double parse(String text, {String currencyCode = 'VND'}) {
+    String digitsOnly = text.replaceAll(RegExp(r'[^0-9]'), '');
+    if (digitsOnly.isEmpty) return 0;
+
+    double value = double.tryParse(digitsOnly) ?? 0;
+    if (currencyCode == 'JPY' || currencyCode == 'VND') {
+      return value;
+    } else {
+      return value / 100;
+    }
+  }
 
   @override
   TextEditingValue formatEditUpdate(
