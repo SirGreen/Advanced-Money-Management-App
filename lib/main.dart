@@ -58,7 +58,11 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Hive.initFlutter();
-  await initializeDateFormatting('vi_VN', null);
+  await Future.wait([
+    initializeDateFormatting('en', null),
+    initializeDateFormatting('ja', null),
+    initializeDateFormatting('vi', null),
+  ]);
 
   Hive.registerAdapter(ExpenditureAdapter());
   Hive.registerAdapter(TagAdapter());
@@ -267,19 +271,20 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       ],
       child: Builder(
         builder: (context) {
+          final settingsViewModel = context.watch<SettingsViewModel>();
+          final locale = settingsViewModel.settings.languageCode == null
+              ? null
+              : Locale(settingsViewModel.settings.languageCode!);
+
           return MaterialApp(
             debugShowCheckedModeBanner: false,
             title: 'Finance App',
+            locale: locale,
             theme: ThemeData(
               colorScheme: ColorScheme.fromSeed(seedColor: Colors.teal),
               useMaterial3: true,
             ),
-            localizationsDelegates: const [
-              AppLocalizations.delegate,
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-            ],
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
             home: const MainView(),
             builder: (context, child) {
@@ -290,18 +295,15 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                     Positioned.fill(
                       child: MaterialApp(
                         debugShowCheckedModeBanner: false,
+                        locale: locale,
                         theme: ThemeData(
                           colorScheme: ColorScheme.fromSeed(
                             seedColor: Colors.teal,
                           ),
                           useMaterial3: true,
                         ),
-                        localizationsDelegates: const [
-                          AppLocalizations.delegate,
-                          GlobalMaterialLocalizations.delegate,
-                          GlobalWidgetsLocalizations.delegate,
-                          GlobalCupertinoLocalizations.delegate,
-                        ],
+                        localizationsDelegates:
+                            AppLocalizations.localizationsDelegates,
                         supportedLocales: AppLocalizations.supportedLocales,
                         home: LockScreenPage(onUnlock: _onUnlock),
                       ),
