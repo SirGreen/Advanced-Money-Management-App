@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -193,7 +192,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    _checkPinSet();
+    _pinIsSet = widget.settingsViewModel.isAppLockEnabled;
+    _isLocked = _pinIsSet;
     _setupQuickActions();
   }
 
@@ -210,17 +210,11 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       const ShortcutItem(
         type: 'action_add_transaction',
         localizedTitle: 'Ghi nhanh giao dịch',
+        // icon: 'ic_add_shortcut', // Bỏ icon đi để tránh crash trên Android/iOS nếu chưa setup ảnh native
       ),
     ]);
   }
 
-  Future<void> _checkPinSet() async {
-    final isEnabled = widget.settingsViewModel.isAppLockEnabled;
-    setState(() {
-      _pinIsSet = isEnabled;
-      _isLocked = _pinIsSet;
-    });
-  }
 
   @override
   void dispose() {
@@ -230,15 +224,14 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.paused ||
-        state == AppLifecycleState.inactive) {
-      _checkPinSet().then((_) {
-        if (_pinIsSet && !_isLocked) {
-          setState(() {
-            _isLocked = true;
-          });
-        }
-      });
+    if (state == AppLifecycleState.paused) {
+      final isEnabled = widget.settingsViewModel.isAppLockEnabled;
+      if (isEnabled && !_isLocked) {
+        setState(() {
+          _pinIsSet = isEnabled;
+          _isLocked = true;
+        });
+      }
     }
   }
 
