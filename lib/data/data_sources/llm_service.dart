@@ -23,7 +23,7 @@ class LLMService {
     }
 
     final model = GenerativeModel(
-      model: 'gemini-1.5-flash-latest',
+      model: 'gemini-2.5-flash-lite',
       apiKey: settings.geminiApiKey!,
       generationConfig: GenerationConfig(
         temperature: 0.4,
@@ -131,7 +131,7 @@ class LLMService {
     }
 
     final model = GenerativeModel(
-      model: 'gemini-2.5-pro',
+      model: 'gemini-3.1-flash-lite-preview',
       apiKey: settings.geminiApiKey!,
       generationConfig: GenerationConfig(responseMimeType: 'application/json'),
     );
@@ -199,7 +199,7 @@ class LLMService {
     }
 
     final model = GenerativeModel(
-      model: 'gemini-2.5-pro',
+      model: 'gemini-3.1-flash-lite-preview',
       apiKey: settings.geminiApiKey!,
       generationConfig: GenerationConfig(responseMimeType: 'application/json'),
     );
