@@ -23,8 +23,22 @@ import '../helpers/currency_picker_sheet.dart';
 
 class AddTransactionView extends StatefulWidget {
   final Expenditure? expenditure;
+  // Prefilled data from OCR
+  final String? prefilledName;
+  final double? prefilledAmount;
+  final List<Tag>? prefilledTags;
+  final String? prefilledReceiptPath;
+  final String? prefilledMemo;
 
-  const AddTransactionView({super.key, this.expenditure});
+  const AddTransactionView({
+    super.key,
+    this.expenditure,
+    this.prefilledName,
+    this.prefilledAmount,
+    this.prefilledTags,
+    this.prefilledReceiptPath,
+    this.prefilledMemo,
+  });
 
   @override
   State<AddTransactionView> createState() => _AddTransactionViewState();
@@ -65,19 +79,37 @@ class _AddTransactionViewState extends State<AddTransactionView> {
     super.initState();
     isEditing = widget.expenditure != null;
     final e = widget.expenditure;
-    _nameController = TextEditingController(text: e?.articleName ?? '');
     
+    // Initialize from prefilled data if not editing
+    if (!isEditing) {
+      _nameController = TextEditingController(text: widget.prefilledName ?? '');
+      _notesController.text = widget.prefilledMemo ?? '';
+      _receiptPath = widget.prefilledReceiptPath;
+      
+      if (widget.prefilledAmount != null) {
+        final formatter = NumberFormat('#,###');
+        _amountController.text = formatter.format(widget.prefilledAmount);
+      }
+
+      if (widget.prefilledTags != null && widget.prefilledTags!.isNotEmpty) {
+        _selectedMainTagId = widget.prefilledTags![0].id;
+        _selectedSubTagIds = widget.prefilledTags!.length > 1
+            ? widget.prefilledTags!.sublist(1).map((t) => t.id).toList()
+            : [];
+      }
+    } else {
+      _nameController = TextEditingController(text: e?.articleName ?? '');
+      _notesController.text = e?.notes ?? '';
+      _isIncome = e?.isIncome ?? false;
+      _selectedMainTagId = e?.mainTagId;
+      _selectedSubTagIds = List.from(e?.subTagIds ?? []);
+      _selectedDate = e?.date ?? DateTime.now();
+      _receiptPath = e?.receiptImagePath;
+    }
+
     final settingsViewModel = Provider.of<SettingsViewModel>(context, listen: false);
     _selectedCurrency = e?.currencyCode ?? settingsViewModel.settings.primaryCurrencyCode;
 
-    if (isEditing) {
-      _notesController.text = e!.notes ?? '';
-      _isIncome = e.isIncome;
-      _selectedMainTagId = e.mainTagId;
-      _selectedSubTagIds = List.from(e.subTagIds);
-      _selectedDate = e.date;
-      _receiptPath = e.receiptImagePath;
-    }
     _amountController.addListener(_onAmountOrCurrencyChanged);
   }
 

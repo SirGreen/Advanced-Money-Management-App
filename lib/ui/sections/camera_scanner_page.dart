@@ -10,7 +10,7 @@ import '../settings/settings_view_model.dart';
 import '../helpers/currency_input_formatter.dart';
 
 import '../../../domain/entities/tag.dart';
-import 'add_edit_expenditure_page.dart';
+import '../transaction/add_transaction_view.dart';
 import '../helpers/glass_card.dart';
 import '../helpers/gradient_background.dart';
 import '../helpers/gradient_title.dart';
@@ -108,7 +108,7 @@ class _CameraScannerPageState extends State<CameraScannerPage> {
 
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
-        builder: (_) => AddEditExpenditurePage(
+        builder: (_) => AddTransactionView(
           prefilledName: prefilledName,
           prefilledAmount: prefilledAmount,
           prefilledTags: recommendedTags,
