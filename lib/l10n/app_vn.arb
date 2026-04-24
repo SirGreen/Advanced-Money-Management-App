@@ -1,4 +1,4 @@
-﻿{
+{
     "@@locale": "vi",
     "recentTransactions": "Chi tiêu gần đây",
     "@recentTransactions": {},
@@ -532,5 +532,22 @@
     "selectBackupFile": "Chọn tệp sao lưu để khôi phục",
     "confirmRestore": "Bạn có chắc chắn muốn khôi phục dữ liệu không? Dữ liệu hiện tại sẽ bị ghi đè.",
     "backupFileName": "backup_{date}.json",
-    "noBackupFile": "Không có tệp được chọn"
+    "noBackupFile": "Không có tệp được chọn",
+    "budgetWarningTitle": "Cảnh báo Ngân sách",
+    "budgetWarning80": "Bạn đã dùng hết 80% ngân sách cho danh mục {category}.",
+    "@budgetWarning80": {
+        "placeholders": {
+            "category": {
+                "type": "String"
+            }
+        }
+    },
+    "budgetWarning100": "Bạn đã dùng hết 100% ngân sách cho danh mục {category}!",
+    "@budgetWarning100": {
+        "placeholders": {
+            "category": {
+                "type": "String"
+            }
+        }
+    }
 }

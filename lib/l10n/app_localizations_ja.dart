@@ -1267,4 +1267,17 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get noBackupFile => 'ファイルが選択されていません';
+
+  @override
+  String get budgetWarningTitle => '予算警告';
+
+  @override
+  String budgetWarning80(String category) {
+    return '$categoryの予算の80％を消費しました。';
+  }
+
+  @override
+  String budgetWarning100(String category) {
+    return '$categoryの予算を100％消費しました！';
+  }
 }

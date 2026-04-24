@@ -1,4 +1,4 @@
-﻿{
+{
     "@@locale": "en",
     "recentTransactions": "Recent Transactions",
     "noTransactions": "No transactions yet. Let's add one!",
@@ -587,5 +587,22 @@
     "selectBackupFile": "Select a backup file to restore",
     "confirmRestore": "Are you sure you want to restore data? Current data will be overwritten.",
     "backupFileName": "backup_{date}.json",
-    "noBackupFile": "No file selected"
+    "noBackupFile": "No file selected",
+  "budgetWarningTitle": "Budget Warning",
+  "budgetWarning80": "You have used 80% of your budget for {category}.",
+  "@budgetWarning80": {
+    "placeholders": {
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "budgetWarning100": "You have used 100% of your budget for {category}!",
+  "@budgetWarning100": {
+    "placeholders": {
+      "category": {
+        "type": "String"
+      }
+    }
+  }
 }

@@ -1,4 +1,4 @@
-﻿{
+{
     "@@locale": "ja",
     "recentTransactions": "最近の支出",
     "noTransactions": "支出がありません。追加してみましょう！",
@@ -610,5 +610,22 @@
     "selectBackupFile": "復元するバックアップファイルを選択",
     "confirmRestore": "データを復元してもよろしいですか？現在のデータは上書きされます。",
     "backupFileName": "backup_{date}.json",
-    "noBackupFile": "ファイルが選択されていません"
+    "noBackupFile": "ファイルが選択されていません",
+    "budgetWarningTitle": "予算警告",
+    "budgetWarning80": "{category}の予算の80％を消費しました。",
+    "@budgetWarning80": {
+        "placeholders": {
+            "category": {
+                "type": "String"
+            }
+        }
+    },
+    "budgetWarning100": "{category}の予算を100％消費しました！",
+    "@budgetWarning100": {
+        "placeholders": {
+            "category": {
+                "type": "String"
+            }
+        }
+    }
 }

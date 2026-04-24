@@ -2442,6 +2442,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No file selected'**
   String get noBackupFile;
+
+  /// No description provided for @budgetWarningTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Budget Warning'**
+  String get budgetWarningTitle;
+
+  /// No description provided for @budgetWarning80.
+  ///
+  /// In en, this message translates to:
+  /// **'You have used 80% of your budget for {category}.'**
+  String budgetWarning80(String category);
+
+  /// No description provided for @budgetWarning100.
+  ///
+  /// In en, this message translates to:
+  /// **'You have used 100% of your budget for {category}!'**
+  String budgetWarning100(String category);
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
