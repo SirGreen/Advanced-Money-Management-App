@@ -53,6 +53,8 @@ import 'ui/auth/lock_screen_page.dart';
 
 import 'l10n/app_localizations.dart';
 import 'ui/main_view.dart';
+import 'package:quick_actions/quick_actions.dart';
+import 'ui/transaction/add_transaction_view.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -184,12 +186,32 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   bool _isLocked = false;
   bool _pinIsSet = false;
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+  final QuickActions quickActions = const QuickActions();
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _checkPinSet();
+    _setupQuickActions();
+  }
+
+  void _setupQuickActions() {
+    quickActions.initialize((String shortcutType) {
+      if (shortcutType == 'action_add_transaction') {
+        navigatorKey.currentState?.push(
+          MaterialPageRoute(builder: (_) => const AddTransactionView()),
+        );
+      }
+    });
+
+    quickActions.setShortcutItems(<ShortcutItem>[
+      const ShortcutItem(
+        type: 'action_add_transaction',
+        localizedTitle: 'Ghi nhanh giao dịch',
+      ),
+    ]);
   }
 
   Future<void> _checkPinSet() async {
@@ -277,6 +299,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
               : Locale(settingsViewModel.settings.languageCode!);
 
           return MaterialApp(
+            navigatorKey: navigatorKey,
             debugShowCheckedModeBanner: false,
             title: 'Finance App',
             locale: locale,
