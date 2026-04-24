@@ -1,11 +1,11 @@
-{
+﻿{
     "@@locale": "ja",
     "recentTransactions": "最近の支出",
     "noTransactions": "支出がありません。追加してみましょう！",
     "reports": "レポート",
     "manageTags": "タグの管理",
     "settings": "設定",
-    "manageScheduled": "レポート",
+    "manageScheduled": "定期取引の管理",
     "addTransaction": "追加",
     "editTransaction": "編集",
     "transactionType": "タイプ",

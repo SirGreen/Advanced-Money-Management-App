@@ -1,11 +1,11 @@
-{
+﻿{
     "@@locale": "en",
     "recentTransactions": "Recent Transactions",
     "noTransactions": "No transactions yet. Let's add one!",
     "reports": "Reports",
     "manageTags": "Manage Tags",
     "settings": "Settings",
-    "manageScheduled": "Reports",
+    "manageScheduled": "Manage Scheduled",
     "addTransaction": "Add Transaction",
     "editTransaction": "Edit Transaction",
     "transactionType": "Type",

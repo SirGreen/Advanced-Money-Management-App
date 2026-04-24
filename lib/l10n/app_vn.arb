@@ -1,4 +1,4 @@
-{
+﻿{
     "@@locale": "vi",
     "recentTransactions": "Chi tiêu gần đây",
     "@recentTransactions": {},
@@ -10,7 +10,7 @@
     "@manageTags": {},
     "settings": "Cài đặt",
     "@settings": {},
-    "manageScheduled": "Báo cáo",
+    "manageScheduled": "Chi tiêu định kỳ",
     "@manageScheduled": {},
     "addTransaction": "Thêm",
     "@addTransaction": {},

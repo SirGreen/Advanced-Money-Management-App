@@ -24,7 +24,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get settings => 'Cài đặt';
 
   @override
-  String get manageScheduled => 'Báo cáo';
+  String get manageScheduled => 'Chi tiêu định kỳ';
 
   @override
   String get addTransaction => 'Thêm';

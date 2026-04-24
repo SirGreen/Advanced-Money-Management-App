@@ -1408,7 +1408,7 @@ abstract class AppLocalizations {
   /// No description provided for @savings.
   ///
   /// In en, this message translates to:
-  /// **'Savings'**
+  /// **'Assets'**
   String get savings;
 
   /// No description provided for @investments.

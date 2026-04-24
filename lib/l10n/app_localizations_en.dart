@@ -24,7 +24,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings => 'Settings';
 
   @override
-  String get manageScheduled => 'Reports';
+  String get manageScheduled => 'Manage Scheduled';
 
   @override
   String get addTransaction => 'Add Transaction';

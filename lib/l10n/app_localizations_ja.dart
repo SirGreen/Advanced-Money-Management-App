@@ -24,7 +24,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get settings => '設定';
 
   @override
-  String get manageScheduled => 'レポート';
+  String get manageScheduled => '定期取引の管理';
 
   @override
   String get addTransaction => '取引を追加';
