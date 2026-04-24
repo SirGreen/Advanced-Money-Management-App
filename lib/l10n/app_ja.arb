@@ -5,7 +5,7 @@
     "reports": "レポート",
     "manageTags": "タグの管理",
     "settings": "設定",
-    "manageScheduled": "レポート",
+    "manageScheduled": "定期取引の管理",
     "addTransaction": "追加",
     "editTransaction": "編集",
     "transactionType": "タイプ",
@@ -610,5 +610,22 @@
     "selectBackupFile": "復元するバックアップファイルを選択",
     "confirmRestore": "データを復元してもよろしいですか？現在のデータは上書きされます。",
     "backupFileName": "backup_{date}.json",
-    "noBackupFile": "ファイルが選択されていません"
+    "noBackupFile": "ファイルが選択されていません",
+    "budgetWarningTitle": "予算警告",
+    "budgetWarning80": "{category}の予算の80％を消費しました。",
+    "@budgetWarning80": {
+        "placeholders": {
+            "category": {
+                "type": "String"
+            }
+        }
+    },
+    "budgetWarning100": "{category}の予算を100％消費しました！",
+    "@budgetWarning100": {
+        "placeholders": {
+            "category": {
+                "type": "String"
+            }
+        }
+    }
 }

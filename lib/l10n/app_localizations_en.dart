@@ -24,7 +24,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings => 'Settings';
 
   @override
-  String get manageScheduled => 'Reports';
+  String get manageScheduled => 'Manage Scheduled';
 
   @override
   String get addTransaction => 'Add Transaction';
@@ -1267,4 +1267,17 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get noBackupFile => 'No file selected';
+
+  @override
+  String get budgetWarningTitle => 'Budget Warning';
+
+  @override
+  String budgetWarning80(String category) {
+    return 'You have used 80% of your budget for $category.';
+  }
+
+  @override
+  String budgetWarning100(String category) {
+    return 'You have used 100% of your budget for $category!';
+  }
 }

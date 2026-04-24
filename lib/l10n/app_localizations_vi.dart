@@ -24,7 +24,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get settings => 'Cài đặt';
 
   @override
-  String get manageScheduled => 'Báo cáo';
+  String get manageScheduled => 'Chi tiêu định kỳ';
 
   @override
   String get addTransaction => 'Thêm';
@@ -1267,4 +1267,17 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get noBackupFile => 'Không có tệp được chọn';
+
+  @override
+  String get budgetWarningTitle => 'Cảnh báo Ngân sách';
+
+  @override
+  String budgetWarning80(String category) {
+    return 'Bạn đã dùng hết 80% ngân sách cho danh mục $category.';
+  }
+
+  @override
+  String budgetWarning100(String category) {
+    return 'Bạn đã dùng hết 100% ngân sách cho danh mục $category!';
+  }
 }

@@ -26,12 +26,19 @@ class ScheduledExpenditureListView extends StatelessWidget {
               Tab(text: "History"),
             ],
           ),
-          // actions: [
-          //   IconButton(
-          //     icon: const Icon(Icons.add),
-          //     onPressed: () { ... }
-          //   ),
-          // ],
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.add),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const AddScheduledExpenditureView(),
+                  ),
+                );
+              },
+            ),
+          ],
         ),
         body: TabBarView(
           children: [

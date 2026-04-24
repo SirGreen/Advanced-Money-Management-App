@@ -158,8 +158,16 @@ class ExportService {
       if (config.startDate != null && exp.date.isBefore(config.startDate!)) {
         return false;
       }
-      if (config.endDate != null && exp.date.isAfter(config.endDate!)) {
-        return false;
+      if (config.endDate != null) {
+        final endOfDay = DateTime(
+          config.endDate!.year,
+          config.endDate!.month,
+          config.endDate!.day,
+          23, 59, 59,
+        );
+        if (exp.date.isAfter(endOfDay)) {
+          return false;
+        }
       }
 
       // Income/Expense filter

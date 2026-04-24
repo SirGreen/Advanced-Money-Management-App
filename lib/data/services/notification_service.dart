@@ -6,6 +6,11 @@ import 'package:flutter/foundation.dart'; // For debugPrint
 import 'dart:io';
 
 class NotificationService {
+  // Singleton pattern: ensures the same initialized instance is used app-wide.
+  static final NotificationService _instance = NotificationService._internal();
+  factory NotificationService() => _instance;
+  NotificationService._internal();
+
   final FlutterLocalNotificationsPlugin _notificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
@@ -73,6 +78,14 @@ class NotificationService {
           'recurring_transaction_channel',
           'Recurring Transactions',
           description: 'Reminders for upcoming recurring transactions',
+          importance: Importance.max,
+        ),
+      );
+      await androidPlugin?.createNotificationChannel(
+        const AndroidNotificationChannel(
+          'budget_alert_channel',
+          'Budget Alerts',
+          description: 'Notifications when spending reaches budget limits',
           importance: Importance.max,
         ),
       );
@@ -175,5 +188,32 @@ class NotificationService {
 
   Future<void> cancelReminder(int id) async {
     await _notificationsPlugin.cancel(id: id);
+  }
+
+  Future<void> showImmediateNotification({
+    required int id,
+    required String title,
+    required String body,
+  }) async {
+    try {
+      await _notificationsPlugin.show(
+        id: id,
+        title: title,
+        body: body,
+        notificationDetails: const NotificationDetails(
+          android: AndroidNotificationDetails(
+            'budget_alert_channel',
+            'Budget Alerts',
+            channelDescription: 'Notifications when spending reaches budget limits',
+            importance: Importance.max,
+            priority: Priority.high,
+          ),
+          iOS: DarwinNotificationDetails(),
+        ),
+      );
+      debugPrint("Successfully showed immediate notification ID $id");
+    } catch (e) {
+      debugPrint("Error showing immediate notification: $e");
+    }
   }
 }

@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
@@ -20,6 +19,7 @@ import '../helpers/gradient_background.dart';
 import '../helpers/gradient_title.dart';
 import '../helpers/tag_icon.dart';
 import '../helpers/currency_picker_sheet.dart';
+import '../../data/services/notification_service.dart';
 
 class AddTransactionView extends StatefulWidget {
   final Expenditure? expenditure;
@@ -1080,7 +1080,10 @@ class _AddTransactionViewState extends State<AddTransactionView> {
     FocusScope.of(context).unfocus();
     final settingsViewModel = Provider.of<SettingsViewModel>(context, listen: false);
     final primaryCurrency = settingsViewModel.settings.primaryCurrencyCode;
-    
+    // Cache context-dependent values BEFORE any await to avoid BuildContext async gap warnings.
+    final viewModelForTag = Provider.of<ExpenditureViewModel>(context, listen: false);
+    final l10nCached = AppLocalizations.of(context)!;
+
     double? amount = _parseAmount(_amountController.text);
     String finalCurrency = _selectedCurrency;
 
@@ -1096,10 +1099,6 @@ class _AddTransactionViewState extends State<AddTransactionView> {
           amount = amount * rate;
           finalCurrency = primaryCurrency;
         } else {
-          // If still no rate, we keep original currency (but balance will be weird as user noted)
-          // Old app logic: if rate is null, it used amountInput as is but still set primary currency
-          // which effectively treated 16 EUR as 16 VND.
-          // To match old app exactly:
           finalCurrency = primaryCurrency;
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
@@ -1114,11 +1113,6 @@ class _AddTransactionViewState extends State<AddTransactionView> {
         ? _nameController.text
         : 'Default - ${DateFormat.Hms('vi_VN').format(_selectedDate)}';
 
-    // Fallback tag nếu chưa chọn: dùng tag đầu tiên trong danh sách
-    final viewModelForTag = Provider.of<ExpenditureViewModel>(
-      context,
-      listen: false,
-    );
     final fallbackTagId =
         _selectedMainTagId ??
         (viewModelForTag.tags.isNotEmpty
@@ -1141,15 +1135,44 @@ class _AddTransactionViewState extends State<AddTransactionView> {
       receiptImagePath: _receiptPath,
     );
 
+    final mainTag = viewModelForTag.tags.firstWhere(
+      (t) => t.id == fallbackTagId,
+      orElse: () => Tag(id: 'dummy', name: '', colorValue: 0),
+    );
+
+    double oldTotal = 0;
+    if (!_isIncome && mainTag.budgetAmount != null && mainTag.budgetAmount! > 0 && mainTag.budgetInterval != 'None') {
+      oldTotal = viewModel.getSpentAmountForTagBudget(mainTag);
+    }
+
     if (isEditing) {
       await viewModel.updateExpenditure(expenditure);
     } else {
       await viewModel.addExpenditure(expenditure);
     }
 
-    if (mounted) {
-      Navigator.pop(context);
+    if (!mounted) return;
+
+    if (!_isIncome && mainTag.budgetAmount != null && mainTag.budgetAmount! > 0 && mainTag.budgetInterval != 'None') {
+      final newTotal = viewModel.getSpentAmountForTagBudget(mainTag);
+      final budget = mainTag.budgetAmount!;
+
+      if (oldTotal < budget * 0.8 && newTotal >= budget * 0.8 && newTotal < budget) {
+        NotificationService().showImmediateNotification(
+          id: mainTag.id.hashCode,
+          title: l10nCached.budgetWarningTitle,
+          body: l10nCached.budgetWarning80(mainTag.name),
+        );
+      } else if (oldTotal < budget && newTotal >= budget) {
+        NotificationService().showImmediateNotification(
+          id: mainTag.id.hashCode + 1,
+          title: l10nCached.budgetWarningTitle,
+          body: l10nCached.budgetWarning100(mainTag.name),
+        );
+      }
     }
+
+    Navigator.pop(context);
   }
 
   void _deleteTransaction() {
