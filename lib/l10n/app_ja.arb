@@ -627,5 +627,11 @@
                 "type": "String"
             }
         }
-    }
+    },
+    "privacyMode": "プライバシーモード",
+    "privacyModeOn": "オン",
+    "privacyModeOff": "オフ",
+    "privacyModeInfoTitle": "プライバシーモード",
+    "privacyModeInfoBody": "有効にすると:\n\n• すべての金額が •••に置き換えられます\n• 取引名がぼかされます\n• レポートの数値が非表示になります\n• 貯蓄口座の残高が非表示になります\n• 貯蓄目標の金額が非表示になります\n\nアプリを再起動しても設定が保持されます。",
+    "privacyModeGotIt": "わかりました"
 }

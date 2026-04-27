@@ -6,6 +6,7 @@ import '../../domain/entities/scheduled_expenditure.dart';
 import '../../domain/entities/settings.dart';
 import '../../domain/entities/saving_goal.dart';
 import '../../domain/entities/saving_contribution.dart';
+import '../../domain/entities/saving_account.dart';
 
 class BackupRestoreService {
   static const String expenditureBoxName = 'expenditures';
@@ -14,6 +15,7 @@ class BackupRestoreService {
   static const String settingsBoxName = 'settings';
   static const String savingGoalBoxName = 'saving_goals';
   static const String savingContributionBoxName = 'saving_contributions';
+  static const String savingAccountBoxName = 'saving_accounts';
 
   /// Export all data to JSON string
   Future<String> exportAllData() async {
@@ -132,6 +134,14 @@ class BackupRestoreService {
         backupData['saving_contributions'] = [];
       }
 
+      // Export saving accounts
+      if (Hive.isBoxOpen(savingAccountBoxName)) {
+        final box = Hive.box<SavingAccount>(savingAccountBoxName);
+        backupData['saving_accounts'] = box.values.map((e) => e.toJson()).toList();
+      } else {
+        backupData['saving_accounts'] = [];
+      }
+
       // Convert to JSON string with pretty printing
       return jsonEncode(backupData);
     } catch (e) {
@@ -142,13 +152,26 @@ class BackupRestoreService {
   /// Import data from JSON string
   Future<void> importAllData(String jsonString) async {
     try {
-      final backupData = jsonDecode(jsonString) as Map<String, dynamic>;
+      final decoded = jsonDecode(jsonString);
+      if (decoded is! Map<String, dynamic>) {
+        throw Exception('Invalid backup file format.');
+      }
+      final backupData = decoded;
 
-      // Import expenditures
+      // Validate: must contain at least one recognised key
+      final knownKeys = {
+        'expenditures', 'tags', 'scheduled_expenditures',
+        'saving_goals', 'saving_contributions', 'saving_accounts',
+      };
+      if (!backupData.keys.any(knownKeys.contains)) {
+        throw Exception(
+            'File không phải định dạng backup hợp lệ. Vui lòng chọn đúng file backup.');
+      }
+
+      // Import expenditures – MERGE (upsert by id, existing data preserved)
       if (backupData.containsKey('expenditures')) {
         final box = await Hive.openBox<Expenditure>(expenditureBoxName);
-        await box.clear();
-
+        // No box.clear() — only add/update records from backup
         for (final item in backupData['expenditures'] as List) {
           final expenditure = Expenditure.fromJson(
             item as Map<String, dynamic>,
@@ -157,11 +180,10 @@ class BackupRestoreService {
         }
       }
 
-      // Import tags
+      // Import tags – MERGE
       if (backupData.containsKey('tags')) {
         final box = await Hive.openBox<Tag>(tagBoxName);
-        await box.clear();
-
+        // No box.clear() — only add/update records from backup
         for (final item in backupData['tags'] as List) {
           final tag = Tag(
             id: item['id'] ?? '',
@@ -177,13 +199,12 @@ class BackupRestoreService {
         }
       }
 
-      // Import scheduled expenditures
+      // Import scheduled expenditures – MERGE
       if (backupData.containsKey('scheduled_expenditures')) {
         final box = await Hive.openBox<ScheduledExpenditure>(
           scheduledExpenditureBoxName,
         );
-        await box.clear();
-
+        // No box.clear() — only add/update records from backup
         for (final item in backupData['scheduled_expenditures'] as List) {
           final scheduleTypeIndex = item['scheduleType'] as int? ?? 0;
           final scheduleType = ScheduleType.values[scheduleTypeIndex];
@@ -214,54 +235,36 @@ class BackupRestoreService {
         }
       }
 
-      // Import settings
-      if (backupData.containsKey('settings')) {
-        final box = await Hive.openBox<Settings>(settingsBoxName);
-        final settingsData = backupData['settings'] as Map<String, dynamic>;
+      // Settings import is intentionally skipped to preserve the user's
+      // current app configuration (language, currency, PIN, API key, etc.).
 
-        final settings = Settings(
-          dividerType: _parseDividerType(settingsData['dividerType']),
-          paydayStartDay: settingsData['paydayStartDay'] as int? ?? 1,
-          fixedIntervalDays: settingsData['fixedIntervalDays'] as int? ?? 7,
-          languageCode: settingsData['languageCode'],
-          paginationLimit: settingsData['paginationLimit'] as int? ?? 50,
-          primaryCurrencyCode: settingsData['primaryCurrencyCode'] ?? 'VND',
-          converterFromCurrency:
-              settingsData['converterFromCurrency'] ?? 'USD',
-          converterToCurrency: settingsData['converterToCurrency'] ?? 'VND',
-          remindersEnabled:
-              settingsData['remindersEnabled'] as bool? ?? false,
-          lastBackupDate: settingsData['lastBackupDate'] != null
-              ? DateTime.parse(settingsData['lastBackupDate'])
-              : null,
-          userContext: settingsData['userContext'],
-          privacyModeEnabled:
-              settingsData['privacyModeEnabled'] as bool? ?? false,
-          geminiApiKey: settingsData['geminiApiKey'],
-        );
-
-        await box.put(0, settings);
-      }
-
-      // Import saving goals
+      // Import saving goals – MERGE – MERGE
       if (backupData.containsKey('saving_goals')) {
         final box = await Hive.openBox<SavingGoal>(savingGoalBoxName);
-        await box.clear();
-
+        // No box.clear() — only add/update records from backup
         for (final item in backupData['saving_goals'] as List) {
           final goal = SavingGoal.fromJson(item as Map<String, dynamic>);
           await box.put(goal.id, goal);
         }
       }
 
-      // Import saving contributions
+      // Import saving contributions – MERGE
       if (backupData.containsKey('saving_contributions')) {
         final box = await Hive.openBox<SavingContribution>(savingContributionBoxName);
-        await box.clear();
-
+        // No box.clear() — only add/update records from backup
         for (final item in backupData['saving_contributions'] as List) {
           final contribution = SavingContribution.fromJson(item as Map<String, dynamic>);
           await box.put(contribution.id, contribution);
+        }
+      }
+
+      // Import saving accounts – MERGE
+      if (backupData.containsKey('saving_accounts')) {
+        final box = await Hive.openBox<SavingAccount>(savingAccountBoxName);
+        // No box.clear() — only add/update records from backup
+        for (final item in backupData['saving_accounts'] as List) {
+          final account = SavingAccount.fromJson(item as Map<String, dynamic>);
+          await box.put(account.id, account);
         }
       }
     } catch (e) {

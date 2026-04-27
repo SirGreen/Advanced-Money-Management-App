@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -11,6 +10,8 @@ import '../helpers/glass_card.dart';
 import '../helpers/gradient_background.dart';
 import '../helpers/tag_icon.dart';
 import '../../l10n/app_localizations.dart';
+import '../../data/services/privacy_mode_service.dart';
+import '../widgets/privacy_mode_widgets.dart';
 
 class ReportsAppBar extends StatelessWidget implements PreferredSizeWidget {
   final AppLocalizations l10n;
@@ -86,13 +87,21 @@ class ReportsPage extends StatefulWidget {
 
 class _ReportsPageState extends State<ReportsPage> {
   late DateTimeRange _dateRange;
+  late Future<ReportData> _reportFuture;
 
   @override
   void initState() {
     super.initState();
-    final settingsViewModel =
-        Provider.of<SettingsViewModel>(context, listen: false);
     _dateRange = _calculateDefaultDateRange();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Listen to ExpenditureViewModel so the report refreshes automatically
+    // whenever transactions are added, edited, or deleted.
+    final vm = Provider.of<ExpenditureViewModel>(context);
+    _reportFuture = vm.getReportData(_dateRange);
   }
 
   static DateTimeRange _calculateDefaultDateRange() {
@@ -114,15 +123,20 @@ class _ReportsPageState extends State<ReportsPage> {
       cancelText: l10n.cancel,
     );
     if (picked != null && picked != _dateRange) {
+      final vm = Provider.of<ExpenditureViewModel>(context, listen: false);
       setState(() {
         _dateRange = picked;
+        _reportFuture = vm.getReportData(picked);
       });
     }
   }
 
   void _resetDateRange() {
+    final vm = Provider.of<ExpenditureViewModel>(context, listen: false);
+    final newRange = _calculateDefaultDateRange();
     setState(() {
-      _dateRange = _calculateDefaultDateRange();
+      _dateRange = newRange;
+      _reportFuture = vm.getReportData(newRange);
     });
   }
 
@@ -146,14 +160,12 @@ class _ReportsPageState extends State<ReportsPage> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final expenditureViewModel =
-        Provider.of<ExpenditureViewModel>(context, listen: false);
-    final settingsViewModel =
-        Provider.of<SettingsViewModel>(context, listen: false);
+    final settingsViewModel = Provider.of<SettingsViewModel>(context);
+    final isPrivacyMode = settingsViewModel.settings.privacyModeEnabled;
 
     return BackGround(
       child: FutureBuilder<ReportData>(
-        future: expenditureViewModel.getReportData(_dateRange),
+        future: _reportFuture,
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return const Center(child: CircularProgressIndicator());
@@ -178,12 +190,12 @@ class _ReportsPageState extends State<ReportsPage> {
                     8,
                     MediaQuery.of(context).padding.top + kToolbarHeight + 40,
                     8,
-                    8,
+                    MediaQuery.of(context).padding.bottom + 90,
                   ),
                   sliver: SliverList(
                     delegate: SliverChildListDelegate([
                       // All-time money left card
-                      _buildAllTimeCard(context, l10n),
+                      _buildAllTimeCard(context, l10n, isPrivacyMode),
                       const SizedBox(height: 16),
 
                       // Income vs Expense card
@@ -192,6 +204,7 @@ class _ReportsPageState extends State<ReportsPage> {
                         l10n,
                         reportData,
                         currencyCode,
+                        isPrivacyMode,
                       ),
                       const SizedBox(height: 16),
 
@@ -202,6 +215,7 @@ class _ReportsPageState extends State<ReportsPage> {
                           reportData.lineChartData!,
                           currencyCode,
                           l10n,
+                          isPrivacyMode,
                         ),
                       const SizedBox(height: 16),
 
@@ -215,6 +229,7 @@ class _ReportsPageState extends State<ReportsPage> {
                           currencyCode,
                           _dateRange,
                           isIncomeChart: false,
+                          isPrivacyMode: isPrivacyMode,
                         ),
                       const SizedBox(height: 16),
 
@@ -228,6 +243,7 @@ class _ReportsPageState extends State<ReportsPage> {
                           currencyCode,
                           _dateRange,
                           isIncomeChart: true,
+                          isPrivacyMode: isPrivacyMode,
                         ),
                       const SizedBox(height: 16),
                     ]),
@@ -241,7 +257,7 @@ class _ReportsPageState extends State<ReportsPage> {
     );
   }
 
-  Widget _buildAllTimeCard(BuildContext context, AppLocalizations l10n) {
+  Widget _buildAllTimeCard(BuildContext context, AppLocalizations l10n, bool isPrivacyMode) {
     final allTimeMoneyLeft = Provider.of<ExpenditureViewModel>(
       context,
       listen: false,
@@ -257,6 +273,14 @@ class _ReportsPageState extends State<ReportsPage> {
     final Color textColor =
         isPositive ? Colors.green.shade900 : Colors.red.shade900;
 
+    final displayAmount = isPrivacyMode
+        ? PrivacyModeService.maskSymbol
+        : NumberFormat.currency(
+            locale: l10n.localeName,
+            name: currencyCode,
+            decimalDigits: 2,
+          ).format(allTimeMoneyLeft);
+
     return GlassCard(
       color: cardColor,
       child: ListTile(
@@ -266,11 +290,7 @@ class _ReportsPageState extends State<ReportsPage> {
           style: TextStyle(color: textColor.withValues(alpha: 0.8)),
         ),
         trailing: Text(
-          NumberFormat.currency(
-            locale: l10n.localeName,
-            name: currencyCode,
-            decimalDigits: 2,
-          ).format(allTimeMoneyLeft),
+          displayAmount,
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 16,
@@ -286,6 +306,7 @@ class _ReportsPageState extends State<ReportsPage> {
     AppLocalizations l10n,
     ReportData data,
     String currencyCode,
+    bool isPrivacyMode,
   ) {
     final net = data.totalIncome - data.totalExpense;
     final currencyFormat = NumberFormat.currency(
@@ -293,6 +314,7 @@ class _ReportsPageState extends State<ReportsPage> {
       decimalDigits: 2,
       name: currencyCode,
     );
+    final mask = PrivacyModeService.maskSymbol;
     return GlassCard(
       padding: const EdgeInsets.all(12),
       child: Column(
@@ -301,6 +323,7 @@ class _ReportsPageState extends State<ReportsPage> {
             income: data.totalIncome,
             expense: data.totalExpense,
             currencyCode: currencyCode,
+            isPrivacyMode: isPrivacyMode,
           ),
           const SizedBox(height: 12),
           Row(
@@ -313,7 +336,7 @@ class _ReportsPageState extends State<ReportsPage> {
                     style: const TextStyle(fontSize: 12, color: Colors.grey),
                   ),
                   Text(
-                    currencyFormat.format(data.totalIncome),
+                    isPrivacyMode ? mask : currencyFormat.format(data.totalIncome),
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 14,
@@ -329,7 +352,7 @@ class _ReportsPageState extends State<ReportsPage> {
                     style: const TextStyle(fontSize: 12, color: Colors.grey),
                   ),
                   Text(
-                    currencyFormat.format(data.totalExpense),
+                    isPrivacyMode ? mask : currencyFormat.format(data.totalExpense),
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 14,
@@ -345,7 +368,7 @@ class _ReportsPageState extends State<ReportsPage> {
                     style: const TextStyle(fontSize: 12, color: Colors.grey),
                   ),
                   Text(
-                    currencyFormat.format(net),
+                    isPrivacyMode ? mask : currencyFormat.format(net),
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 14,
@@ -369,6 +392,7 @@ class _ReportsPageState extends State<ReportsPage> {
     String currencyCode,
     DateTimeRange dateRange, {
     required bool isIncomeChart,
+    required bool isPrivacyMode,
   }) {
     int touchedIndex = -1;
     final totalValue = data.values.fold(
@@ -461,6 +485,7 @@ class _ReportsPageState extends State<ReportsPage> {
               otherAmount,
               isIncomeChart,
               currencyCode,
+              isPrivacyMode,
             ),
             const SizedBox(height: 16),
           ],
@@ -478,12 +503,14 @@ class _ReportsPageState extends State<ReportsPage> {
     double otherAmount,
     bool isIncomeChart,
     String currencyCode,
+    bool isPrivacyMode,
   ) {
     final currencyFormat = NumberFormat.currency(
       locale: l10n.localeName,
       decimalDigits: 2,
       name: currencyCode,
     );
+    final mask = PrivacyModeService.maskSymbol;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -518,7 +545,9 @@ class _ReportsPageState extends State<ReportsPage> {
                       child: Text(tag.name),
                     ),
                     Text(
-                      '${currencyFormat.format(amount)} ($percentage%)',
+                      isPrivacyMode
+                          ? '$mask ($percentage%)'
+                          : '${currencyFormat.format(amount)} ($percentage%)',
                       style: const TextStyle(fontSize: 12),
                     ),
                   ],
@@ -544,7 +573,9 @@ class _ReportsPageState extends State<ReportsPage> {
                     child: Text('Other'),
                   ),
                   Text(
-                    '${currencyFormat.format(otherAmount)} (${(otherAmount / totalValue * 100).toStringAsFixed(1)}%)',
+                    isPrivacyMode
+                        ? '$mask (${(otherAmount / totalValue * 100).toStringAsFixed(1)}%)'
+                        : '${currencyFormat.format(otherAmount)} (${(otherAmount / totalValue * 100).toStringAsFixed(1)}%)',
                     style: const TextStyle(fontSize: 12),
                   ),
                 ],
@@ -560,6 +591,7 @@ class _ReportsPageState extends State<ReportsPage> {
     LineChartReportData data,
     String currencyCode,
     AppLocalizations l10n,
+    bool isPrivacyMode,
   ) {
     final currencyFormat = NumberFormat.compactCurrency(
       locale: l10n.localeName,
@@ -609,7 +641,7 @@ class _ReportsPageState extends State<ReportsPage> {
                     ),
                     leftTitles: AxisTitles(
                       sideTitles: SideTitles(
-                        showTitles: true,
+                        showTitles: !isPrivacyMode,
                         reservedSize: 40,
                         getTitlesWidget: (value, meta) {
                           return Text(
@@ -686,11 +718,13 @@ class _IncomeExpenseBarChart extends StatelessWidget {
   final double income;
   final double expense;
   final String currencyCode;
+  final bool isPrivacyMode;
 
   const _IncomeExpenseBarChart({
     required this.income,
     required this.expense,
     required this.currencyCode,
+    required this.isPrivacyMode,
   });
 
   @override
@@ -717,6 +751,7 @@ class _IncomeExpenseBarChart extends StatelessWidget {
               incomeWidth,
               Colors.green,
               currencyFormat,
+              isPrivacyMode,
             ),
             const SizedBox(height: 12),
             _buildBarRow(
@@ -726,6 +761,7 @@ class _IncomeExpenseBarChart extends StatelessWidget {
               expenseWidth,
               Colors.red,
               currencyFormat,
+              isPrivacyMode,
             ),
           ],
         );
@@ -740,6 +776,7 @@ class _IncomeExpenseBarChart extends StatelessWidget {
     double barWidth,
     Color color,
     NumberFormat currencyFormat,
+    bool isPrivacyMode,
   ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -749,7 +786,9 @@ class _IncomeExpenseBarChart extends StatelessWidget {
           children: [
             Text(label),
             Text(
-              currencyFormat.format(amount),
+              isPrivacyMode
+                  ? PrivacyModeService.maskSymbol
+                  : currencyFormat.format(amount),
               style: TextStyle(fontWeight: FontWeight.bold, color: color),
             ),
           ],
@@ -860,9 +899,9 @@ class _FilteredTransactionsPageState extends State<FilteredTransactionsPage> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final settingsViewModel =
-        Provider.of<SettingsViewModel>(context, listen: false);
+    final settingsViewModel = Provider.of<SettingsViewModel>(context);
     final currencyCode = settingsViewModel.settings.primaryCurrencyCode;
+    final isPrivacyMode = settingsViewModel.settings.privacyModeEnabled;
 
     final double appBarHeight = kToolbarHeight + 36.0;
     final double statusBarHeight = MediaQuery.of(context).padding.top;
@@ -954,7 +993,7 @@ class _FilteredTransactionsPageState extends State<FilteredTransactionsPage> {
               )
             else
               SliverPadding(
-                padding: EdgeInsets.fromLTRB(8, totalTopOffset + 8, 8, 8),
+                padding: EdgeInsets.fromLTRB(8, totalTopOffset + 8, 8, MediaQuery.of(context).padding.bottom + 90),
                 sliver: SliverList.builder(
                   itemCount: _results.length,
                   itemBuilder: (context, index) {
@@ -966,9 +1005,12 @@ class _FilteredTransactionsPageState extends State<FilteredTransactionsPage> {
                       padding: EdgeInsets.zero,
                       child: ListTile(
                         leading: TagIcon(tag: widget.tag, radius: 20),
-                        title: Text(
-                          expenditure.articleName,
-                          style: const TextStyle(fontWeight: FontWeight.w500),
+                        title: PrivacyBlur(
+                          isPrivate: isPrivacyMode,
+                          child: Text(
+                            expenditure.articleName,
+                            style: const TextStyle(fontWeight: FontWeight.w500),
+                          ),
                         ),
                         subtitle: Text(
                           DateFormat.yMMMd(
@@ -976,11 +1018,13 @@ class _FilteredTransactionsPageState extends State<FilteredTransactionsPage> {
                           ).format(expenditure.date),
                         ),
                         trailing: Text(
-                          NumberFormat.currency(
-                            locale: l10n.localeName,
-                            name: currencyCode,
-                            decimalDigits: 2,
-                          ).format(expenditure.amount ?? 0.0),
+                          isPrivacyMode
+                              ? PrivacyModeService.maskSymbol
+                              : NumberFormat.currency(
+                                  locale: l10n.localeName,
+                                  name: currencyCode,
+                                  decimalDigits: 2,
+                                ).format(expenditure.amount ?? 0.0),
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 16,

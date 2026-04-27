@@ -604,5 +604,11 @@
         "type": "String"
       }
     }
-  }
+  },
+  "privacyMode": "Privacy Mode",
+  "privacyModeOn": "On",
+  "privacyModeOff": "Off",
+  "privacyModeInfoTitle": "Privacy Mode",
+  "privacyModeInfoBody": "When enabled:\n\n• All amounts are replaced with •••\n• Transaction names are blurred\n• Report figures are hidden\n• Saving account balances are hidden\n• Saving goal amounts are hidden\n\nThe setting is saved and restored when you reopen the app.",
+  "privacyModeGotIt": "Got it"
 }

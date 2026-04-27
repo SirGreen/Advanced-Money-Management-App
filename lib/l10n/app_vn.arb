@@ -549,5 +549,11 @@
                 "type": "String"
             }
         }
-    }
+    },
+    "privacyMode": "Chế độ riêng tư",
+    "privacyModeOn": "Đang bật",
+    "privacyModeOff": "Đang tắt",
+    "privacyModeInfoTitle": "Chế độ riêng tư",
+    "privacyModeInfoBody": "Khi bật chế độ riêng tư:\n\n• Tất cả số tiền được thay bằng •••\n• Tên giao dịch bị làm mờ\n• Số liệu trên báo cáo bị ẩn\n• Số dư tài khoản tiết kiệm bị ẩn\n• Mục tiêu tiết kiệm bị ẩn\n\nTrạng thái được lưu lại khi khởi động lại ứng dụng.",
+    "privacyModeGotIt": "Đã hiểu"
 }

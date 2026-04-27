@@ -1,4 +1,3 @@
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:local_auth/local_auth.dart';
@@ -16,7 +15,6 @@ import '../helpers/gradient_title.dart';
 import '../helpers/section_header.dart';
 import '../tags/manage_tags_page.dart';
 import 'backup_restore_page.dart';
-import 'privacy_mode_page.dart';
 import 'settings_view_model.dart';
 
 class SettingsAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -46,6 +44,29 @@ class SettingsAppBar extends StatelessWidget implements PreferredSizeWidget {
 
 class SettingsView extends StatelessWidget {
   const SettingsView({super.key});
+
+  void _showPrivacyModeInfo(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Row(
+          children: [
+            const Icon(Icons.visibility_off_outlined),
+            const SizedBox(width: 8),
+            Text(l10n.privacyModeInfoTitle),
+          ],
+        ),
+        content: Text(l10n.privacyModeInfoBody),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(l10n.privacyModeGotIt),
+          ),
+        ],
+      ),
+    );
+  }
 
   void _showApiKeyDialog(BuildContext context, SettingsViewModel viewModel) {
     final controller = TextEditingController(text: viewModel.settings.geminiApiKey);
@@ -418,6 +439,7 @@ class SettingsView extends StatelessWidget {
     final appBarHeight = settingsAppBar.preferredSize.height;
     final statusBarHeight = MediaQuery.of(context).padding.top;
     final totalTopOffset = appBarHeight + statusBarHeight;
+    final bottomPadding = MediaQuery.of(context).padding.bottom + 90;
 
     return BackGround(
       child: Scaffold(
@@ -431,7 +453,7 @@ class SettingsView extends StatelessWidget {
             return CustomScrollView(
               slivers: [
                 SliverPadding(
-                  padding: EdgeInsets.fromLTRB(8, totalTopOffset + 15, 8, 90),
+                  padding: EdgeInsets.fromLTRB(8, totalTopOffset + 15, 8, bottomPadding),
                   sliver: SliverList(
                     delegate: SliverChildListDelegate([
                       GlassCardContainer(
@@ -565,20 +587,34 @@ class SettingsView extends StatelessWidget {
                           children: [
                             SectionHeader(title: l10n.security),
                             ListTile(
-                              leading: const Icon(Icons.visibility_off),
-                              title: const Text('Privacy Mode'),
-                              subtitle: Text(
-                                settings.privacyModeEnabled ? 'Enabled' : 'Disabled',
+                              leading: Icon(
+                                settings.privacyModeEnabled
+                                    ? Icons.visibility_off
+                                    : Icons.visibility_outlined,
+                                color: settings.privacyModeEnabled
+                                    ? Colors.amber.shade700
+                                    : null,
                               ),
-                              trailing: const Icon(Icons.chevron_right),
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (_) => const PrivacyModePage(),
+                              title: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Text(l10n.privacyMode),
+                                  const SizedBox(width: 4),
+                                  GestureDetector(
+                                    onTap: () => _showPrivacyModeInfo(context),
+                                    child: const Icon(Icons.info_outline, size: 16, color: Colors.grey),
                                   ),
-                                );
-                              },
+                                ],
+                              ),
+                              subtitle: Text(
+                                settings.privacyModeEnabled ? l10n.privacyModeOn : l10n.privacyModeOff,
+                              ),
+                              trailing: Switch(
+                                value: settings.privacyModeEnabled,
+                                onChanged: (value) =>
+                                    viewModel.togglePrivacyMode(value),
+                                activeColor: Colors.amber.shade700,
+                              ),
                             ),
                             SwitchListTile(
                               secondary: const Icon(Icons.lock),

@@ -1,8 +1,12 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import './export_view_model.dart';
 import '../../domain/entities/export_config.dart';
+import '../helpers/glass_card.dart';
+import '../helpers/gradient_background.dart';
+import '../helpers/gradient_title.dart';
+import '../helpers/section_header.dart';
 
 class ExportTransactionsView extends StatefulWidget {
   const ExportTransactionsView({super.key});
@@ -13,185 +17,167 @@ class ExportTransactionsView extends StatefulWidget {
 
 class _ExportTransactionsViewState extends State<ExportTransactionsView> {
   @override
-  void initState() {
-    super.initState();
-    Future.delayed(Duration.zero, () {
-      context.read<ExportViewModel>();
-    });
+  Widget build(BuildContext context) {
+    return Consumer<ExportViewModel>(
+      builder: (context, viewModel, child) {
+        final topPadding =
+            MediaQuery.of(context).padding.top + kToolbarHeight + 8;
+        final bottomPadding =
+            MediaQuery.of(context).padding.bottom + 90;
+
+        return BackGround(
+          child: Scaffold(
+            backgroundColor: Colors.transparent,
+            extendBodyBehindAppBar: true,
+            appBar: _buildAppBar(),
+            body: SingleChildScrollView(
+              padding: EdgeInsets.fromLTRB(12, topPadding, 12, bottomPadding),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildLocationCard(viewModel),
+                  const SizedBox(height: 12),
+                  _buildPresetSection(context, viewModel),
+                  const SizedBox(height: 12),
+                  _buildDateRangeSection(context, viewModel),
+                  const SizedBox(height: 12),
+                  _buildTransactionTypeSection(viewModel),
+                  const SizedBox(height: 12),
+                  _buildExportFormatSection(viewModel),
+                  const SizedBox(height: 12),
+                  _buildFieldSelectionSection(viewModel),
+                  const SizedBox(height: 12),
+                  _buildPreviewSection(context, viewModel),
+                  const SizedBox(height: 16),
+                  _buildExportButton(context, viewModel),
+                  if (viewModel.error != null) ...[
+                    const SizedBox(height: 12),
+                    _buildErrorCard(viewModel),
+                  ],
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Xuất dữ liệu giao dịch'),
+  PreferredSizeWidget _buildAppBar() {
+    return AppBar(
+      title: GradientTitle(text: 'Xuất dữ liệu'),
+      centerTitle: true,
+      elevation: 0,
+      backgroundColor: Colors.white.withValues(alpha: 0.7),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(bottom: Radius.circular(32)),
       ),
-      body: Consumer<ExportViewModel>(
-        builder: (context, viewModel, child) {
-          return SingleChildScrollView(
-            padding: const EdgeInsets.all(16),
+    );
+  }
+
+  Widget _buildLocationCard(ExportViewModel viewModel) {
+    return GlassCard(
+      padding: const EdgeInsets.all(14),
+      color: Colors.blue.withValues(alpha: 0.15),
+      child: Row(
+        children: [
+          Icon(Icons.folder_outlined, color: Colors.blue.shade700, size: 28),
+          const SizedBox(width: 12),
+          Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Info about export location
-                Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: Colors.blue[50],
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: Colors.blue[200]!),
-                  ),
-                  child: Row(
-                    children: [
-                      Icon(Icons.info_outline, color: Colors.blue[700]),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Vị trí lưu tệp',
-                              style: TextStyle(
-                                color: Colors.blue[700],
-                                fontWeight: FontWeight.bold,
-                                fontSize: 12,
-                              ),
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              viewModel.exportDirectoryPath,
-                              style: TextStyle(
-                                color: Colors.blue[700],
-                                fontSize: 11,
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 10,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
+                Text(
+                  'Vị trí lưu tệp',
+                  style: TextStyle(
+                    color: Colors.blue.shade800,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 13,
                   ),
                 ),
-                const SizedBox(height: 24),
-
-                // Preset options
-                _buildPresetSection(context, viewModel),
-                const SizedBox(height: 24),
-
-                // Date range filter
-                _buildDateRangeSection(context, viewModel),
-                const SizedBox(height: 24),
-
-                // Transaction type filters
-                _buildTransactionTypeSection(context, viewModel),
-                const SizedBox(height: 24),
-
-                // Export format
-                _buildExportFormatSection(context, viewModel),
-                const SizedBox(height: 24),
-
-                // Field selection
-                _buildFieldSelectionSection(context, viewModel),
-                const SizedBox(height: 24),
-
-                // Preview
-                _buildPreviewSection(context, viewModel),
-                const SizedBox(height: 24),
-
-                // Export button
-                _buildExportButton(context, viewModel),
+                const SizedBox(height: 4),
+                Text(
+                  viewModel.exportDirectoryPath,
+                  style: TextStyle(color: Colors.blue.shade700, fontSize: 12),
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ],
             ),
-          );
-        },
+          ),
+        ],
       ),
     );
   }
 
   Widget _buildPresetSection(BuildContext context, ExportViewModel viewModel) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Cấu hình nhanh',
-          style: Theme.of(context).textTheme.titleMedium,
-        ),
-        const SizedBox(height: 12),
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
+    return GlassCard(
+      padding: const EdgeInsets.all(14),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SectionHeader(title: 'Cấu hình nhanh'),
+          const SizedBox(height: 10),
+          Row(
             children: [
-              _buildPresetButton(
-                context,
-                'Tháng này',
-                () => viewModel.usePresetThisMonth(),
-              ),
+              _buildPresetChip('Tháng này', viewModel.usePresetThisMonth),
               const SizedBox(width: 8),
-              _buildPresetButton(
-                context,
-                'Năm này',
-                () => viewModel.usePresetThisYear(),
-              ),
+              _buildPresetChip('Năm này', viewModel.usePresetThisYear),
               const SizedBox(width: 8),
-              _buildPresetButton(
-                context,
-                'Toàn bộ',
-                () => viewModel.usePresetAllTransactions(),
-              ),
+              _buildPresetChip('Toàn bộ', viewModel.usePresetAllTransactions),
             ],
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
-  Widget _buildPresetButton(
-    BuildContext context,
-    String label,
-    VoidCallback onPressed,
-  ) {
-    return OutlinedButton(
-      onPressed: onPressed,
-      child: Text(label),
+  Widget _buildPresetChip(String label, VoidCallback onPressed) {
+    return Expanded(
+      child: OutlinedButton(
+        onPressed: onPressed,
+        style: OutlinedButton.styleFrom(
+          side: BorderSide(color: Colors.teal.shade400),
+          foregroundColor: Colors.teal.shade700,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          padding: const EdgeInsets.symmetric(vertical: 8),
+        ),
+        child: Text(label, style: const TextStyle(fontSize: 12)),
+      ),
     );
   }
 
   Widget _buildDateRangeSection(BuildContext context, ExportViewModel viewModel) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Khoảng thời gian',
-          style: Theme.of(context).textTheme.titleMedium,
-        ),
-        const SizedBox(height: 12),
-        Row(
-          children: [
-            Expanded(
-              child: _buildDatePicker(
-                context,
-                'Từ ngày',
-                viewModel.config.startDate,
-                (date) {
-                  viewModel.setDateRange(date, viewModel.config.endDate);
-                },
+    return GlassCard(
+      padding: const EdgeInsets.all(14),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SectionHeader(title: 'Khoảng thời gian'),
+          const SizedBox(height: 10),
+          Row(
+            children: [
+              Expanded(
+                child: _buildDatePicker(
+                  context,
+                  'Từ ngày',
+                  viewModel.config.startDate,
+                  (date) => viewModel.setDateRange(date, viewModel.config.endDate),
+                ),
               ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: _buildDatePicker(
-                context,
-                'Đến ngày',
-                viewModel.config.endDate,
-                (date) {
-                  viewModel.setDateRange(viewModel.config.startDate, date);
-                },
+              const SizedBox(width: 12),
+              Expanded(
+                child: _buildDatePicker(
+                  context,
+                  'Đến ngày',
+                  viewModel.config.endDate,
+                  (date) => viewModel.setDateRange(viewModel.config.startDate, date),
+                ),
               ),
-            ),
-          ],
-        ),
-      ],
+            ],
+          ),
+        ],
+      ),
     );
   }
 
@@ -204,8 +190,14 @@ class _ExportTransactionsViewState extends State<ExportTransactionsView> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: Theme.of(context).textTheme.bodySmall),
-        const SizedBox(height: 4),
+        Text(
+          label,
+          style: TextStyle(
+              fontSize: 12,
+              color: Colors.grey.shade700,
+              fontWeight: FontWeight.w600),
+        ),
+        const SizedBox(height: 6),
         GestureDetector(
           onTap: () async {
             final picked = await showDatePicker(
@@ -214,15 +206,14 @@ class _ExportTransactionsViewState extends State<ExportTransactionsView> {
               firstDate: DateTime(2020),
               lastDate: DateTime.now(),
             );
-            if (picked != null) {
-              onChanged(picked);
-            }
+            if (picked != null) onChanged(picked);
           },
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 11),
             decoration: BoxDecoration(
-              border: Border.all(color: Colors.grey[400]!),
-              borderRadius: BorderRadius.circular(8),
+              color: Colors.white.withValues(alpha: 0.5),
+              border: Border.all(color: Colors.teal.withValues(alpha: 0.4)),
+              borderRadius: BorderRadius.circular(12),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -231,8 +222,9 @@ class _ExportTransactionsViewState extends State<ExportTransactionsView> {
                   selectedDate != null
                       ? DateFormat('dd/MM/yyyy').format(selectedDate)
                       : 'Chọn ngày',
+                  style: const TextStyle(fontSize: 13),
                 ),
-                Icon(Icons.calendar_today, size: 18, color: Colors.grey[600]),
+                Icon(Icons.calendar_today, size: 16, color: Colors.teal.shade600),
               ],
             ),
           ),
@@ -241,184 +233,62 @@ class _ExportTransactionsViewState extends State<ExportTransactionsView> {
     );
   }
 
-  Widget _buildTransactionTypeSection(BuildContext context, ExportViewModel viewModel) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Loại giao dịch',
-          style: Theme.of(context).textTheme.titleMedium,
-        ),
-        const SizedBox(height: 12),
-        CheckboxListTile(
-          value: viewModel.config.includeExpense,
-          onChanged: (value) {
-            viewModel.setExpenseIncluded(value ?? true);
-          },
-          title: const Text('Bao gồm chi tiêu'),
-          controlAffinity: ListTileControlAffinity.leading,
-          contentPadding: EdgeInsets.zero,
-        ),
-        CheckboxListTile(
-          value: viewModel.config.includeIncome,
-          onChanged: (value) {
-            viewModel.setIncomeIncluded(value ?? false);
-          },
-          title: const Text('Bao gồm thu nhập'),
-          controlAffinity: ListTileControlAffinity.leading,
-          contentPadding: EdgeInsets.zero,
-        ),
-      ],
-    );
-  }
-
-  Widget _buildExportFormatSection(BuildContext context, ExportViewModel viewModel) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Định dạng xuất',
-          style: Theme.of(context).textTheme.titleMedium,
-        ),
-        const SizedBox(height: 12),
-        Row(
-          children: [
-            Expanded(
-              child: RadioListTile<String>(
-                value: 'csv',
-                groupValue: viewModel.config.exportFormat,
-                onChanged: (value) {
-                  if (value != null) viewModel.setExportFormat(value);
-                },
-                title: const Text('CSV'),
-                controlAffinity: ListTileControlAffinity.leading,
-                contentPadding: EdgeInsets.zero,
-              ),
-            ),
-            Expanded(
-              child: RadioListTile<String>(
-                value: 'excel',
-                groupValue: viewModel.config.exportFormat,
-                onChanged: (value) {
-                  if (value != null) viewModel.setExportFormat(value);
-                },
-                title: const Text('Excel'),
-                controlAffinity: ListTileControlAffinity.leading,
-                contentPadding: EdgeInsets.zero,
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-
-  Widget _buildFieldSelectionSection(BuildContext context, ExportViewModel viewModel) {
-    const availableFields = ['date', 'amount', 'category', 'article', 'notes', 'type', 'currency'];
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Chọn thông tin xuất',
-          style: Theme.of(context).textTheme.titleMedium,
-        ),
-        const SizedBox(height: 12),
-        Wrap(
-          spacing: 8,
-          runSpacing: 8,
-          children: availableFields.map((field) {
-            final isSelected = viewModel.config.selectedFields.contains(field);
-            return FilterChip(
-              label: Text(ExportConfig().getFieldLabel(field)),
-              selected: isSelected,
-              onSelected: (selected) {
-                final newFields = List<String>.from(viewModel.config.selectedFields);
-                if (selected) {
-                  newFields.add(field);
-                } else {
-                  newFields.remove(field);
-                }
-                viewModel.setFieldSelection(newFields);
-              },
-            );
-          }).toList(),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildPreviewSection(BuildContext context, ExportViewModel viewModel) {
-    final summary = viewModel.summary;
-    if (summary == null) return const SizedBox();
-
-    final currencyFormat = NumberFormat.currency(locale: 'vi_VN', symbol: '₫');
-
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.grey[100],
-        borderRadius: BorderRadius.circular(8),
-      ),
+  Widget _buildTransactionTypeSection(ExportViewModel viewModel) {
+    return GlassCard(
+      padding: const EdgeInsets.fromLTRB(14, 14, 14, 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Xem trước',
-            style: Theme.of(context).textTheme.titleMedium,
+          const SectionHeader(title: 'Loại giao dịch'),
+          CheckboxListTile(
+            value: viewModel.config.includeExpense,
+            onChanged: (v) => viewModel.setExpenseIncluded(v ?? true),
+            title: const Text('Bao gồm chi tiêu'),
+            controlAffinity: ListTileControlAffinity.leading,
+            contentPadding: EdgeInsets.zero,
+            activeColor: Colors.teal.shade600,
           ),
-          const SizedBox(height: 12),
+          CheckboxListTile(
+            value: viewModel.config.includeIncome,
+            onChanged: (v) => viewModel.setIncomeIncluded(v ?? false),
+            title: const Text('Bao gồm thu nhập'),
+            controlAffinity: ListTileControlAffinity.leading,
+            contentPadding: EdgeInsets.zero,
+            activeColor: Colors.teal.shade600,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildExportFormatSection(ExportViewModel viewModel) {
+    return GlassCard(
+      padding: const EdgeInsets.fromLTRB(14, 14, 14, 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SectionHeader(title: 'Định dạng xuất'),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Tổng giao dịch',
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: Colors.grey[600],
-                    ),
-                  ),
-                  Text(
-                    '${summary['totalTransactions']}',
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                ],
+              Expanded(
+                child: RadioListTile<String>(
+                  value: 'csv',
+                  groupValue: viewModel.config.exportFormat,
+                  onChanged: (v) { if (v != null) viewModel.setExportFormat(v); },
+                  title: const Text('CSV'),
+                  activeColor: Colors.teal.shade600,
+                  contentPadding: EdgeInsets.zero,
+                ),
               ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Tổng chi tiêu',
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: Colors.grey[600],
-                    ),
-                  ),
-                  Text(
-                    currencyFormat.format(summary['totalExpense']),
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      color: Colors.red,
-                    ),
-                  ),
-                ],
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Tổng thu nhập',
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: Colors.grey[600],
-                    ),
-                  ),
-                  Text(
-                    currencyFormat.format(summary['totalIncome']),
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      color: Colors.green,
-                    ),
-                  ),
-                ],
+              Expanded(
+                child: RadioListTile<String>(
+                  value: 'excel',
+                  groupValue: viewModel.config.exportFormat,
+                  onChanged: (v) { if (v != null) viewModel.setExportFormat(v); },
+                  title: const Text('Excel'),
+                  activeColor: Colors.teal.shade600,
+                  contentPadding: EdgeInsets.zero,
+                ),
               ),
             ],
           ),
@@ -427,107 +297,237 @@ class _ExportTransactionsViewState extends State<ExportTransactionsView> {
     );
   }
 
-  Widget _buildExportButton(BuildContext context, ExportViewModel viewModel) {
+  Widget _buildFieldSelectionSection(ExportViewModel viewModel) {
+    const availableFields = [
+      'date', 'amount', 'category', 'article', 'notes', 'type', 'currency',
+    ];
+
+    return GlassCard(
+      padding: const EdgeInsets.all(14),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SectionHeader(title: 'Chọn thông tin xuất'),
+          const SizedBox(height: 10),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: availableFields.map((field) {
+              final isSelected = viewModel.config.selectedFields.contains(field);
+              return FilterChip(
+                label: Text(ExportConfig().getFieldLabel(field)),
+                selected: isSelected,
+                selectedColor: Colors.teal.withValues(alpha: 0.25),
+                checkmarkColor: Colors.teal.shade800,
+                onSelected: (selected) {
+                  final newFields = List<String>.from(viewModel.config.selectedFields);
+                  if (selected) {
+                    newFields.add(field);
+                  } else {
+                    newFields.remove(field);
+                  }
+                  viewModel.setFieldSelection(newFields);
+                },
+              );
+            }).toList(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPreviewSection(BuildContext context, ExportViewModel viewModel) {
+    final summary = viewModel.summary;
+    if (summary == null) return const SizedBox.shrink();
+    final currencyFormat = NumberFormat.currency(locale: 'vi_VN', symbol: '₫');
+
+    return GlassCard(
+      padding: const EdgeInsets.all(14),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SectionHeader(title: 'Xem trước'),
+          const SizedBox(height: 12),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _buildSummaryItem(
+                context,
+                label: 'Tổng GD',
+                value: '${summary['totalTransactions']}',
+                color: Colors.teal.shade700,
+              ),
+              _buildSummaryItem(
+                context,
+                label: 'Tổng chi',
+                value: currencyFormat.format(summary['totalExpense'] ?? 0),
+                color: Colors.red.shade700,
+              ),
+              _buildSummaryItem(
+                context,
+                label: 'Tổng thu',
+                value: currencyFormat.format(summary['totalIncome'] ?? 0),
+                color: Colors.green.shade700,
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSummaryItem(
+    BuildContext context, {
+    required String label,
+    required String value,
+    required Color color,
+  }) {
     return Column(
       children: [
-        SizedBox(
-          width: double.infinity,
-          child: ElevatedButton(
-            onPressed: viewModel.isExporting ? null : () => _handleExport(context, viewModel),
-            child: viewModel.isExporting
-                ? const SizedBox(
-                    height: 20,
-                    width: 20,
-                    child: CircularProgressIndicator(strokeWidth: 2),
-                  )
-                : const Text('Xuất dữ liệu'),
-          ),
+        Text(
+          label,
+          style: TextStyle(fontSize: 11, color: Colors.grey.shade600, fontWeight: FontWeight.w600),
         ),
-        if (viewModel.error != null) ...[
-          const SizedBox(height: 12),
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: Colors.red[100],
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Row(
-              children: [
-                Icon(Icons.error, color: Colors.red[700]),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Text(
-                    viewModel.error!,
-                    style: TextStyle(color: Colors.red[700]),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-        if (viewModel.exportedFilePath != null) ...[
-          const SizedBox(height: 12),
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: Colors.green[100],
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Row(
-              children: [
-                Icon(Icons.check_circle, color: Colors.green[700]),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Xuất thành công!',
-                        style: TextStyle(
-                          color: Colors.green[700],
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        'Tệp: ${viewModel.exportedFilePath!.split('/').last}',
-                        style: TextStyle(
-                          color: Colors.green[700],
-                          fontSize: 12,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        'Thư mục: ${viewModel.exportDirectoryPath}',
-                        style: TextStyle(
-                          color: Colors.green[700],
-                          fontSize: 11,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
+        const SizedBox(height: 4),
+        Text(
+          value,
+          style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: color),
+        ),
       ],
+    );
+  }
+
+  Widget _buildExportButton(BuildContext context, ExportViewModel viewModel) {
+    return SizedBox(
+      width: double.infinity,
+      height: 52,
+      child: ElevatedButton.icon(
+        onPressed: viewModel.isExporting ? null : () => _handleExport(context, viewModel),
+        icon: viewModel.isExporting
+            ? const SizedBox(
+                width: 20,
+                height: 20,
+                child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+              )
+            : const Icon(Icons.download_rounded),
+        label: Text(
+          viewModel.isExporting ? 'Đang xuất...' : 'Xuất dữ liệu',
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        ),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.teal.shade600,
+          foregroundColor: Colors.white,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          elevation: 0,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildErrorCard(ExportViewModel viewModel) {
+    return GlassCard(
+      padding: const EdgeInsets.all(14),
+      color: Colors.red.withValues(alpha: 0.15),
+      child: Row(
+        children: [
+          Icon(Icons.error_outline, color: Colors.red.shade700, size: 28),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Text(
+              viewModel.error!,
+              style: TextStyle(color: Colors.red.shade800, fontSize: 13),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
   Future<void> _handleExport(BuildContext context, ExportViewModel viewModel) async {
     await viewModel.export();
-    if (mounted && viewModel.exportedFilePath != null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Xuất tệp: ${viewModel.exportedFilePath!.split('/').last}'),
-          action: SnackBarAction(
-            label: 'OK',
-            onPressed: () {},
+    if (!mounted) return;
+    if (viewModel.exportedFilePath != null) {
+      _showSuccessDialog(context, viewModel);
+    }
+  }
+
+  void _showSuccessDialog(BuildContext context, ExportViewModel viewModel) {
+    final fileName = viewModel.exportedFilePath!.split('/').last;
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        icon: CircleAvatar(
+          radius: 28,
+          backgroundColor: Colors.green.withValues(alpha: 0.15),
+          child: Icon(Icons.check_circle_rounded, color: Colors.green.shade700, size: 36),
+        ),
+        title: const Text(
+          'Xuất thành công!',
+          textAlign: TextAlign.center,
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Divider(),
+            const SizedBox(height: 8),
+            _dialogRow(
+              icon: Icons.insert_drive_file_outlined,
+              label: 'Tệp',
+              value: fileName,
+            ),
+            const SizedBox(height: 8),
+            _dialogRow(
+              icon: Icons.folder_outlined,
+              label: 'Thư mục',
+              value: viewModel.exportDirectoryPath,
+            ),
+          ],
+        ),
+        actionsAlignment: MainAxisAlignment.center,
+        actions: [
+          ElevatedButton(
+            onPressed: () {
+              viewModel.clearExportedFile();
+              Navigator.of(ctx).pop();
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.teal.shade600,
+              foregroundColor: Colors.white,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 10),
+            ),
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _dialogRow({
+    required IconData icon,
+    required String label,
+    required String value,
+  }) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Icon(icon, size: 18, color: Colors.teal.shade600),
+        const SizedBox(width: 8),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(label,
+                  style: const TextStyle(
+                      fontSize: 11, fontWeight: FontWeight.w600, color: Colors.grey)),
+              const SizedBox(height: 2),
+              Text(value, style: const TextStyle(fontSize: 13)),
+            ],
           ),
         ),
-      );
-    }
+      ],
+    );
   }
 }
