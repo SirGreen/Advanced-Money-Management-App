@@ -2460,6 +2460,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'You have used 100% of your budget for {category}!'**
   String budgetWarning100(String category);
+
+  /// No description provided for @privacyMode.
+  String get privacyMode;
+
+  /// No description provided for @privacyModeOn.
+  String get privacyModeOn;
+
+  /// No description provided for @privacyModeOff.
+  String get privacyModeOff;
+
+  /// No description provided for @privacyModeInfoTitle.
+  String get privacyModeInfoTitle;
+
+  /// No description provided for @privacyModeInfoBody.
+  String get privacyModeInfoBody;
+
+  /// No description provided for @privacyModeGotIt.
+  String get privacyModeGotIt;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

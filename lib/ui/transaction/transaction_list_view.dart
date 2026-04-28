@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
@@ -11,6 +10,7 @@ import '../../domain/entities/expenditure.dart';
 import '../../domain/entities/tag.dart';
 import '../settings/settings_view_model.dart';
 import '../../data/services/privacy_mode_service.dart';
+import '../widgets/privacy_mode_widgets.dart';
 import 'scheduled_expenditure_list_view.dart';
 import '../tags/manage_tags_page.dart';
 import '../helpers/glass_card.dart';
@@ -463,12 +463,15 @@ class _TransactionListViewState extends State<TransactionListView> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    expenditure.articleName,
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
+                  PrivacyBlur(
+                    isPrivate: isPrivacyMode,
+                    child: Text(
+                      expenditure.articleName,
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: 4),
                   Text(

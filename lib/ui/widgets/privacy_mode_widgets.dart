@@ -1,5 +1,8 @@
+import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../data/services/privacy_mode_service.dart';
+import '../settings/settings_view_model.dart';
 
 /// Widget to display amount with privacy mode support
 class PrivacyAwareAmount extends StatelessWidget {
@@ -204,6 +207,48 @@ class PrivacyModeTile extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+/// Blurs its [child] when [isPrivate] is true using ImageFiltered.
+/// Use this to visually hide text/content without replacing it with symbols.
+class PrivacyBlur extends StatelessWidget {
+  final Widget child;
+  final bool isPrivate;
+
+  const PrivacyBlur({
+    super.key,
+    required this.child,
+    required this.isPrivate,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    if (!isPrivate) return child;
+    return ImageFiltered(
+      imageFilter: ui.ImageFilter.blur(sigmaX: 7.0, sigmaY: 7.0),
+      child: child,
+    );
+  }
+}
+
+/// Quick eye-toggle button for AppBars.
+/// Reads and writes [SettingsViewModel.privacyModeEnabled] directly.
+class PrivacyToggleButton extends StatelessWidget {
+  const PrivacyToggleButton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final vm = context.watch<SettingsViewModel>();
+    final enabled = vm.settings.privacyModeEnabled;
+    return IconButton(
+      icon: Icon(
+        enabled ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+        color: enabled ? Colors.amber.shade700 : null,
+      ),
+      onPressed: () => vm.togglePrivacyMode(!enabled),
+      tooltip: enabled ? 'Tắt chế độ riêng tư' : 'Bật chế độ riêng tư',
     );
   }
 }
