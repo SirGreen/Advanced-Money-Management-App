@@ -1280,4 +1280,29 @@ class AppLocalizationsVi extends AppLocalizations {
   String budgetWarning100(String category) {
     return 'Bạn đã dùng hết 100% ngân sách cho danh mục $category!';
   }
+
+  @override
+  String get privacyMode => 'Chế độ riêng tư';
+
+  @override
+  String get privacyModeOn => 'Đang bật';
+
+  @override
+  String get privacyModeOff => 'Đang tắt';
+
+  @override
+  String get privacyModeInfoTitle => 'Chế độ riêng tư';
+
+  @override
+  String get privacyModeInfoBody =>
+      'Khi bật chế độ riêng tư:\n\n'
+      '• Tất cả số tiền được thay bằng •••\n'
+      '• Tên giao dịch bị làm mờ\n'
+      '• Số liệu trên báo cáo bị ẩn\n'
+      '• Số dư tài khoản tiết kiệm bị ẩn\n'
+      '• Mục tiêu tiết kiệm bị ẩn\n\n'
+      'Trạng thái được lưu lại khi khởi động lại ứng dụng.';
+
+  @override
+  String get privacyModeGotIt => 'Đã hiểu';
 }

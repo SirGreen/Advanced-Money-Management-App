@@ -1,4 +1,3 @@
-import 'dart:ui';
 
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +9,7 @@ import '../../domain/entities/saving_goal.dart';
 import '../../domain/entities/search_filter.dart';
 import '../../domain/entities/tag.dart';
 import '../../l10n/app_localizations.dart';
+import '../../data/services/privacy_mode_service.dart';
 import '../helpers/glass_card.dart';
 import '../helpers/gradient_background.dart';
 import '../helpers/gradient_title.dart';
@@ -104,6 +104,8 @@ class AssetsPage extends StatefulWidget {
     }
 
     return FloatingActionButton(
+      backgroundColor: Colors.teal.shade600,
+      foregroundColor: Colors.white,
       onPressed: () => Navigator.of(context).push(
         SharedAxisPageRoute(
           page: page,
@@ -236,6 +238,7 @@ class _AssetsPageState extends State<AssetsPage> {
   Widget _buildBudgetsList(BuildContext context, double topPadding) {
     final l10n = AppLocalizations.of(context)!;
     final vm = context.watch<ExpenditureViewModel>();
+    final isPrivacyMode = context.watch<SettingsViewModel>().settings.privacyModeEnabled;
 
     final statuses = vm.tags
         .where((t) => t.budgetAmount != null && t.budgetAmount! > 0)
@@ -296,6 +299,7 @@ class _AssetsPageState extends State<AssetsPage> {
                     itemBuilder: (context, index) => _BudgetCard(
                       tag: statuses[index].tag,
                       status: statuses[index],
+                      isPrivacyMode: isPrivacyMode,
                       onDelete: () => _deleteBudget(context, statuses[index].tag),
                     ),
                   ),
@@ -307,6 +311,7 @@ class _AssetsPageState extends State<AssetsPage> {
 
   Widget _buildSavingAccountsList(BuildContext context, double topPadding) {
     final l10n = AppLocalizations.of(context)!;
+    final isPrivacyMode = context.watch<SettingsViewModel>().settings.privacyModeEnabled;
     return Consumer<SavingAccountViewModel>(
       builder: (context, vm, child) {
         return RefreshIndicator(
@@ -322,7 +327,10 @@ class _AssetsPageState extends State<AssetsPage> {
                       )
                     : SliverList(
                         delegate: SliverChildBuilderDelegate((context, index) {
-                          return _SavingAccountCard(account: vm.savingAccounts[index]);
+                          return _SavingAccountCard(
+                            account: vm.savingAccounts[index],
+                            isPrivacyMode: isPrivacyMode,
+                          );
                         }, childCount: vm.savingAccounts.length),
                       ),
               ),
@@ -335,6 +343,7 @@ class _AssetsPageState extends State<AssetsPage> {
 
   Widget _buildSavingGoalsList(BuildContext context, double topPadding) {
     final l10n = AppLocalizations.of(context)!;
+    final isPrivacyMode = context.watch<SettingsViewModel>().settings.privacyModeEnabled;
     return Consumer<SavingGoalViewModel>(
       builder: (context, vm, child) {
         return RefreshIndicator(
@@ -350,7 +359,10 @@ class _AssetsPageState extends State<AssetsPage> {
                       )
                     : SliverList(
                         delegate: SliverChildBuilderDelegate((context, index) {
-                          return _SavingGoalCard(goal: vm.savingGoals[index]);
+                          return _SavingGoalCard(
+                            goal: vm.savingGoals[index],
+                            isPrivacyMode: isPrivacyMode,
+                          );
                         }, childCount: vm.savingGoals.length),
                       ),
               ),
@@ -468,8 +480,9 @@ class _EmptyStateMessage extends StatelessWidget {
 
 class _SavingAccountCard extends StatelessWidget {
   final SavingAccount account;
+  final bool isPrivacyMode;
 
-  const _SavingAccountCard({required this.account});
+  const _SavingAccountCard({required this.account, required this.isPrivacyMode});
 
   @override
   Widget build(BuildContext context) {
@@ -530,7 +543,7 @@ class _SavingAccountCard extends StatelessWidget {
                 ),
                 const SizedBox(width: 8),
                 Text(
-                  format.format(account.balance),
+                  isPrivacyMode ? PrivacyModeService.maskSymbol : format.format(account.balance),
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                         color: Theme.of(context).colorScheme.secondary,
@@ -557,7 +570,7 @@ class _SavingAccountCard extends StatelessWidget {
                               ),
                         ),
                         Text(
-                          format.format(futureValue),
+                          isPrivacyMode ? PrivacyModeService.maskSymbol : format.format(futureValue),
                           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                                 color: Colors.green.shade800,
                                 fontWeight: FontWeight.bold,
@@ -577,8 +590,9 @@ class _SavingAccountCard extends StatelessWidget {
 
 class _SavingGoalCard extends StatelessWidget {
   final SavingGoal goal;
+  final bool isPrivacyMode;
 
-  const _SavingGoalCard({required this.goal});
+  const _SavingGoalCard({required this.goal, required this.isPrivacyMode});
 
   @override
   Widget build(BuildContext context) {
@@ -647,7 +661,9 @@ class _SavingGoalCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  '${format.format(goal.currentAmount)} / ${format.format(goal.targetAmount)}',
+                  isPrivacyMode
+                      ? '${PrivacyModeService.maskSymbol} / ${PrivacyModeService.maskSymbol}'
+                      : '${format.format(goal.currentAmount)} / ${format.format(goal.targetAmount)}',
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
                 Text(
@@ -671,11 +687,13 @@ class _SavingGoalCard extends StatelessWidget {
 class _BudgetCard extends StatelessWidget {
   final Tag tag;
   final _BudgetStatus status;
+  final bool isPrivacyMode;
   final VoidCallback onDelete;
 
   const _BudgetCard({
     required this.tag,
     required this.status,
+    required this.isPrivacyMode,
     required this.onDelete,
   });
 
@@ -801,7 +819,9 @@ class _BudgetCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  '${format.format(status.spent)} / ${format.format(status.budget)}',
+                  isPrivacyMode
+                      ? '${PrivacyModeService.maskSymbol} / ${PrivacyModeService.maskSymbol}'
+                      : '${format.format(status.spent)} / ${format.format(status.budget)}',
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 Text(
@@ -822,9 +842,11 @@ class _BudgetCard extends StatelessWidget {
                   style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
                 ),
                 Text(
-                  status.isOverBudget
-                      ? l10n.overBudgetBy(format.format(remainingAmount.abs()))
-                      : l10n.remaining(format.format(remainingAmount)),
+                  isPrivacyMode
+                      ? PrivacyModeService.maskSymbol
+                      : status.isOverBudget
+                          ? l10n.overBudgetBy(format.format(remainingAmount.abs()))
+                          : l10n.remaining(format.format(remainingAmount)),
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(color: remainingColor),
                 ),
               ],

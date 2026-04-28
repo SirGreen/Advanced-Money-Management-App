@@ -1,4 +1,3 @@
-import 'dart:ui';
 
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +19,8 @@ import '../helpers/tag_icon.dart';
 import '../sections/camera_scanner_page.dart';
 import '../settings/settings_view_model.dart';
 import 'add_transaction_view.dart';
+import '../../data/services/privacy_mode_service.dart';
+import '../widgets/privacy_mode_widgets.dart';
 import 'expenditure_view_model.dart';
 import 'scheduled_expenditure_view_model.dart';
 import 'search_results_page.dart';
@@ -274,6 +275,7 @@ class _BalanceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isPrivacyMode = context.watch<SettingsViewModel>().settings.privacyModeEnabled;
     final amountColor = amount >= 0 ? Colors.green.shade800 : Colors.red.shade700;
     final formatted = NumberFormat.currency(
       name: currencyCode,
@@ -294,7 +296,7 @@ class _BalanceCard extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              formatted,
+              isPrivacyMode ? PrivacyModeService.maskSymbol : formatted,
               style: Theme.of(context).textTheme.displaySmall?.copyWith(
                 fontWeight: FontWeight.bold,
                 color: amountColor,
@@ -392,6 +394,7 @@ class _RecentTransactionsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isPrivacyMode = context.watch<SettingsViewModel>().settings.privacyModeEnabled;
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
       child: GlassCard(
@@ -412,15 +415,17 @@ class _RecentTransactionsCard extends StatelessWidget {
                 ).getTagById(exp.mainTagId);
                 return ListTile(
                   leading: tag != null ? TagIcon(tag: tag, radius: 16) : null,
-                  title: Text(exp.articleName),
+                  title: PrivacyBlur(isPrivate: isPrivacyMode, child: Text(exp.articleName)),
                   subtitle: Text(
                     DateFormat.yMMMd(l10n.localeName).format(exp.date),
                   ),
                   trailing: Text(
-                    NumberFormat.currency(
-                      name: exp.currencyCode,
-                      decimalDigits: exp.currencyCode == 'JPY' ? 0 : 2,
-                    ).format(exp.amount ?? 0),
+                    isPrivacyMode
+                        ? PrivacyModeService.maskSymbol
+                        : NumberFormat.currency(
+                            name: exp.currencyCode,
+                            decimalDigits: exp.currencyCode == 'JPY' ? 0 : 2,
+                          ).format(exp.amount ?? 0),
                     style: TextStyle(
                       color: exp.isIncome
                           ? Colors.green.shade700
@@ -456,6 +461,7 @@ class _UpcomingTransactionsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (scheduled.isEmpty) return const SizedBox.shrink();
+    final isPrivacyMode = context.watch<SettingsViewModel>().settings.privacyModeEnabled;
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
@@ -478,7 +484,7 @@ class _UpcomingTransactionsCard extends StatelessWidget {
                   color: rule.isIncome ? Colors.green : Colors.red,
                 ),
                 title: Text(rule.name),
-                trailing: Text(amountText),
+                trailing: Text(isPrivacyMode ? PrivacyModeService.maskSymbol : amountText),
                 onTap: () {
                   final filter = SearchFilter(
                     keyword: rule.name,

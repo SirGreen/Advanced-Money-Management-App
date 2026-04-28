@@ -1280,4 +1280,29 @@ class AppLocalizationsEn extends AppLocalizations {
   String budgetWarning100(String category) {
     return 'You have used 100% of your budget for $category!';
   }
+
+  @override
+  String get privacyMode => 'Privacy Mode';
+
+  @override
+  String get privacyModeOn => 'On';
+
+  @override
+  String get privacyModeOff => 'Off';
+
+  @override
+  String get privacyModeInfoTitle => 'Privacy Mode';
+
+  @override
+  String get privacyModeInfoBody =>
+      'When enabled:\n\n'
+      '• All amounts are replaced with •••\n'
+      '• Transaction names are blurred\n'
+      '• Report figures are hidden\n'
+      '• Saving account balances are hidden\n'
+      '• Saving goal amounts are hidden\n\n'
+      'The setting is saved and restored when you reopen the app.';
+
+  @override
+  String get privacyModeGotIt => 'Got it';
 }

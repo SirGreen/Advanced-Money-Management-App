@@ -1280,4 +1280,29 @@ class AppLocalizationsJa extends AppLocalizations {
   String budgetWarning100(String category) {
     return '$categoryの予算を100％消費しました！';
   }
+
+  @override
+  String get privacyMode => 'プライバシーモード';
+
+  @override
+  String get privacyModeOn => 'オン';
+
+  @override
+  String get privacyModeOff => 'オフ';
+
+  @override
+  String get privacyModeInfoTitle => 'プライバシーモード';
+
+  @override
+  String get privacyModeInfoBody =>
+      '有効にすると:\n\n'
+      '• すべての金額が •••に置き換えられます\n'
+      '• 取引名がぼかされます\n'
+      '• レポートの数値が非表示になります\n'
+      '• 貯蓄口座の残高が非表示になります\n'
+      '• 貯蓄目標の金額が非表示になります\n\n'
+      'アプリを再起動しても設定が保持されます。';
+
+  @override
+  String get privacyModeGotIt => 'わかりました';
 }
