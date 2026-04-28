@@ -147,6 +147,7 @@ void main() async {
       currencyRepository: currencyRepository,
       scanReceiptUseCase: scanReceiptUseCase,
       recurringService: recurringService,
+      notificationService: notificationService,
     ),
   );
 }
@@ -163,6 +164,7 @@ class MyApp extends StatefulWidget {
   final CurrencyRepository currencyRepository;
   final ScanReceiptUseCase scanReceiptUseCase;
   final RecurringTransactionService recurringService;
+  final NotificationService notificationService;
 
   const MyApp({
     super.key,
@@ -176,6 +178,7 @@ class MyApp extends StatefulWidget {
     required this.currencyRepository,
     required this.scanReceiptUseCase,
     required this.recurringService,
+    required this.notificationService,
   });
 
   @override
@@ -249,6 +252,10 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
         Provider<RecurringTransactionService>.value(
           value: widget.recurringService,
+        ),
+
+        Provider<NotificationService>.value(
+          value: widget.notificationService,
         ),
 
         ChangeNotifierProvider(

@@ -6,11 +6,6 @@ import 'package:flutter/foundation.dart'; // For debugPrint
 import 'dart:io';
 
 class NotificationService {
-  // Singleton pattern: ensures the same initialized instance is used app-wide.
-  static final NotificationService _instance = NotificationService._internal();
-  factory NotificationService() => _instance;
-  NotificationService._internal();
-
   final FlutterLocalNotificationsPlugin _notificationsPlugin =
       FlutterLocalNotificationsPlugin();
 

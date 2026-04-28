@@ -152,6 +152,7 @@ void main() {
         currencyRepository: currencyRepository,
         scanReceiptUseCase: scanReceiptUseCase,
         recurringService: recurringService,
+        notificationService: mockNotificationService,
       ),
     );
 

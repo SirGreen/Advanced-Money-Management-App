@@ -1156,15 +1156,16 @@ class _AddTransactionViewState extends State<AddTransactionView> {
     if (!_isIncome && mainTag.budgetAmount != null && mainTag.budgetAmount! > 0 && mainTag.budgetInterval != 'None') {
       final newTotal = viewModel.getSpentAmountForTagBudget(mainTag);
       final budget = mainTag.budgetAmount!;
+      final notificationService = Provider.of<NotificationService>(context, listen: false);
 
       if (oldTotal < budget * 0.8 && newTotal >= budget * 0.8 && newTotal < budget) {
-        NotificationService().showImmediateNotification(
+        notificationService.showImmediateNotification(
           id: mainTag.id.hashCode,
           title: l10nCached.budgetWarningTitle,
           body: l10nCached.budgetWarning80(mainTag.name),
         );
       } else if (oldTotal < budget && newTotal >= budget) {
-        NotificationService().showImmediateNotification(
+        notificationService.showImmediateNotification(
           id: mainTag.id.hashCode + 1,
           title: l10nCached.budgetWarningTitle,
           body: l10nCached.budgetWarning100(mainTag.name),
