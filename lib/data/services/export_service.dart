@@ -17,13 +17,14 @@ class ExportService {
     String currencyCode = 'VND',
     String? languageCode,
   }) {
-    final buffer = StringBuffer();
+    final List<List<String>> rows = [];
 
     final currencyFormat = NumberFormat.simpleCurrency(
       name: currencyCode,
       locale: languageCode,
     );
     final currencySymbol = currencyFormat.currencySymbol;
+    final amountFormat = NumberFormat.decimalPattern(languageCode);
 
     // Header
     final headers = config.selectedFields.map((field) {
@@ -31,7 +32,7 @@ class ExportService {
         case 'date':
           return 'Date';
         case 'amount':
-          return 'Amount ($currencySymbol)';
+          return 'Amount ($currencyCode)';
         case 'category':
           return 'Category';
         case 'notes':
@@ -46,8 +47,7 @@ class ExportService {
           return field;
       }
     }).toList();
-
-    buffer.writeln('"${headers.join('","')}"');
+    rows.add(headers);
 
     // Data rows
     for (final expenditure in expenditures) {
@@ -58,7 +58,9 @@ class ExportService {
           case 'date':
             row.add(DateFormat('dd/MM/yyyy').format(expenditure.date));
           case 'amount':
-            row.add(currencyFormat.format(expenditure.amount ?? 0));
+            // Use decimal pattern for data cells to avoid currency symbol corruption
+            // The currency symbol is already in the header to identify the unit
+            row.add(amountFormat.format(expenditure.amount ?? 0));
           case 'category':
             final category = _getCategoryName(expenditure, tagMap);
             row.add(category);
@@ -74,17 +76,22 @@ class ExportService {
             row.add('');
         }
       }
-
-      // Escape quotes and escape fields with commas
-      final escapedRow = row.map((field) {
-        final escaped = field.replaceAll('"', '""');
-        return '"$escaped"';
-      }).toList();
-
-      buffer.writeln(escapedRow.join(','));
+      rows.add(row);
     }
 
-    return buffer.toString();
+    return _rowsToCsv(rows);
+  }
+
+  String _rowsToCsv(List<List<String>> rows) {
+    return '${rows.map((row) {
+      return row.map((field) {
+        // Replace non-breaking spaces (\u00A0 and \u202F) which often confuse mobile CSV parsers
+        final cleaned = field.replaceAll('\u00A0', ' ').replaceAll('\u202F', ' ');
+        // Escape quotes by doubling them and wrapping the field in quotes
+        final escaped = cleaned.replaceAll('"', '""');
+        return '"$escaped"';
+      }).join(',');
+    }).join('\r\n')}\r\n';
   }
 
   // Generate real Excel content
@@ -111,7 +118,7 @@ class ExportService {
         case 'date':
           return 'Date';
         case 'amount':
-          return 'Amount ($currencySymbol)';
+          return 'Amount ($currencyCode)';
         case 'category':
           return 'Category';
         case 'notes':
@@ -197,25 +204,14 @@ class ExportService {
     }).toList();
   }
 
-  // Save string content to file using FilePicker
   Future<String> exportToFile(
     String content,
     String filename,
     String format,
   ) async {
     try {
-      // Use UTF-8 with BOM for CSV to support Unicode in Excel
       final List<int> encodedContent = utf8.encode(content);
-      List<int> bytesList;
-      
-      if (format.toLowerCase() == 'csv') {
-        final List<int> bom = [0xEF, 0xBB, 0xBF];
-        bytesList = bom + encodedContent;
-      } else {
-        bytesList = encodedContent;
-      }
-      
-      final bytes = Uint8List.fromList(bytesList);
+      final bytes = Uint8List.fromList(encodedContent);
       return await exportToFileBytes(bytes, filename, format);
     } catch (e) {
       throw Exception('Error exporting file: $e');
