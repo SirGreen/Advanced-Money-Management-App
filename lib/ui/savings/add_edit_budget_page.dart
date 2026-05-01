@@ -15,6 +15,7 @@ import '../tags/tag_view_model.dart';
 import '../transaction/add_transaction_view.dart';
 import '../transaction/expenditure_view_model.dart';
 import '../settings/settings_view_model.dart';
+import '../../data/services/privacy_mode_service.dart';
 
 class AddEditBudgetAppBar extends StatelessWidget implements PreferredSizeWidget {
   final AppLocalizations l10n;
@@ -319,6 +320,8 @@ class _AddEditBudgetPageState extends State<AddEditBudgetPage> {
       period = DateTimeRange(start: DateTime(now.year, now.month, 1), end: now);
     }
 
+    final isPrivacyMode = settings.privacyModeEnabled;
+
     final transactions = _selectedTag == null
         ? <dynamic>[]
         : vm.getFilteredExpenditures(
@@ -342,13 +345,19 @@ class _AddEditBudgetPageState extends State<AddEditBudgetPage> {
       itemCount: transactions.length,
       itemBuilder: (context, index) {
         final expenditure = transactions[index];
-        final amountString = expenditure.amount != null
-            ? NumberFormat.currency(
-                locale: l10n.localeName,
-                name: currencyCode,
-                decimalDigits: currencyCode == 'JPY' ? 0 : 2,
-              ).format(expenditure.amount)
-            : l10n.noAmountSet;
+        String amountString = '';
+        
+        if (isPrivacyMode) {
+          amountString = PrivacyModeService.maskSymbol;
+        } else {
+          amountString = expenditure.amount != null
+              ? NumberFormat.currency(
+                  locale: l10n.localeName,
+                  name: currencyCode,
+                  decimalDigits: currencyCode == 'JPY' ? 0 : 2,
+                ).format(expenditure.amount)
+              : l10n.noAmountSet;
+        }
 
         return GlassCardContainer(
           margin: const EdgeInsets.symmetric(vertical: 4),
@@ -360,7 +369,11 @@ class _AddEditBudgetPageState extends State<AddEditBudgetPage> {
           ),
           child: ListTile(
             leading: TagIcon(tag: _selectedTag!),
-            title: Text(expenditure.articleName),
+            title: Text(
+              isPrivacyMode
+                  ? PrivacyModeService.createBlurredText(expenditure.articleName)
+                  : expenditure.articleName,
+            ),
             subtitle: Text(DateFormat.yMMMd(l10n.localeName).format(expenditure.date)),
             trailing: Text(
               amountString,

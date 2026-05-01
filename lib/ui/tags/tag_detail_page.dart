@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 
 import '../../l10n/app_localizations.dart';
 import '../transaction/expenditure_view_model.dart';
+import '../settings/settings_view_model.dart';
+import '../../data/services/privacy_mode_service.dart';
 import 'add_edit_tag_page.dart';
 import 'tag_view_model.dart';
 
@@ -65,16 +67,22 @@ class TagDetailPage extends StatelessWidget {
                         barColor = Colors.orange;
                       }
 
-                      final spentStr = NumberFormat.currency(
-                        locale: 'vi',
-                        symbol: 'đ',
-                        decimalDigits: 0,
-                      ).format(spent);
-                      final budgetStr = NumberFormat.currency(
-                        locale: 'vi',
-                        symbol: 'đ',
-                        decimalDigits: 0,
-                      ).format(budget);
+                      final isPrivacyMode = context.watch<SettingsViewModel>().settings.privacyModeEnabled;
+
+                      final spentStr = isPrivacyMode
+                          ? PrivacyModeService.maskSymbol
+                          : NumberFormat.currency(
+                              locale: 'vi',
+                              symbol: 'đ',
+                              decimalDigits: 0,
+                            ).format(spent);
+                      final budgetStr = isPrivacyMode
+                          ? PrivacyModeService.maskSymbol
+                          : NumberFormat.currency(
+                              locale: 'vi',
+                              symbol: 'đ',
+                              decimalDigits: 0,
+                            ).format(budget);
 
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
