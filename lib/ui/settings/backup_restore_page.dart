@@ -1,4 +1,5 @@
-﻿import 'dart:io';
+﻿import 'dart:convert';
+import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
@@ -35,23 +36,16 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
       final fileName = 'backup_$timestamp.json';
 
       // Let user choose where to save
+      // Passing bytes ensures the file is written by the plugin on all platforms
       final savePath = await FilePicker.platform.saveFile(
         dialogTitle: 'Chọn nơi lưu file backup',
         fileName: fileName,
         type: FileType.custom,
         allowedExtensions: ['json'],
-        bytes: Uint8List.fromList(jsonData.codeUnits),
+        bytes: Uint8List.fromList(utf8.encode(jsonData)),
       );
 
-      // On Android/iOS FilePicker.saveFile with bytes writes the file automatically.
-      // On desktop it returns the path and we write manually.
-      if (savePath != null) {
-        // If platform did not write the file (desktop), write it ourselves
-        final destFile = File(savePath);
-        if (!destFile.existsSync()) {
-          await destFile.writeAsString(jsonData);
-        }
-      } else {
+      if (savePath == null) {
         // User cancelled
         return;
       }
