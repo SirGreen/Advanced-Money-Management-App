@@ -32,11 +32,14 @@ class LLMService {
       ),
     );
 
+    final language = _getLanguage(settings);
     final prompt =
         """
     Analyze the transaction name and suggest tags.
     1. From the provided list of existing tags, pick the most relevant ones.
     2. Suggest ONE new, specific, and concise tag name if none of the existing ones are a perfect fit.
+
+    The response MUST be in $language.
 
     Return a single, valid JSON object with two keys: "existing_tags" (a list of strings from the provided list) and "new_tag_suggestion" (a single string, or null).
 
@@ -81,6 +84,7 @@ class LLMService {
 
     final bytes = await imageFile.readAsBytes();
 
+    final language = _getLanguage(settings);
     final prompt =
         """
     Analyze the attached receipt image and extract the following information.
@@ -88,6 +92,8 @@ class LLMService {
     2.  **total_amount**: The final total amount paid (look for keywords like 合計). This should be a number without currency symbols or commas.
     3.  **recommended_tags**: From the provided list of existing tags, suggest the most relevant ones based on the store name and items.
     4. **memo**: What did the user buy and how many of each item, write it as a continuous list of items (each item is accompanied with a dash and the number of items, if not confident in the number of items, do not add the dash and the number), seperated by commas
+
+    The response MUST be in $language.
 
     Return the result ONLY as a single, valid JSON object with the keys "store_name", "total_amount", "recommended_tags", "memo".
 
@@ -136,6 +142,7 @@ class LLMService {
       generationConfig: GenerationConfig(responseMimeType: 'application/json'),
     );
 
+    final language = _getLanguage(settings);
     final prompt =
         """
     You are a financial analyst AI. Your task is to analyze a user's transaction history against a specific budget and determine if they can meet it.
@@ -154,6 +161,9 @@ class LLMService {
     4.  Provide a confidence score for your prediction (0.0 to 1.0).
     5.  Offer a concise summary explaining your reasoning.
     6.  Give actionable suggestions to help the user manage their budget better.
+
+    **Language:**
+    The analysis and suggestions must be in $language.
 
     **Output Format:**
     Return ONLY a single, valid JSON object with the following keys:
@@ -204,6 +214,7 @@ class LLMService {
       generationConfig: GenerationConfig(responseMimeType: 'application/json'),
     );
 
+    final language = _getLanguage(settings);
     final prompt =
         """
     You are an expert financial analyst AI. Your task is to provide a comprehensive analysis of a user's financial report for a specific period.
@@ -223,6 +234,9 @@ class LLMService {
 
     **Your Task:**
     Analyze all the provided data, including the detailed transaction list, keeping the user's personal context in mind. Provide clear, concise, and actionable insights. Use the transaction list to identify specific spending habits, large purchases, or recurring charges that contribute to the category totals.
+
+    **Language:**
+    The response must be in $language.
 
     **Output Format:**
     Return ONLY a single, valid JSON object with the following keys:
@@ -246,6 +260,26 @@ class LLMService {
         debugPrint("Gemini API Error details: ${e.message}");
       }
       return null;
+    }
+  }
+
+  String _getLanguage(Settings settings) {
+    String? code = settings.languageCode;
+    if (code == null && !kIsWeb) {
+      try {
+        code = Platform.localeName.split('_')[0];
+      } catch (_) {
+        // Fallback to English if Platform.localeName is unavailable or fails
+      }
+    }
+
+    switch (code) {
+      case 'ja':
+        return 'Japanese';
+      case 'vi':
+        return 'Vietnamese';
+      default:
+        return 'English';
     }
   }
 }
