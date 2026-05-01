@@ -259,14 +259,6 @@ class SettingsView extends StatelessWidget {
     await viewModel.saveSettings(settings.copyWith(paginationLimit: value));
   }
 
-  Future<void> _updateReminders(
-    SettingsViewModel viewModel,
-    bool value,
-  ) async {
-    final settings = viewModel.settings;
-    await viewModel.saveSettings(settings.copyWith(remindersEnabled: value));
-  }
-
   Future<void> _onCurrencyChanged(
     BuildContext context,
     SettingsViewModel viewModel,
@@ -493,27 +485,6 @@ class SettingsView extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            SectionHeader(title: l10n.reminders),
-                            SwitchListTile(
-                              secondary: Icon(
-                                settings.remindersEnabled
-                                    ? Icons.notifications_active
-                                    : Icons.notifications_off_outlined,
-                              ),
-                              title: Text(l10n.enableReminders),
-                              subtitle: Text(l10n.enableRemindersSubtitle),
-                              value: settings.remindersEnabled,
-                              onChanged: (value) => _updateReminders(viewModel, value),
-                            ),
-                          ],
-                        ),
-                      ),
-                      GlassCardContainer(
-                        padding: EdgeInsets.zero,
-                        margin: const EdgeInsets.only(bottom: 15),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
                             SectionHeader(title: l10n.currency),
                             ListTile(
                               leading: const Icon(Icons.money),
@@ -716,20 +687,6 @@ class SettingsView extends StatelessWidget {
                                   context,
                                   MaterialPageRoute(
                                     builder: (_) => const ExportTransactionsView(),
-                                  ),
-                                );
-                              },
-                            ),
-                            ListTile(
-                              leading: const Icon(Icons.download_for_offline),
-                              title: Text(l10n.importData),
-                              subtitle: Text(l10n.importDataSubtitle),
-                              trailing: const Icon(Icons.chevron_right),
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (_) => const BackupRestorePage(),
                                   ),
                                 );
                               },

@@ -54,7 +54,6 @@ class _AddTransactionViewState extends State<AddTransactionView> {
   String? _selectedMainTagId;
   List<String> _selectedSubTagIds = [];
   DateTime _selectedDate = DateTime.now();
-  bool _isShared = false;
   String? _receiptPath;
   String _selectedCurrency = 'VND';
   late bool isEditing;
@@ -984,20 +983,6 @@ class _AddTransactionViewState extends State<AddTransactionView> {
                   ),
                   maxLines: 3,
                   minLines: 3,
-                ),
-                const SizedBox(height: 16),
-                SwitchListTile(
-                  title: const Text("Tự động thêm vào Tổng kết"),
-                  subtitle: const Text(
-                    "Đồng bộ giao dịch khi tính toán ngân sách",
-                  ),
-                  value: _isShared,
-                  onChanged: (value) {
-                    setState(() {
-                      _isShared = value;
-                    });
-                  },
-                  contentPadding: EdgeInsets.zero,
                 ),
                 const SizedBox(height: 16),
                 Text(
