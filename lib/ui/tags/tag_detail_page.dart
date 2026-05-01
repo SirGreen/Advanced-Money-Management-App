@@ -67,21 +67,23 @@ class TagDetailPage extends StatelessWidget {
                         barColor = Colors.orange;
                       }
 
-                      final isPrivacyMode = context.watch<SettingsViewModel>().settings.privacyModeEnabled;
+                      final settings = context.watch<SettingsViewModel>().settings;
+                      final isPrivacyMode = settings.privacyModeEnabled;
+                      final currencyCode = settings.primaryCurrencyCode;
 
                       final spentStr = isPrivacyMode
                           ? PrivacyModeService.maskSymbol
                           : NumberFormat.currency(
-                              locale: 'vi',
-                              symbol: 'đ',
-                              decimalDigits: 0,
+                              locale: l10n.localeName,
+                              name: currencyCode,
+                              decimalDigits: (currencyCode == 'JPY' || currencyCode == 'VND') ? 0 : 2,
                             ).format(spent);
                       final budgetStr = isPrivacyMode
                           ? PrivacyModeService.maskSymbol
                           : NumberFormat.currency(
-                              locale: 'vi',
-                              symbol: 'đ',
-                              decimalDigits: 0,
+                              locale: l10n.localeName,
+                              name: currencyCode,
+                              decimalDigits: (currencyCode == 'JPY' || currencyCode == 'VND') ? 0 : 2,
                             ).format(budget);
 
                       return Column(
