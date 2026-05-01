@@ -127,6 +127,35 @@ class _AddScheduledExpenditureViewState
         child: ListView(
           padding: const EdgeInsets.all(16),
           children: [
+            // Income / Expense Toggle
+            Center(
+              child: SegmentedButton<bool>(
+                segments: const [
+                  ButtonSegment<bool>(
+                    value: false,
+                    label: Text("Expense"),
+                    icon: Icon(Icons.arrow_downward_rounded),
+                  ),
+                  ButtonSegment<bool>(
+                    value: true,
+                    label: Text("Income"),
+                    icon: Icon(Icons.arrow_upward_rounded),
+                  ),
+                ],
+                selected: {_isIncome},
+                onSelectionChanged: (newSelection) {
+                  setState(() => _isIncome = newSelection.first);
+                },
+                style: SegmentedButton.styleFrom(
+                  selectedBackgroundColor: _isIncome
+                      ? Colors.green.withAlpha(50)
+                      : Colors.red.withAlpha(50),
+                  selectedForegroundColor: _isIncome ? Colors.green : Colors.red,
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
+
             // Name
             TextFormField(
               controller: _nameController,
@@ -323,9 +352,11 @@ class _AddScheduledExpenditureViewState
       scheduleType: _scheduleType,
       scheduleValue: int.parse(_scheduleValueController.text),
       startDate: _startDate,
-      isActive: true,
+      lastCreatedDate: isEditing ? widget.scheduledExpenditure!.lastCreatedDate : null,
+      isActive: isEditing ? widget.scheduledExpenditure!.isActive : true,
+      endDate: isEditing ? widget.scheduledExpenditure!.endDate : null,
       isIncome: _isIncome,
-      currencyCode: 'VND',
+      currencyCode: isEditing ? widget.scheduledExpenditure!.currencyCode : 'VND',
       reminderDaysBefore: _reminderDaysBefore,
     );
 
