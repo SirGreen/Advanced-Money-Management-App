@@ -288,6 +288,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
             exportRepository: widget.exportRepository,
             expenditureRepository: widget.expenditureRepository,
             tagRepository: widget.tagRepository,
+            settingsRepository: widget.settingsRepository,
           ),
         ),
       ],

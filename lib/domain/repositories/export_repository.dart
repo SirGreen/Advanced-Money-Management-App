@@ -6,8 +6,10 @@ abstract class ExportRepository {
   Future<String> exportTransactions(
     List<Expenditure> expenditures,
     ExportConfig config,
-    Map<String, Tag> tagMap,
-  );
+    Map<String, Tag> tagMap, {
+    String currencyCode = 'VND',
+    String? languageCode,
+  });
 
   List<Expenditure> filterTransactions(
     List<Expenditure> expenditures,

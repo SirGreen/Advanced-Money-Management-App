@@ -13,8 +13,10 @@ class ExportRepositoryImpl implements ExportRepository {
   Future<String> exportTransactions(
     List<Expenditure> expenditures,
     ExportConfig config,
-    Map<String, Tag> tagMap,
-  ) async {
+    Map<String, Tag> tagMap, {
+    String currencyCode = 'VND',
+    String? languageCode,
+  }) async {
     // Filter transactions
     final filtered = filterTransactions(expenditures, config);
 
@@ -25,7 +27,13 @@ class ExportRepositoryImpl implements ExportRepository {
 
     // Generate content and save based on format
     if (config.exportFormat == 'excel') {
-      final bytes = _exportService.generateExcel(filtered, config, tagMap);
+      final bytes = _exportService.generateExcel(
+        filtered,
+        config,
+        tagMap,
+        currencyCode: currencyCode,
+        languageCode: languageCode,
+      );
       if (bytes == null) {
         throw Exception('Failed to generate Excel content');
       }
@@ -35,7 +43,13 @@ class ExportRepositoryImpl implements ExportRepository {
         extension,
       );
     } else {
-      final content = _exportService.generateCSV(filtered, config, tagMap);
+      final content = _exportService.generateCSV(
+        filtered,
+        config,
+        tagMap,
+        currencyCode: currencyCode,
+        languageCode: languageCode,
+      );
       return await _exportService.exportToFile(
         content,
         filename,

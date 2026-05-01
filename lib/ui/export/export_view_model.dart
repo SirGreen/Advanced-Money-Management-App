@@ -4,11 +4,13 @@ import '../../domain/entities/export_config.dart';
 import '../../domain/repositories/export_repository.dart';
 import '../../domain/repositories/expenditure_repository.dart';
 import '../../domain/repositories/tag_repository.dart';
+import '../../domain/repositories/settings_repository.dart';
 
 class ExportViewModel extends ChangeNotifier {
   final ExportRepository _exportRepository;
   final ExpenditureRepository _expenditureRepository;
   final TagRepository _tagRepository;
+  final SettingsRepository _settingsRepository;
 
   ExportConfig _config = ExportConfig.allTransactions();
   bool _isExporting = false;
@@ -30,9 +32,11 @@ class ExportViewModel extends ChangeNotifier {
     required ExportRepository exportRepository,
     required ExpenditureRepository expenditureRepository,
     required TagRepository tagRepository,
+    required SettingsRepository settingsRepository,
   })  : _exportRepository = exportRepository,
         _expenditureRepository = expenditureRepository,
-        _tagRepository = tagRepository {
+        _tagRepository = tagRepository,
+        _settingsRepository = settingsRepository {
     _loadExportDirectoryPath();
   }
 
@@ -159,12 +163,15 @@ class ExportViewModel extends ChangeNotifier {
       final allExpenditures = await _expenditureRepository.getExpenditures();
       final allTags = await _tagRepository.getAllTags();
       final tagMap = {for (var tag in allTags) tag.id: tag};
+      final settings = await _settingsRepository.getSettings();
 
       // Export
       final filePath = await _exportRepository.exportTransactions(
         allExpenditures,
         _config,
         tagMap,
+        currencyCode: settings.primaryCurrencyCode,
+        languageCode: settings.languageCode,
       );
 
       _exportedFilePath = filePath;

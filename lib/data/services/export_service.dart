@@ -1,4 +1,5 @@
 import 'dart:typed_data';
+import 'dart:convert';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:excel/excel.dart' as excel_pkg;
@@ -12,9 +13,17 @@ class ExportService {
   String generateCSV(
     List<Expenditure> expenditures,
     ExportConfig config,
-    Map<String, Tag> tagMap,
-  ) {
+    Map<String, Tag> tagMap, {
+    String currencyCode = 'VND',
+    String? languageCode,
+  }) {
     final buffer = StringBuffer();
+
+    final currencyFormat = NumberFormat.simpleCurrency(
+      name: currencyCode,
+      locale: languageCode,
+    );
+    final currencySymbol = currencyFormat.currencySymbol;
 
     // Header
     final headers = config.selectedFields.map((field) {
@@ -22,7 +31,7 @@ class ExportService {
         case 'date':
           return 'Date';
         case 'amount':
-          return 'Amount (₫)';
+          return 'Amount ($currencySymbol)';
         case 'category':
           return 'Category';
         case 'notes':
@@ -41,8 +50,6 @@ class ExportService {
     buffer.writeln('"${headers.join('","')}"');
 
     // Data rows
-    final currencyFormat = NumberFormat.currency(locale: 'vi_VN', symbol: '₫');
-
     for (final expenditure in expenditures) {
       final row = <String>[];
 
@@ -84,11 +91,19 @@ class ExportService {
   List<int>? generateExcel(
     List<Expenditure> expenditures,
     ExportConfig config,
-    Map<String, Tag> tagMap,
-  ) {
+    Map<String, Tag> tagMap, {
+    String currencyCode = 'VND',
+    String? languageCode,
+  }) {
     final excel = excel_pkg.Excel.createExcel();
     final sheet = excel['Transactions'];
     excel.setDefaultSheet('Transactions');
+
+    final currencyFormat = NumberFormat.simpleCurrency(
+      name: currencyCode,
+      locale: languageCode,
+    );
+    final currencySymbol = currencyFormat.currencySymbol;
 
     // Header
     final headers = config.selectedFields.map((field) {
@@ -96,7 +111,7 @@ class ExportService {
         case 'date':
           return 'Date';
         case 'amount':
-          return 'Amount (₫)';
+          return 'Amount ($currencySymbol)';
         case 'category':
           return 'Category';
         case 'notes':
@@ -115,8 +130,6 @@ class ExportService {
     sheet.appendRow(headers.map((h) => excel_pkg.TextCellValue(h)).toList());
 
     // Data rows
-    final currencyFormat = NumberFormat.currency(locale: 'vi_VN', symbol: '₫');
-
     for (final expenditure in expenditures) {
       final row = <excel_pkg.CellValue>[];
 
@@ -191,7 +204,18 @@ class ExportService {
     String format,
   ) async {
     try {
-      final bytes = Uint8List.fromList(content.codeUnits);
+      // Use UTF-8 with BOM for CSV to support Unicode in Excel
+      final List<int> encodedContent = utf8.encode(content);
+      List<int> bytesList;
+      
+      if (format.toLowerCase() == 'csv') {
+        final List<int> bom = [0xEF, 0xBB, 0xBF];
+        bytesList = bom + encodedContent;
+      } else {
+        bytesList = encodedContent;
+      }
+      
+      final bytes = Uint8List.fromList(bytesList);
       return await exportToFileBytes(bytes, filename, format);
     } catch (e) {
       throw Exception('Error exporting file: $e');
